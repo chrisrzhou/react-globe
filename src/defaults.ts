@@ -23,9 +23,10 @@ export const defaultCameraOptions: CameraOptions = {
 };
 
 export const defaultFocusOptions: FocusOptions = {
-  animationDuration: 2000,
+  animationDuration: 1000,
   distanceRadiusScale: 1.5,
-  easingFunction: ['Quintic', 'Out'],
+  easingFunction: ['Cubic', 'Out'],
+  enableDefocus: true,
 };
 
 export const defaultGlobeOptions: GlobeOptions = {
@@ -52,7 +53,22 @@ export const defaultLightOptions: LightsOptions = {
   pointLightPositionRadiusScales: [-2, 1, -1],
 };
 
-export const defaultMarkersOptions: MarkersOptions = {
-  radiusScaleRange: [0.01, 0.02],
+export const defaultDotMarkerOptions: MarkersOptions = {
+  enableGlow: true,
+  glowCoefficient: 0,
+  glowPower: 4,
+  glowRadiusScale: 3,
+  radiusScaleRange: [0.005, 0.01],
   type: MarkersType.Dot,
 };
+
+export const defaultBarMarkerOptions: MarkersOptions = {
+  enableGlow: true,
+  glowCoefficient: 0,
+  glowPower: 4,
+  glowRadiusScale: 0,
+  radiusScaleRange: [0.2, defaultFocusOptions.distanceRadiusScale - 1],
+  type: MarkersType.Bar,
+};
+
+export const defaultMarkersOptions: MarkersOptions = defaultDotMarkerOptions;

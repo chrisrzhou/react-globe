@@ -12,7 +12,7 @@ import ReactGlobe from "./../../src";
 <Playground>
   <div style={{ background: "#efefef", height: 400, width: "100%" }}>
     <ReactGlobe
-      data={[
+      markers={[
         {
           color: "red",
           coordinates: [1.3521, 103.8198],
@@ -29,6 +29,9 @@ import ReactGlobe from "./../../src";
           value: 35
         }
       ]}
+      onClickMarker={marker => console.log("clicked", marker)}
+      onDefocus={previousFocus => console.log("defocus", previousFocus)}
+      onHoverMarker={marker => console.log("clicked", marker)}
     />
   </div>
 </Playground>

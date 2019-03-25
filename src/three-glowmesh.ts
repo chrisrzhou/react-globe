@@ -89,13 +89,16 @@ export function createGlowGeometry(
   return glowGeometry;
 }
 
-export default function createGlowMesh(
+export function createGlowMesh(
   geometry: THREE.Geometry,
   length: number,
   glowOptions: GlowOptions,
+  isBackSide: boolean = true,
 ): THREE.Mesh {
   const glowGeometry = createGlowGeometry(geometry, length);
   const glowMaterial = createGlowMaterial(glowOptions);
-  glowMaterial.side = THREE.BackSide;
+  if (isBackSide) {
+    glowMaterial.side = THREE.BackSide;
+  }
   return new THREE.Mesh(glowGeometry, glowMaterial);
 }

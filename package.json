@@ -41,7 +41,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "three": "^0.102.1",
     "three-orbitcontrols": "^2.102.1",
-    "tippy.js": "^4.2.0"
+    "three.interaction": "^0.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",

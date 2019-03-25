@@ -1,6 +1,7 @@
 import * as TWEEN from 'es6-tween';
 import * as React from 'react';
 import * as THREE from 'three';
+import { Interaction } from 'three.interaction';
 
 import {
   defaultCameraOptions,
@@ -19,37 +20,50 @@ import {
 import {
   CameraOptions,
   Coordinates,
-  Datum,
   FocusOptions,
   GlobeOptions,
   LightsOptions,
+  Marker,
   MarkersOptions,
   Size,
 } from './types';
 
-const { useEffect } = React;
+const { useEffect, useState } = React;
 
 export interface Props {
   cameraOptions: CameraOptions;
-  data: Datum[];
   focus?: Coordinates;
   focusOptions: FocusOptions;
   globeOptions: GlobeOptions;
   lightOptions: LightsOptions;
+  markers: Marker[];
   markersOptions: MarkersOptions;
+  onDefocus?: (previousCoordinates: Coordinates) => void;
+  onClickMarker?: (marker: Marker) => void;
+  onHoverMarker?: (marker: Marker) => void;
   size: Size;
 }
 
 function ReactGlobe({
   cameraOptions,
-  data,
-  focus,
+  focus: initialFocus,
   focusOptions,
   globeOptions,
   lightOptions,
+  markers,
   markersOptions,
+  onClickMarker,
+  onDefocus,
+  onHoverMarker,
   size: initialSize,
 }: Props): React.ReactElement {
+  const [focus, setFocus] = useState<Coordinates>(initialFocus);
+
+  // sync state with props
+  useEffect(() => {
+    setFocus(initialFocus);
+  }, [initialFocus]);
+
   const { radius } = globeOptions;
   // initialize THREE instances
   const [mountRef, size] = useResize(initialSize);
@@ -64,20 +78,47 @@ function ReactGlobe({
     radius,
     focus,
   );
-  const markersRef = useMarkers(data, radius, markersOptions);
+
+  function handleClickMarker(marker: Marker): void {
+    setFocus(marker.coordinates);
+    if (onClickMarker) {
+      onClickMarker(marker);
+    }
+  }
+
+  function handleHoverMarker(marker: Marker): void {
+    if (onHoverMarker) {
+      onHoverMarker(marker);
+    }
+  }
+
+  const markersRef = useMarkers(markers, radius, markersOptions, {
+    onClick: handleClickMarker,
+    onHover: handleHoverMarker,
+  });
 
   // handle animation effect
   useEffect(() => {
     const mount = mountRef.current;
     const renderer = rendererRef.current;
+    const camera = cameraRef.current;
     let animationFrameID: number;
 
     // create scene
     const scene = new THREE.Scene();
-    scene.add(cameraRef.current);
+    scene.add(camera);
     scene.add(globeRef.current);
     scene.add(markersRef.current);
     mount.appendChild(renderer.domElement);
+
+    // initialize interaction events
+    new Interaction(renderer, scene, camera);
+    if (focusOptions.enableDefocus && focus) {
+      scene.on('click', () => {
+        onDefocus && onDefocus(focus);
+        setFocus(undefined);
+      });
+    }
 
     function animate(): void {
       renderer.render(scene, cameraRef.current);
@@ -95,9 +136,12 @@ function ReactGlobe({
     };
   }, [
     cameraRef,
+    focus,
+    focusOptions.enableDefocus,
     globeRef,
     markersRef,
     mountRef,
+    onDefocus,
     orbitControlsRef,
     rendererRef,
   ]);
@@ -111,10 +155,10 @@ function ReactGlobe({
 
 ReactGlobe.defaultProps = {
   cameraOptions: defaultCameraOptions,
-  data: [],
   focusOptions: defaultFocusOptions,
   globeOptions: defaultGlobeOptions,
   lightOptions: defaultLightOptions,
+  markers: [],
   markersOptions: defaultMarkersOptions,
 };
 

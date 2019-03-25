@@ -2,7 +2,7 @@ import { Group } from 'three';
 
 // Common
 export type Coordinates = [number, number];
-export type EasingFunction =
+export type EasingFunction =  // TweenJS curves: https://sole.github.io/tween.js/examples/03_graphs.html
   | ['Back', 'In']
   | ['Back', 'Out']
   | ['Back', 'InOut']
@@ -70,6 +70,7 @@ export interface FocusOptions {
   animationDuration: number;
   distanceRadiusScale: number;
   easingFunction: EasingFunction;
+  enableDefocus: boolean;
 }
 
 export interface GlobeOptions {
@@ -97,8 +98,12 @@ export interface LightsOptions {
 }
 
 export interface MarkersOptions {
+  enableGlow: boolean;
+  glowCoefficient: number;
+  glowPower: number;
+  glowRadiusScale: number;
   radiusScaleRange: [number, number];
-  renderer?: (d: Datum) => THREE.Group;
+  renderer?: (marker: Marker) => THREE.Group;
   type: MarkersType;
 }
 
@@ -108,7 +113,7 @@ export enum MarkersType {
   Dot = 'dot',
 }
 
-export interface Datum {
+export interface Marker {
   coordinates: Coordinates;
   value: number;
   [key: string]: any;

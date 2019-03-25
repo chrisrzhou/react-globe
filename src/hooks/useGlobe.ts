@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as THREE from 'three';
 
-import createGlowMesh from '../createGlowMesh';
+import { createGlowMesh } from '../three-glowmesh';
 import { GlobeOptions } from '../types';
 
 const { useEffect, useRef } = React;
