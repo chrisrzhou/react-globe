@@ -1,0 +1,36 @@
+---
+name: Focus
+route: /usage/focus
+menu: Usage
+---
+
+import { Playground } from "docz";
+import { useState } from "react";
+import ReactGlobe from "./../../src";
+
+# Focus
+
+To focus on a specific geo-coordinate (e.g. Singapore `[1.3521, 103.8198]`), pass an array of latitude-longitude coordinates to the component.
+
+Resetting this to `undefined` unfocuses the globe.
+
+<Playground>
+  {() => {
+    const [focus, setFocus] = useState(undefined);
+    return (
+      <div>
+        <button onClick={() => setFocus([1.3521, 103.8198])}>Singapore</button>
+        <button onClick={() => setFocus([40.73061, -73.935242])}>
+          New York
+        </button>
+        <button onClick={() => setFocus([37.773972, -122.431297])}>
+          San Fransisco
+        </button>
+        <button onClick={() => setFocus(undefined)}>None</button>
+        <div style={{ background: "#efefef", height: 400, width: "100%" }}>
+          <ReactGlobe focus={focus} />
+        </div>
+      </div>
+    );
+  }}
+</Playground>

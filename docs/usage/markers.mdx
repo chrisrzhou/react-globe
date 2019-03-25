@@ -1,0 +1,34 @@
+---
+name: Markers
+route: /usage/markers
+menu: Usage
+---
+
+import { Playground } from "docz";
+import ReactGlobe from "./../../src";
+
+# Markers
+
+<Playground>
+  <div style={{ background: "#efefef", height: 400, width: "100%" }}>
+    <ReactGlobe
+      data={[
+        {
+          color: "red",
+          coordinates: [1.3521, 103.8198],
+          value: 50
+        },
+        {
+          color: "blue",
+          coordinates: [40.73061, -73.935242],
+          value: 25
+        },
+        {
+          color: "orange",
+          coordinates: [37.773972, -122.431297],
+          value: 35
+        }
+      ]}
+    />
+  </div>
+</Playground>
