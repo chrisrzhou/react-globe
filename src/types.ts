@@ -64,6 +64,7 @@ export interface CameraOptions {
   maxPolarAngle: number;
   minPolarAngle: number;
   rotateSpeed: number;
+  zoomSpeed: number;
 }
 
 export interface FocusOptions {
@@ -85,7 +86,6 @@ export interface GlobeOptions {
   glowColor: string;
   glowPower: number;
   glowRadiusScale: number;
-  radius: number;
   texture: string;
 }
 
@@ -97,24 +97,31 @@ export interface LightsOptions {
   pointLightPositionRadiusScales: Position;
 }
 
-export interface MarkersOptions {
-  enableGlow: boolean;
+export interface MarkerOptions {
+  enableTooltip: boolean;
+  getTooltipContent: (marker: Marker) => string;
   glowCoefficient: number;
   glowPower: number;
   glowRadiusScale: number;
   radiusScaleRange: [number, number];
   renderer?: (marker: Marker) => THREE.Group;
-  type: MarkersType;
+  type: MarkerType;
 }
 
 // Markers
-export enum MarkersType {
-  Bar = 'bar',
-  Dot = 'dot',
-}
-
 export interface Marker {
   coordinates: Coordinates;
   value: number;
   [key: string]: any;
+}
+
+export type MarkerCallback = (
+  marker: Marker,
+  event?: PointerEvent,
+  target?: any,
+) => void;
+
+export enum MarkerType {
+  Bar = 'bar',
+  Dot = 'dot',
 }

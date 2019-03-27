@@ -1,4 +1,5 @@
 export { default as useCamera } from './useCamera';
+export { default as useEventCallback } from './useEventCallback';
 export { default as useGlobe } from './useGlobe';
 export { default as useMarkers } from './useMarkers';
 export { default as useRenderer } from './useRenderer';

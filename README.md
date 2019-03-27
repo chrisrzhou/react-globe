@@ -4,10 +4,7 @@ Build beautiful and interactive React + ThreeJS globe visualizations with ease.
 
 ## TODO
 
-- [ ] Figure out a way to render tooltips (in an example if we can't implement it at the component level)
-- [ ] Provide easy way to map countries/cities into geo-coordinates
 - [ ] Support responsive globe radius
-- [ ] Animate/tween marker size
 - [ ] Support passing custom marker renderers
 - [ ] Support scripting for camera to control detailed animations.
 - [ ] Add Gallery to Docs (e.g. #metoorising)

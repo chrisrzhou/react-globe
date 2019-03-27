@@ -1,7 +1,16 @@
 import * as React from 'react';
 import * as THREE from 'three';
+// @ts-ignore: three-orbitcontrols is untyped
 import OrbitControls from 'three-orbitcontrols';
 
+import {
+  CAMERA_DAMPING_FACTOR,
+  CAMERA_FAR,
+  CAMERA_FOV,
+  CAMERA_MIN_DISTANCE_RADIUS_SCALE,
+  CAMERA_NEAR,
+  RADIUS,
+} from '../defaults';
 import {
   CameraOptions,
   Coordinates,
@@ -24,6 +33,7 @@ export default function useCamera<T>(
     maxPolarAngle,
     minPolarAngle,
     rotateSpeed,
+    zoomSpeed,
   }: CameraOptions,
   {
     ambientLightColor,
@@ -39,7 +49,7 @@ export default function useCamera<T>(
   }: FocusOptions,
   rendererRef: React.RefObject<THREE.WebGLRenderer>,
   aspect: number,
-  radius: number,
+  start: Coordinates,
   focus?: Coordinates,
 ): [React.RefObject<THREE.PerspectiveCamera>, React.RefObject<OrbitControls>] {
   const cameraRef = useRef<THREE.PerspectiveCamera>(
@@ -75,10 +85,11 @@ export default function useCamera<T>(
     const ambientLight = ambientLightRef.current;
     const pointLight = pointLightRef.current;
 
-    camera.far = 100000;
-    camera.fov = 45;
-    camera.near = 1;
-    camera.position.set(0, 0, radius * distanceRadiusScale);
+    camera.far = CAMERA_FAR;
+    camera.fov = CAMERA_FOV;
+    camera.near = CAMERA_NEAR;
+    const position = coordinatesToPosition(start, RADIUS * distanceRadiusScale);
+    camera.position.set(...position);
 
     // apply light options
     ambientLight.color = new THREE.Color(ambientLightColor);
@@ -86,25 +97,25 @@ export default function useCamera<T>(
     pointLight.color = new THREE.Color(pointLightColor);
     pointLight.intensity = pointLightIntensity;
     pointLight.position.set(
-      radius * pointLightPositionRadiusScales[0],
-      radius * pointLightPositionRadiusScales[1],
-      radius * pointLightPositionRadiusScales[2],
+      RADIUS * pointLightPositionRadiusScales[0],
+      RADIUS * pointLightPositionRadiusScales[1],
+      RADIUS * pointLightPositionRadiusScales[2],
     );
 
     // apply orbit controls options
     orbitControls.enableDamping = true;
     orbitControls.autoRotate = enableAutoRotate;
     orbitControls.autoRotateSpeed = autoRotateSpeed;
-    orbitControls.dampingFactor = 0.1;
+    orbitControls.dampingFactor = CAMERA_DAMPING_FACTOR;
     orbitControls.enablePan = false;
     orbitControls.enableRotate = enableRotate;
     orbitControls.enableZoom = enableZoom;
-    orbitControls.maxDistance = radius * maxDistanceRadiusScale;
+    orbitControls.maxDistance = RADIUS * maxDistanceRadiusScale;
     orbitControls.maxPolarAngle = maxPolarAngle;
-    orbitControls.minDistance = radius * 1.1;
+    orbitControls.minDistance = RADIUS * CAMERA_MIN_DISTANCE_RADIUS_SCALE;
     orbitControls.minPolarAngle = minPolarAngle;
     orbitControls.rotateSpeed = rotateSpeed;
-    orbitControls.zoomSpeed = 1;
+    orbitControls.zoomSpeed = zoomSpeed;
     orbitControlsRef.current = orbitControls;
   }, [
     ambientLightColor,
@@ -120,8 +131,9 @@ export default function useCamera<T>(
     pointLightColor,
     pointLightIntensity,
     pointLightPositionRadiusScales,
-    radius,
     rotateSpeed,
+    start,
+    zoomSpeed,
   ]);
 
   // update size
@@ -150,7 +162,7 @@ export default function useCamera<T>(
       ];
       const to: Position = coordinatesToPosition(
         focus,
-        radius * focusDistanceRadiusScale,
+        RADIUS * focusDistanceRadiusScale,
       );
       tween(from, to, focusAnimationDuration, focusEasingFunction, () => {
         camera.position.set(...from);
@@ -164,7 +176,7 @@ export default function useCamera<T>(
         ];
         const to: Position = coordinatesToPosition(
           preFocusCoordinates,
-          radius * distanceRadiusScale,
+          RADIUS * distanceRadiusScale,
         );
         tween(
           from,
@@ -188,7 +200,6 @@ export default function useCamera<T>(
     focusAnimationDuration,
     focusDistanceRadiusScale,
     focusEasingFunction,
-    radius,
   ]);
 
   return [cameraRef, orbitControlsRef];

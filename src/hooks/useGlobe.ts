@@ -1,14 +1,18 @@
 import * as React from 'react';
 import * as THREE from 'three';
 
+import {
+  BACKGROUND_RADIUS_SCALE,
+  CLOUDS_RADIUS_OFFSET,
+  GLOBE_SEGMENTS,
+  RADIUS,
+} from '../defaults';
 import { createGlowMesh } from '../three-glowmesh';
 import { GlobeOptions } from '../types';
 
 const { useEffect, useRef } = React;
 
-const BACKGROUND_RADIUS_SCALE = 10;
-const CLOUDS_RADIUS_OFFSET = 1;
-const SEGMENTS = 50;
+const SECONDS_TO_MILLISECONDS = 1000;
 
 export default function useGlobe<T>({
   backgroundTexture,
@@ -22,7 +26,6 @@ export default function useGlobe<T>({
   glowColor,
   glowPower,
   glowRadiusScale,
-  radius,
   texture,
 }: GlobeOptions): React.RefObject<THREE.Group> {
   const globeRef = useRef<THREE.Group>(new THREE.Group());
@@ -41,9 +44,9 @@ export default function useGlobe<T>({
     if (enableBackground) {
       new THREE.TextureLoader().load(backgroundTexture, map => {
         background.geometry = new THREE.SphereGeometry(
-          radius * BACKGROUND_RADIUS_SCALE,
-          SEGMENTS,
-          SEGMENTS,
+          RADIUS * BACKGROUND_RADIUS_SCALE,
+          GLOBE_SEGMENTS,
+          GLOBE_SEGMENTS,
         );
         background.material = new THREE.MeshBasicMaterial({
           map,
@@ -57,9 +60,9 @@ export default function useGlobe<T>({
     if (enableClouds) {
       new THREE.TextureLoader().load(cloudsTexture, map => {
         clouds.geometry = new THREE.SphereGeometry(
-          radius + CLOUDS_RADIUS_OFFSET,
-          SEGMENTS,
-          SEGMENTS,
+          RADIUS + CLOUDS_RADIUS_OFFSET,
+          GLOBE_SEGMENTS,
+          GLOBE_SEGMENTS,
         );
         clouds.material = new THREE.MeshLambertMaterial({
           map,
@@ -69,9 +72,12 @@ export default function useGlobe<T>({
         globe.add(clouds);
 
         function animateClouds(): void {
-          clouds.rotation.x += (Math.random() * cloudsSpeed) / 1000;
-          clouds.rotation.y += (Math.random() * cloudsSpeed) / 1000;
-          clouds.rotation.z += (Math.random() * cloudsSpeed) / 1000;
+          clouds.rotation.x +=
+            (Math.random() * cloudsSpeed) / SECONDS_TO_MILLISECONDS;
+          clouds.rotation.y +=
+            (Math.random() * cloudsSpeed) / SECONDS_TO_MILLISECONDS;
+          clouds.rotation.z +=
+            (Math.random() * cloudsSpeed) / SECONDS_TO_MILLISECONDS;
           requestAnimationFrame(animateClouds);
         }
         animateClouds();
@@ -79,7 +85,11 @@ export default function useGlobe<T>({
     }
 
     new THREE.TextureLoader().load(texture, map => {
-      sphere.geometry = new THREE.SphereGeometry(radius, SEGMENTS, SEGMENTS);
+      sphere.geometry = new THREE.SphereGeometry(
+        RADIUS,
+        GLOBE_SEGMENTS,
+        GLOBE_SEGMENTS,
+      );
       sphere.material = new THREE.MeshLambertMaterial({
         map,
       });
@@ -89,7 +99,7 @@ export default function useGlobe<T>({
       if (enableGlow) {
         const glowMesh = createGlowMesh(
           sphere.geometry,
-          radius * glowRadiusScale,
+          RADIUS * glowRadiusScale,
           {
             color: glowColor,
             coefficient: glowCoefficient,
@@ -112,7 +122,6 @@ export default function useGlobe<T>({
     glowColor,
     glowPower,
     glowRadiusScale,
-    radius,
     texture,
   ]);
 

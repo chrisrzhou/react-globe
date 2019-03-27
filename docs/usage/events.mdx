@@ -1,0 +1,67 @@
+---
+name: Events
+route: /usage/Events
+menu: Usage
+---
+
+import { useState } from "react";
+import { Playground } from "docz";
+import ReactGlobe from "../../src";
+import markers from "../markers";
+
+# Events
+
+<Playground>
+  {() => {
+    const [event, setEvent] = useState(null);
+    function onClickMarker(marker, event, target) {
+      setEvent({
+        type: "CLICK",
+        marker,
+        eventMouse: { x: event.clientX, y: event.clientY },
+        target
+      });
+    }
+    function onDefocus(previousMarker, event, target) {
+      setEvent({
+        type: "DEFOCUS",
+        previousMarker,
+        eventMouse: { x: event.clientX, y: event.clientY },
+        targetMetadata: target.metadata
+      });
+    }
+    function onMouseOutMarker(previousMarker, event, target) {
+      setEvent({
+        type: "MOUSEOUT",
+        previousMarker,
+        eventMouse: { x: event.clientX, y: event.clientY },
+        targetMetadata: target.metadata
+      });
+    }
+    function onMouseOverMarker(marker, event, target) {
+      setEvent({
+        type: "MOUSEOVER",
+        marker,
+        eventMouse: { x: event.clientX, y: event.clientY },
+        targetMetadata: target.metadata
+      });
+    }
+    return (
+      <div>
+        <div style={{ background: "#efefef", height: 400, width: "100%" }}>
+          <ReactGlobe
+            markers={markers}
+            onClickMarker={onClickMarker}
+            onDefocus={onDefocus}
+            onMouseOutMarker={onMouseOutMarker}
+            onMouseOverMarker={onMouseOverMarker}
+          />
+        </div>
+        <h2>
+          <b>Event Name:</b> {event !== null ? event.type : "null"}
+        </h2>
+        <pre style={{ fontSize: 10 }}>{JSON.stringify(event, null, 2)}</pre>
+      </div>
+    );
+  }}
+</Playground>
