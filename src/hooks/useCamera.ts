@@ -17,6 +17,7 @@ import {
   FocusOptions,
   LightsOptions,
   Position,
+  Size,
 } from '../types';
 import { coordinatesToPosition, tween } from '../utils';
 
@@ -48,8 +49,8 @@ export default function useCamera<T>(
     easingFunction: focusEasingFunction,
   }: FocusOptions,
   rendererRef: React.RefObject<THREE.WebGLRenderer>,
-  aspect: number,
-  start: Coordinates,
+  size: Size,
+  lookAt: Coordinates,
   focus?: Coordinates,
 ): [React.RefObject<THREE.PerspectiveCamera>, React.RefObject<OrbitControls>] {
   const cameraRef = useRef<THREE.PerspectiveCamera>(
@@ -88,7 +89,10 @@ export default function useCamera<T>(
     camera.far = CAMERA_FAR;
     camera.fov = CAMERA_FOV;
     camera.near = CAMERA_NEAR;
-    const position = coordinatesToPosition(start, RADIUS * distanceRadiusScale);
+    const position = coordinatesToPosition(
+      lookAt,
+      RADIUS * distanceRadiusScale,
+    );
     camera.position.set(...position);
 
     // apply light options
@@ -125,6 +129,7 @@ export default function useCamera<T>(
     enableAutoRotate,
     enableRotate,
     enableZoom,
+    lookAt,
     maxDistanceRadiusScale,
     maxPolarAngle,
     minPolarAngle,
@@ -132,16 +137,15 @@ export default function useCamera<T>(
     pointLightIntensity,
     pointLightPositionRadiusScales,
     rotateSpeed,
-    start,
     zoomSpeed,
   ]);
 
   // update size
   useEffect(() => {
     const camera = cameraRef.current;
-    camera.aspect = aspect;
+    camera.aspect = size[0] / size[1];
     camera.updateProjectionMatrix();
-  }, [aspect]);
+  }, [size]);
 
   // update focus
   useEffect(() => {

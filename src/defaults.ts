@@ -6,6 +6,7 @@ import * as cloudsTexture from './textures/clouds.png';
 import * as globeTexture from './textures/globe.jpg';
 import {
   CameraOptions,
+  EasingFunction,
   FocusOptions,
   GlobeOptions,
   LightsOptions,
@@ -14,6 +15,7 @@ import {
   MarkerType,
 } from './types';
 
+// hardcoded constants that can eventually be exposed via options
 export const RADIUS = 300;
 export const BACKGROUND_RADIUS_SCALE = 10;
 export const CAMERA_FAR = RADIUS * 100;
@@ -27,6 +29,11 @@ export const MARKER_ANIMATION_DURATION = 2000;
 export const MARKER_DEFAULT_COLOR = '#d1d1d1';
 export const MARKER_SEGMENTS = 10;
 export const MARKER_UNIT_RADIUS_SCALE = 0.01;
+export const MARKER_ACTIVE_ANIMATION_DURATION = 100;
+export const MARKER_ACTIVE_ANIMATION_EASING_FUNCTION: EasingFunction = [
+  'Cubic',
+  'In',
+];
 
 export const defaultCameraOptions: CameraOptions = {
   autoRotateSpeed: 0.02,
@@ -50,7 +57,7 @@ export const defaultFocusOptions: FocusOptions = {
 
 export const defaultGlobeOptions: GlobeOptions = {
   backgroundTexture,
-  cloudsSpeed: 1,
+  cloudsSpeed: 0.5,
   cloudsOpacity: 0.3,
   cloudsTexture,
   enableBackground: true,
@@ -72,6 +79,7 @@ export const defaultLightOptions: LightsOptions = {
 };
 
 export const defaultDotMarkerOptions: MarkerOptions = {
+  activeScale: 2,
   enableTooltip: true,
   getTooltipContent: (marker: Marker) => JSON.stringify(marker.coordinates),
   glowCoefficient: 0,
@@ -82,6 +90,7 @@ export const defaultDotMarkerOptions: MarkerOptions = {
 };
 
 export const defaultBarMarkerOptions: MarkerOptions = {
+  activeScale: 1.1,
   enableTooltip: true,
   getTooltipContent: (marker: Marker) => JSON.stringify(marker.coordinates),
   glowCoefficient: 0,

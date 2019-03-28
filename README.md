@@ -4,10 +4,10 @@ Build beautiful and interactive React + ThreeJS globe visualizations with ease.
 
 ## TODO
 
-- [ ] Support responsive globe radius
+- [ ] Work on `animations` prop that uses `useCamera` focus to power animations
 - [ ] Support passing custom marker renderers
-- [ ] Support scripting for camera to control detailed animations.
-- [ ] Add Gallery to Docs (e.g. #metoorising)
+- [ ] Update docz/README
+- [ ] Add Gallery menu with examples (e.g. #metoorising)
 
 ## Install
 

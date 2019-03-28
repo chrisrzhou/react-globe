@@ -18,23 +18,22 @@ import markers from "../markers";
       setEvent({
         type: "CLICK",
         marker,
-        eventMouse: { x: event.clientX, y: event.clientY },
+        pointerEventPosition: { x: event.clientX, y: event.clientY },
         target
       });
     }
-    function onDefocus(previousMarker, event, target) {
+    function onDefocus(previousMarker, event) {
       setEvent({
         type: "DEFOCUS",
         previousMarker,
-        eventMouse: { x: event.clientX, y: event.clientY },
-        targetMetadata: target.metadata
+        pointerEventPosition: { x: event.clientX, y: event.clientY }
       });
     }
     function onMouseOutMarker(previousMarker, event, target) {
       setEvent({
         type: "MOUSEOUT",
         previousMarker,
-        eventMouse: { x: event.clientX, y: event.clientY },
+        pointerEventPosition: { x: event.clientX, y: event.clientY },
         targetMetadata: target.metadata
       });
     }
@@ -42,7 +41,7 @@ import markers from "../markers";
       setEvent({
         type: "MOUSEOVER",
         marker,
-        eventMouse: { x: event.clientX, y: event.clientY },
+        pointerEventPosition: { x: event.clientX, y: event.clientY },
         targetMetadata: target.metadata
       });
     }

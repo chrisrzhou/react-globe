@@ -1,4 +1,4 @@
-import { Group } from 'three';
+import * as THREE from 'three';
 
 // Common
 export type Coordinates = [number, number];
@@ -98,13 +98,14 @@ export interface LightsOptions {
 }
 
 export interface MarkerOptions {
+  activeScale: number;
   enableTooltip: boolean;
   getTooltipContent: (marker: Marker) => string;
   glowCoefficient: number;
   glowPower: number;
   glowRadiusScale: number;
   radiusScaleRange: [number, number];
-  renderer?: (marker: Marker) => THREE.Group;
+  renderer?: (marker: Marker) => THREE.Object3D;
   type: MarkerType;
 }
 
@@ -118,10 +119,27 @@ export interface Marker {
 export type MarkerCallback = (
   marker: Marker,
   event?: PointerEvent,
-  target?: any,
+  markerObject?: THREE.Object3D,
 ) => void;
 
 export enum MarkerType {
   Bar = 'bar',
   Dot = 'dot',
+}
+
+// Reducer
+export enum ActionType {
+  SetFocus = 'SET_FOCUS',
+  SetActiveMarker = 'SET_ACTIVE_MANAGER',
+}
+
+export interface Action {
+  type: ActionType;
+  payload: any;
+}
+
+export interface State {
+  activeMarker?: Marker;
+  activeMarkerObject?: THREE.Object3D;
+  focus?: Coordinates;
 }

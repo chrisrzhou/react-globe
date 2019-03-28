@@ -10,7 +10,7 @@ import {
   MARKER_UNIT_RADIUS_SCALE,
   RADIUS,
 } from '../defaults';
-import { createGlowMesh } from '../three-glowmesh';
+import { createGlowMesh } from '../three-glow-mesh';
 import { Marker, MarkerCallback, MarkerOptions, MarkerType } from '../types';
 import { coordinatesToPosition, tween } from '../utils';
 
@@ -80,7 +80,7 @@ export default function useMarkers<T>(
                 MARKER_SEGMENTS,
               );
               markerObject.material = new THREE.MeshBasicMaterial({ color });
-              radiusOffset = size;
+              radiusOffset = size * (1 + glowRadiusScale);
               // add glow
               const glowMesh = createGlowMesh(
                 markerObject.geometry as THREE.Geometry,
@@ -109,16 +109,14 @@ export default function useMarkers<T>(
       // handle events
       // @ts-ignore: three.interaction is untyped
       markerObject.on('click', event => {
-        console.log(event);
         event.stopPropagation();
-        onClick(marker, event.data.originalEvent, event.data.target);
+        onClick(marker, event.data.originalEvent, markerObject);
       });
       // @ts-ignore: three.interaction is untyped
       markerObject.on('mousemove', event => {
         event.stopPropagation();
-        onMouseOver(marker, event.data.originalEvent, event.data.target);
+        onMouseOver(marker, event.data.originalEvent, markerObject);
       });
-
       markersRef.current.add(markerObject);
     });
   }, [

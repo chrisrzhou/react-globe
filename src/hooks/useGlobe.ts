@@ -7,7 +7,7 @@ import {
   GLOBE_SEGMENTS,
   RADIUS,
 } from '../defaults';
-import { createGlowMesh } from '../three-glowmesh';
+import { createGlowMesh } from '../three-glow-mesh';
 import { GlobeOptions } from '../types';
 
 const { useEffect, useRef } = React;

@@ -11,6 +11,8 @@ import {
   defaultGlobeOptions,
   defaultLightOptions,
   defaultMarkerOptions,
+  MARKER_ACTIVE_ANIMATION_DURATION,
+  MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
 } from './defaults';
 import {
   useCamera,
@@ -20,8 +22,10 @@ import {
   useRenderer,
   useResize,
 } from './hooks';
+import reducer from './reducer';
 import Tooltip from './Tooltip';
 import {
+  ActionType,
   CameraOptions,
   Coordinates,
   FocusOptions,
@@ -32,8 +36,9 @@ import {
   MarkerOptions,
   Size,
 } from './types';
+import { tween } from './utils';
 
-const { useEffect, useRef, useState } = React;
+const { useEffect, useReducer, useRef } = React;
 
 export interface Props {
   cameraOptions: CameraOptions;
@@ -41,6 +46,7 @@ export interface Props {
   focusOptions: FocusOptions;
   globeOptions: GlobeOptions;
   lightOptions: LightsOptions;
+  lookAt: Coordinates;
   markers: Marker[];
   markerOptions: MarkerOptions;
   onClickMarker?: MarkerCallback;
@@ -48,7 +54,6 @@ export interface Props {
   onMouseOutMarker?: MarkerCallback;
   onMouseOverMarker?: MarkerCallback;
   size: Size;
-  start: Coordinates;
 }
 
 function ReactGlobe({
@@ -57,6 +62,7 @@ function ReactGlobe({
   focusOptions,
   globeOptions,
   lightOptions,
+  lookAt,
   markers,
   markerOptions,
   onClickMarker,
@@ -64,7 +70,6 @@ function ReactGlobe({
   onMouseOutMarker,
   onMouseOverMarker,
   size: initialSize,
-  start,
 }: Props): React.ReactElement {
   // merge options with defaults to support incomplete options
   const mergedGlobeOptions = { ...defaultGlobeOptions, ...globeOptions };
@@ -73,40 +78,86 @@ function ReactGlobe({
   const mergedFocusOptions = { ...defaultFocusOptions, ...focusOptions };
   const mergedMarkerOptions = { ...defaultMarkerOptions, ...markerOptions };
 
-  const [focus, setFocus] = useState<Coordinates>(initialFocus);
-  const [hoveredMarker, setHoveredMarker] = useState<Marker>();
-  const mouseRef = useRef<{ x: number; y: number }>();
+  const [state, dispatch] = useReducer(reducer, {
+    focus: initialFocus,
+  });
+  const { activeMarker, activeMarkerObject, focus } = state;
+  const { enableDefocus } = focusOptions;
+  const { activeScale, enableTooltip, getTooltipContent } = mergedMarkerOptions;
 
   const handleClickMarker = useEventCallback(
-    (marker: Marker, event: PointerEvent, target: any): void => {
-      setFocus(marker.coordinates);
-      setHoveredMarker(undefined);
-      onClickMarker && onClickMarker(marker, event, target);
+    (
+      marker: Marker,
+      event: PointerEvent,
+      markerObject: THREE.Object3D,
+    ): void => {
+      dispatch({
+        type: ActionType.SetFocus,
+        payload: marker.coordinates,
+      });
+      onClickMarker && onClickMarker(marker, event, markerObject);
     },
   );
 
   const handleMouseOutMarker = useEventCallback(
-    (marker: Marker, event: PointerEvent, target: any): void => {
-      setHoveredMarker(undefined);
-      onMouseOutMarker && onMouseOutMarker(marker, event, target);
+    (marker: Marker, event: PointerEvent): void => {
+      dispatch({
+        type: ActionType.SetActiveMarker,
+        payload: {
+          activeMarker: undefined,
+          activeMarkerObject: undefined,
+        },
+      });
+      const from: [number, number, number] = [
+        activeScale,
+        activeScale,
+        activeScale,
+      ];
+      tween(
+        from,
+        [1, 1, 1],
+        MARKER_ACTIVE_ANIMATION_DURATION,
+        MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
+        () => activeMarkerObject.scale.set(...from),
+      );
+      onMouseOutMarker && onMouseOutMarker(marker, event, activeMarkerObject);
     },
   );
 
   const handleMouseOverMarker = useEventCallback(
-    (marker: Marker, event: PointerEvent, target: any): void => {
-      setHoveredMarker(marker);
-      onMouseOverMarker && onMouseOverMarker(marker, event, target);
+    (
+      marker: Marker,
+      event: PointerEvent,
+      markerObject: THREE.Object3D,
+    ): void => {
+      dispatch({
+        type: ActionType.SetActiveMarker,
+        payload: {
+          marker,
+          markerObject,
+        },
+      });
+      const from: [number, number, number] = [1, 1, 1];
+      tween(
+        from,
+        [activeScale, activeScale, activeScale],
+        MARKER_ACTIVE_ANIMATION_DURATION,
+        MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
+        () => markerObject.scale.set(...from),
+      );
+      onMouseOverMarker && onMouseOverMarker(marker, event, markerObject);
     },
   );
 
   const handleDefocus = useEventCallback((event: PointerEvent) => {
-    if (focus && onDefocus) {
-      onDefocus(focus, event);
-      setFocus(undefined);
+    if (focus && enableDefocus) {
+      dispatch({
+        type: ActionType.SetFocus,
+        payload: undefined,
+      });
+      onDefocus && onDefocus(focus, event);
     }
   });
-
-  console.log('render');
 
   // initialize THREE instances
   const [mountRef, size] = useResize(initialSize);
@@ -117,14 +168,15 @@ function ReactGlobe({
     mergedLightOptions,
     mergedFocusOptions,
     rendererRef,
-    size[0] / size[1],
-    start,
+    size,
+    lookAt,
     focus,
   );
   const markersRef = useMarkers(markers, mergedMarkerOptions, {
     onClick: handleClickMarker,
     onMouseOver: handleMouseOverMarker,
   });
+  const mouseRef = useRef<{ x: number; y: number }>();
 
   // track mouse position
   useEffect(() => {
@@ -139,7 +191,10 @@ function ReactGlobe({
 
   // sync state with props
   useEffect(() => {
-    setFocus(initialFocus);
+    dispatch({
+      type: ActionType.SetFocus,
+      payload: initialFocus,
+    });
   }, [initialFocus]);
 
   // handle animation effect
@@ -158,20 +213,18 @@ function ReactGlobe({
     mount.appendChild(renderer.domElement);
 
     // initialize interaction events
-    new Interaction(renderer, scene, camera, {
-      interactionFrequency: 100,
-    });
+    new Interaction(renderer, scene, camera);
     // @ts-ignore: three.interaction is untyped
     scene.on('mousemove', event => {
-      if (hoveredMarker) {
+      if (activeMarker) {
         handleMouseOutMarker(
-          hoveredMarker,
+          activeMarker,
           event.data.originalEvent,
-          event.data.target,
+          activeMarkerObject,
         );
       }
     });
-    if (mergedFocusOptions.enableDefocus && focus) {
+    if (enableDefocus && focus) {
       // @ts-ignore: three.interaction is untyped
       scene.on('click', event => {
         handleDefocus(event.data.originalEvent);
@@ -193,14 +246,15 @@ function ReactGlobe({
       mount.removeChild(renderer.domElement);
     };
   }, [
+    activeMarker,
+    activeMarkerObject,
     cameraRef,
+    enableDefocus,
     focus,
     globeRef,
     handleDefocus,
     handleMouseOutMarker,
-    hoveredMarker,
     markersRef,
-    mergedFocusOptions.enableDefocus,
     mountRef,
     orbitControlsRef,
     rendererRef,
@@ -209,12 +263,12 @@ function ReactGlobe({
   return (
     <div ref={mountRef} style={{ height: '100%', width: '100%' }}>
       <canvas ref={canvasRef} style={{ display: 'block' }} />
-      {mergedMarkerOptions.enableTooltip && hoveredMarker && (
+      {enableTooltip && activeMarker && (
         <Tooltip
           offset={10}
           x={mouseRef.current.x}
           y={mouseRef.current.y}
-          content={mergedMarkerOptions.getTooltipContent(hoveredMarker)}
+          content={getTooltipContent(activeMarker)}
         />
       )}
     </div>
@@ -226,9 +280,9 @@ ReactGlobe.defaultProps = {
   focusOptions: defaultFocusOptions,
   globeOptions: defaultGlobeOptions,
   lightOptions: defaultLightOptions,
+  lookAt: [1.3521, 103.8198],
   markers: [],
   markerOptions: defaultMarkerOptions,
-  start: [1.3521, 103.8198],
 };
 
 export default ReactGlobe;
