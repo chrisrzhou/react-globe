@@ -6,6 +6,9 @@ import * as THREE from 'three';
 import {
   MARKER_ANIMATION_DURATION,
   MARKER_DEFAULT_COLOR,
+  MARKER_GLOW_COEFFICIENT,
+  MARKER_GLOW_POWER,
+  MARKER_GLOW_RADIUS_SCALE,
   MARKER_SEGMENTS,
   MARKER_UNIT_RADIUS_SCALE,
   RADIUS,
@@ -23,14 +26,7 @@ interface Handlers {
 
 export default function useMarkers<T>(
   markers: Marker[],
-  {
-    glowCoefficient,
-    glowPower,
-    glowRadiusScale,
-    radiusScaleRange,
-    renderer,
-    type,
-  }: MarkerOptions,
+  { radiusScaleRange, renderer, type }: MarkerOptions,
   { onClick, onMouseOver }: Handlers,
 ): React.RefObject<THREE.Group> {
   const markersRef = useRef<THREE.Group>(new THREE.Group());
@@ -47,61 +43,66 @@ export default function useMarkers<T>(
 
     markersRef.current.children = []; // clear data before adding
     markers.forEach(marker => {
-      const shouldUseCustomMarker = renderer !== undefined;
       const { coordinates, value } = marker;
+      const shouldUseCustomMarker = renderer !== undefined;
 
       const color = marker.color || MARKER_DEFAULT_COLOR;
       const size = sizeScale(value);
-      let radiusOffset = 0;
-      let markerObject: THREE.Mesh = new THREE.Mesh();
+      let markerObject: THREE.Object3D;
 
       if (shouldUseCustomMarker) {
-        // TODO: implement custom renderer
+        markerObject = renderer(marker);
       } else {
         let from = { size: 0 };
         const to = { size };
+        const mesh = new THREE.Mesh();
         tween(from, to, MARKER_ANIMATION_DURATION, ['Linear', 'None'], () => {
           switch (type) {
             case MarkerType.Bar:
-              markerObject.geometry = new THREE.BoxGeometry(
+              mesh.geometry = new THREE.BoxGeometry(
                 unitRadius,
                 unitRadius,
                 from.size,
               );
-              markerObject.material = new THREE.MeshLambertMaterial({
+              mesh.material = new THREE.MeshLambertMaterial({
                 color,
               });
               break;
             case MarkerType.Dot:
             default:
-              markerObject.geometry = new THREE.SphereGeometry(
+              mesh.geometry = new THREE.SphereGeometry(
                 from.size,
                 MARKER_SEGMENTS,
                 MARKER_SEGMENTS,
               );
-              markerObject.material = new THREE.MeshBasicMaterial({ color });
-              radiusOffset = size * (1 + glowRadiusScale);
+              mesh.material = new THREE.MeshBasicMaterial({ color });
               // add glow
               const glowMesh = createGlowMesh(
-                markerObject.geometry as THREE.Geometry,
-                from.size * glowRadiusScale,
+                mesh.geometry.clone() as THREE.Geometry,
+                from.size * MARKER_GLOW_RADIUS_SCALE,
                 {
                   color,
-                  coefficient: glowCoefficient,
-                  power: glowPower,
+                  coefficient: MARKER_GLOW_COEFFICIENT,
+                  power: MARKER_GLOW_POWER,
                 },
                 false,
               );
-              markerObject.children = [];
-              markerObject.add(glowMesh);
+              mesh.children = [];
+              mesh.add(glowMesh);
           }
         });
+        markerObject = mesh;
+      }
+
+      let heightOffset = 0;
+      if (type === MarkerType.Dot) {
+        heightOffset = (size * (1 + MARKER_GLOW_RADIUS_SCALE)) / 2;
       }
 
       // place markers
       const position = coordinatesToPosition(
         coordinates,
-        RADIUS + radiusOffset,
+        RADIUS + heightOffset,
       );
       markerObject.position.set(...position);
       markerObject.lookAt(new THREE.Vector3(0, 0, 0));
@@ -120,9 +121,6 @@ export default function useMarkers<T>(
       markersRef.current.add(markerObject);
     });
   }, [
-    glowCoefficient,
-    glowPower,
-    glowRadiusScale,
     markers,
     onClick,
     onMouseOver,

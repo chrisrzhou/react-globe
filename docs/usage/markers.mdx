@@ -4,6 +4,7 @@ route: /usage/markers
 menu: Usage
 ---
 
+import * as THREE from "three";
 import { Playground } from "docz";
 import ReactGlobe from "../../src";
 
@@ -27,11 +28,71 @@ import ReactGlobe from "../../src";
           color: "orange",
           coordinates: [37.773972, -122.431297],
           value: 35
+        },
+        {
+          coordinates: [39.9042, 116.4074],
+          value: 135
+        },
+        {
+          coordinates: [51.5074, 0.1278],
+          value: 80
         }
       ]}
-      onClickMarker={marker => console.log("clicked", marker)}
-      onDefocus={previousFocus => console.log("defocus", previousFocus)}
-      onHoverMarker={marker => console.log("clicked", marker)}
+    />
+  </div>
+</Playground>
+
+## Custom Renderer
+
+<Playground>
+  <div style={{ background: "#efefef", height: 800, width: "100%" }}>
+    <ReactGlobe
+      markers={[
+        {
+          id: 1,
+          color: "red",
+          coordinates: [1.3521, 103.8198],
+          value: 50
+        },
+        {
+          id: 2,
+          color: "blue",
+          coordinates: [40.73061, -73.935242],
+          value: 25
+        },
+        {
+          id: 3,
+          color: "orange",
+          coordinates: [37.773972, -122.431297],
+          value: 35
+        },
+        {
+          id: 4,
+          color: "gold",
+          coordinates: [39.9042, 116.4074],
+          value: 135
+        },
+        {
+          id: 5,
+          color: "green",
+          coordinates: [51.5074, 0.1278],
+          value: 80
+        }
+      ]}
+      markerOptions={{
+        renderer: marker => {
+          const { color, id, value } = marker;
+          const scaledSize = value / 2;
+          const geometry =
+            id > 3
+              ? new THREE.BoxGeometry(scaledSize, scaledSize, scaledSize)
+              : new THREE.SphereGeometry(scaledSize, 10, 10);
+          const material = new THREE.MeshLambertMaterial({
+            color: new THREE.Color(color)
+          });
+          return new THREE.Mesh(geometry, material);
+        }
+      }}
     />
   </div>
 </Playground>

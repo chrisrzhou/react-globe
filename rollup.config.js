@@ -12,7 +12,17 @@ export default [
       typescript(),
     ],
     input: 'src/index.ts',
-    external: ['react', 'tippy.js'],
+    external: [
+      'd3-array',
+      'd3-scale',
+      'es6-tween',
+      'react',
+      'resize-observer-polyfill',
+      'three',
+      'three.interaction',
+      'three-orbitcontrols',
+      'tippy.js',
+    ],
     output: [
       {
         exports: 'named',

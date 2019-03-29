@@ -26,7 +26,10 @@ export const CAMERA_MIN_DISTANCE_RADIUS_SCALE = 1.1;
 export const CLOUDS_RADIUS_OFFSET = 1;
 export const GLOBE_SEGMENTS = 50;
 export const MARKER_ANIMATION_DURATION = 2000;
-export const MARKER_DEFAULT_COLOR = '#d1d1d1';
+export const MARKER_DEFAULT_COLOR = 'gold';
+export const MARKER_GLOW_COEFFICIENT = 0;
+export const MARKER_GLOW_POWER = 3;
+export const MARKER_GLOW_RADIUS_SCALE = 2;
 export const MARKER_SEGMENTS = 10;
 export const MARKER_UNIT_RADIUS_SCALE = 0.01;
 export const MARKER_ACTIVE_ANIMATION_DURATION = 100;
@@ -79,23 +82,17 @@ export const defaultLightOptions: LightsOptions = {
 };
 
 export const defaultDotMarkerOptions: MarkerOptions = {
-  activeScale: 2,
+  activeScale: 1.3,
   enableTooltip: true,
   getTooltipContent: (marker: Marker) => JSON.stringify(marker.coordinates),
-  glowCoefficient: 0,
-  glowPower: 4,
-  glowRadiusScale: 3,
-  radiusScaleRange: [0.005, 0.01],
+  radiusScaleRange: [0.005, 0.02],
   type: MarkerType.Dot,
 };
 
 export const defaultBarMarkerOptions: MarkerOptions = {
-  activeScale: 1.1,
+  activeScale: 1.05,
   enableTooltip: true,
   getTooltipContent: (marker: Marker) => JSON.stringify(marker.coordinates),
-  glowCoefficient: 0,
-  glowPower: 4,
-  glowRadiusScale: 0,
   radiusScaleRange: [0.2, defaultFocusOptions.distanceRadiusScale - 1],
   type: MarkerType.Bar,
 };

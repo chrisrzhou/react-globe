@@ -26,6 +26,7 @@ import reducer from './reducer';
 import Tooltip from './Tooltip';
 import {
   ActionType,
+  Animation,
   CameraOptions,
   Coordinates,
   FocusOptions,
@@ -41,6 +42,7 @@ import { tween } from './utils';
 const { useEffect, useReducer, useRef } = React;
 
 export interface Props {
+  animations: Animation[];
   cameraOptions: CameraOptions;
   focus?: Coordinates;
   focusOptions: FocusOptions;
@@ -57,9 +59,10 @@ export interface Props {
 }
 
 function ReactGlobe({
+  animations,
   cameraOptions,
   focus: initialFocus,
-  focusOptions,
+  focusOptions: initialFocusOptions,
   globeOptions,
   lightOptions,
   lookAt,
@@ -75,13 +78,14 @@ function ReactGlobe({
   const mergedGlobeOptions = { ...defaultGlobeOptions, ...globeOptions };
   const mergedCameraOptions = { ...defaultCameraOptions, ...cameraOptions };
   const mergedLightOptions = { ...defaultLightOptions, ...lightOptions };
-  const mergedFocusOptions = { ...defaultFocusOptions, ...focusOptions };
+  const mergedFocusOptions = { ...defaultFocusOptions, ...initialFocusOptions };
   const mergedMarkerOptions = { ...defaultMarkerOptions, ...markerOptions };
 
   const [state, dispatch] = useReducer(reducer, {
     focus: initialFocus,
+    focusOptions: mergedFocusOptions,
   });
-  const { activeMarker, activeMarkerObject, focus } = state;
+  const { activeMarker, activeMarkerObject, focus, focusOptions } = state;
   const { enableDefocus } = focusOptions;
   const { activeScale, enableTooltip, getTooltipContent } = mergedMarkerOptions;
 
@@ -118,7 +122,11 @@ function ReactGlobe({
         [1, 1, 1],
         MARKER_ACTIVE_ANIMATION_DURATION,
         MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
-        () => activeMarkerObject.scale.set(...from),
+        () => {
+          if (activeMarkerObject) {
+            activeMarkerObject.scale.set(...from);
+          }
+        },
       );
       onMouseOutMarker && onMouseOutMarker(marker, event, activeMarkerObject);
     },
@@ -137,13 +145,17 @@ function ReactGlobe({
           markerObject,
         },
       });
-      const from: [number, number, number] = [1, 1, 1];
+      const from = markerObject.scale.toArray() as [number, number, number];
       tween(
         from,
         [activeScale, activeScale, activeScale],
         MARKER_ACTIVE_ANIMATION_DURATION,
         MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
-        () => markerObject.scale.set(...from),
+        () => {
+          if (markerObject) {
+            markerObject.scale.set(...from);
+          }
+        },
       );
       onMouseOverMarker && onMouseOverMarker(marker, event, markerObject);
     },
@@ -166,7 +178,7 @@ function ReactGlobe({
   const [cameraRef, orbitControlsRef] = useCamera(
     mergedCameraOptions,
     mergedLightOptions,
-    mergedFocusOptions,
+    focusOptions,
     rendererRef,
     size,
     lookAt,
@@ -197,7 +209,45 @@ function ReactGlobe({
     });
   }, [initialFocus]);
 
-  // handle animation effect
+  // handle animations
+  useEffect(() => {
+    let wait = 0;
+    const timeouts: NodeJS.Timeout[] = [];
+
+    animations.forEach(animation => {
+      const {
+        animationDuration,
+        coordinates,
+        distanceRadiusScale,
+        easingFunction,
+      } = animation;
+      const timeout: NodeJS.Timeout = setTimeout(
+        () =>
+          dispatch({
+            type: ActionType.Animate,
+            payload: {
+              focus: coordinates,
+              focusOptions: {
+                animationDuration,
+                distanceRadiusScale,
+                easingFunction,
+              },
+            },
+          }),
+        wait,
+      );
+      timeouts.push(timeout);
+      wait += animationDuration;
+    });
+
+    return () => {
+      timeouts.forEach(timeout => {
+        clearTimeout(timeout);
+      });
+    };
+  }, [animations]);
+
+  // handle scene and rendering loop
   useEffect(() => {
     const mount = mountRef.current;
     const renderer = rendererRef.current;
@@ -276,6 +326,7 @@ function ReactGlobe({
 }
 
 ReactGlobe.defaultProps = {
+  animations: [],
   cameraOptions: defaultCameraOptions,
   focusOptions: defaultFocusOptions,
   globeOptions: defaultGlobeOptions,

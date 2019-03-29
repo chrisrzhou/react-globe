@@ -101,9 +101,6 @@ export interface MarkerOptions {
   activeScale: number;
   enableTooltip: boolean;
   getTooltipContent: (marker: Marker) => string;
-  glowCoefficient: number;
-  glowPower: number;
-  glowRadiusScale: number;
   radiusScaleRange: [number, number];
   renderer?: (marker: Marker) => THREE.Object3D;
   type: MarkerType;
@@ -129,6 +126,7 @@ export enum MarkerType {
 
 // Reducer
 export enum ActionType {
+  Animate = 'ANIMATE',
   SetFocus = 'SET_FOCUS',
   SetActiveMarker = 'SET_ACTIVE_MANAGER',
 }
@@ -142,4 +140,13 @@ export interface State {
   activeMarker?: Marker;
   activeMarkerObject?: THREE.Object3D;
   focus?: Coordinates;
+  focusOptions: FocusOptions;
+}
+
+// Animation
+export interface Animation {
+  animationDuration: number;
+  coordinates: Coordinates;
+  distanceRadiusScale: number;
+  easingFunction: EasingFunction;
 }
