@@ -4,21 +4,10 @@ import * as THREE from 'three';
 import OrbitControls from 'three-orbitcontrols';
 
 import {
-  CAMERA_DAMPING_FACTOR,
-  CAMERA_FAR,
-  CAMERA_FOV,
-  CAMERA_MIN_DISTANCE_RADIUS_SCALE,
-  CAMERA_NEAR,
-  RADIUS,
+    CAMERA_DAMPING_FACTOR, CAMERA_FAR, CAMERA_FOV, CAMERA_MIN_DISTANCE_RADIUS_SCALE, CAMERA_NEAR,
+    RADIUS
 } from '../defaults';
-import {
-  CameraOptions,
-  Coordinates,
-  FocusOptions,
-  LightsOptions,
-  Position,
-  Size,
-} from '../types';
+import { CameraOptions, Coordinates, FocusOptions, LightOptions, Position, Size } from '../types';
 import { coordinatesToPosition, tween } from '../utils';
 
 const { useEffect, useRef } = React;
@@ -42,7 +31,7 @@ export default function useCamera<T>(
     pointLightColor,
     pointLightIntensity,
     pointLightPositionRadiusScales,
-  }: LightsOptions,
+  }: LightOptions,
   {
     animationDuration: focusAnimationDuration,
     distanceRadiusScale: focusDistanceRadiusScale,

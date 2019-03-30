@@ -1,4 +1,4 @@
-# 🌍 React Globe
+# 🌎 React Globe
 
 Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
@@ -8,7 +8,7 @@ Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
 - ☀️ Beautiful and complete with clouds + backgrounds + lighting.
 - ✌️ Incredibly simple to use and configure.
-- 🗺 Render interactive markers easily on the globe with simple data.
+- 📍 Render interactive markers easily on the globe with simple data.
 - 🤸‍ Globe animations simplified.
 - ⚛️ Modern Javascript + build tools.
 

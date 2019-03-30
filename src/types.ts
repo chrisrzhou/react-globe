@@ -1,7 +1,65 @@
 import * as THREE from 'three';
 
-// Common
+// Internal
+export enum ActionType {
+  Animate = 'ANIMATE',
+  SetFocus = 'SET_FOCUS',
+  SetActiveMarker = 'SET_ACTIVE_MANAGER',
+}
+
+export interface Action {
+  type: ActionType;
+  payload: any;
+}
+
+export interface State {
+  activeMarker?: Marker;
+  activeMarkerObject?: THREE.Object3D;
+  focus?: Coordinates;
+  focusOptions: FocusOptions;
+}
+
 export type Coordinates = [number, number];
+
+export type Position = [number, number, number];
+
+export type Size = [number, number];
+
+// Props
+export interface Animation {
+  /** Duration of the animation. */
+  animationDuration: number;
+  /** Coordinates that the globe will animate to. */
+  coordinates: Coordinates;
+  /** Distance (measured as a scale factor to the globe radius) that the globe will animate to. **/
+  distanceRadiusScale: number;
+  /** Easing function applied for the animation. */
+  easingFunction: EasingFunction;
+}
+
+export interface CameraOptions {
+  /** Auto-rotate speed. */
+  autoRotateSpeed: number;
+  /** Distance (measured as a scale factor to the globe radius) that the camera is placed.  This number should be greater than 1. */
+  distanceRadiusScale: number;
+  /** Enable the auto-rotate feature of the globe. */
+  enableAutoRotate: boolean;
+  /** Enable the rotate feature of the globe. */
+  enableRotate: boolean;
+  /** Enable the zoom feature of the globe. */
+  enableZoom: boolean;
+  /** Max distance (measured as a scale factor to the globe radius) that the camera is allowed to be zoomed out.  This number should be greater than `distanceRadiusScale`. */
+  maxDistanceRadiusScale: number;
+  /** The maximum angle to orbit vertically.  This number should be between `0` to `Math.PI` radians. */
+  maxPolarAngle: number;
+  /** The minimum angle to orbit vertically.  This number should be between `0` to `Math.PI` radians. */
+  minPolarAngle: number;
+  /** Speed of rotation. */
+  rotateSpeed: number;
+  /** Speed of zoom. */
+  zoomSpeed: number;
+}
+
 export type EasingFunction =  // TweenJS curves: https://sole.github.io/tween.js/examples/03_graphs.html
   | ['Back', 'In']
   | ['Back', 'Out']
@@ -50,22 +108,6 @@ export type EasingFunction =  // TweenJS curves: https://sole.github.io/tween.js
   | ['Quadratic', 'In']
   | ['Quadratic', 'Out']
   | ['Quadratic', 'InOut'];
-export type Position = [number, number, number];
-export type Size = [number, number];
-
-// Options
-export interface CameraOptions {
-  autoRotateSpeed: number;
-  distanceRadiusScale: number;
-  enableAutoRotate: boolean;
-  enableRotate: boolean;
-  enableZoom: boolean;
-  maxDistanceRadiusScale: number;
-  maxPolarAngle: number;
-  minPolarAngle: number;
-  rotateSpeed: number;
-  zoomSpeed: number;
-}
 
 export interface FocusOptions {
   animationDuration: number;
@@ -89,12 +131,29 @@ export interface GlobeOptions {
   texture: string;
 }
 
-export interface LightsOptions {
+export interface LightOptions {
   ambientLightColor: string;
   ambientLightIntensity: number;
   pointLightColor: string;
   pointLightIntensity: number;
   pointLightPositionRadiusScales: Position;
+}
+
+export interface Marker {
+  coordinates: Coordinates;
+  value: number;
+  [key: string]: any;
+}
+
+export type MarkerCallback = (
+  marker: Marker,
+  markerObject?: THREE.Object3D,
+  event?: PointerEvent,
+) => void;
+
+export enum MarkerType {
+  Bar = 'bar',
+  Dot = 'dot',
 }
 
 export interface MarkerOptions {
@@ -104,49 +163,4 @@ export interface MarkerOptions {
   radiusScaleRange: [number, number];
   renderer?: (marker: Marker) => THREE.Object3D;
   type: MarkerType;
-}
-
-// Markers
-export interface Marker {
-  coordinates: Coordinates;
-  value: number;
-  [key: string]: any;
-}
-
-export type MarkerCallback = (
-  marker: Marker,
-  event?: PointerEvent,
-  markerObject?: THREE.Object3D,
-) => void;
-
-export enum MarkerType {
-  Bar = 'bar',
-  Dot = 'dot',
-}
-
-// Reducer
-export enum ActionType {
-  Animate = 'ANIMATE',
-  SetFocus = 'SET_FOCUS',
-  SetActiveMarker = 'SET_ACTIVE_MANAGER',
-}
-
-export interface Action {
-  type: ActionType;
-  payload: any;
-}
-
-export interface State {
-  activeMarker?: Marker;
-  activeMarkerObject?: THREE.Object3D;
-  focus?: Coordinates;
-  focusOptions: FocusOptions;
-}
-
-// Animation
-export interface Animation {
-  animationDuration: number;
-  coordinates: Coordinates;
-  distanceRadiusScale: number;
-  easingFunction: EasingFunction;
 }

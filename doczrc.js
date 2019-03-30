@@ -1,11 +1,27 @@
 export default {
   dest: 'dist/docs',
-  hashRouter: true,
   menu: [
     'README',
     {
+      name: 'Props',
+      menu: ['Component', 'Types'],
+    },
+    {
       name: 'Usage',
-      menu: ['Props', 'Basic', 'Focus'],
+      menu: [
+        'Globe',
+        'Textures',
+        'Camera',
+        'Lights',
+        'Focus',
+        'Markers',
+        'Events',
+        'Animations',
+      ],
+    },
+    {
+      name: 'Gallery',
+      menu: ['metoorising'],
     },
     'FAQ',
     'CHANGELOG',

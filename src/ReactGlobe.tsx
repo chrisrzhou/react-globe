@@ -31,9 +31,8 @@ import {
   Coordinates,
   FocusOptions,
   GlobeOptions,
-  LightsOptions,
+  LightOptions,
   Marker,
-  MarkerCallback,
   MarkerOptions,
   Size,
 } from './types';
@@ -42,23 +41,49 @@ import { tween } from './utils';
 const { useEffect, useReducer, useRef } = React;
 
 export interface Props {
+  /** An array of animation steps to script globe animations. */
   animations: Animation[];
+  /** Configure camera options (e.g. rotation, zoom, angles). */
   cameraOptions: CameraOptions;
+  /** A set of coordinates to be focused on. */
   focus?: Coordinates;
+  /** Configure focusing options (e.g. animation duration, distance, easing function). */
   focusOptions: FocusOptions;
+  /** Configure globe options (e.g. textures, background, clouds, glow). */
   globeOptions: GlobeOptions;
-  lightOptions: LightsOptions;
+  /** Configure light options (ambient and point light colors and intensity). */
+  lightOptions: LightOptions;
+  /** A set of starting coordinates for the globe. */
   lookAt: Coordinates;
+  /** An array of data that will render interactive markers on the globe. */
   markers: Marker[];
+  /** Configure marker options (e.g. tooltips, size, marker types and custom marker renderer). */
   markerOptions: MarkerOptions;
-  onClickMarker?: MarkerCallback;
+  /** Callback to handle click events on a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
+  onClickMarker?: (
+    marker: Marker,
+    markerObject?: THREE.Object3D,
+    event?: PointerEvent,
+  ) => void;
+  /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates and pointer event. */
   onDefocus?: (previousFocus: Coordinates, event?: PointerEvent) => void;
-  onMouseOutMarker?: MarkerCallback;
-  onMouseOverMarker?: MarkerCallback;
+  /** Callback to handle mouseout events of a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
+  onMouseOutMarker?: (
+    marker: Marker,
+    markerObject?: THREE.Object3D,
+    event?: PointerEvent,
+  ) => void;
+  /** Callback to handle mouseover events a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
+  onMouseOverMarker?: (
+    marker: Marker,
+    markerObject?: THREE.Object3D,
+    event?: PointerEvent,
+  ) => void;
+  /** Set explicit [width, height] values for the canvas container.  This will disable responsive resizing. */
   size: Size;
 }
 
-function ReactGlobe({
+export default function ReactGlobe({
   animations,
   cameraOptions,
   focus: initialFocus,
@@ -99,7 +124,7 @@ function ReactGlobe({
         type: ActionType.SetFocus,
         payload: marker.coordinates,
       });
-      onClickMarker && onClickMarker(marker, event, markerObject);
+      onClickMarker && onClickMarker(marker, markerObject, event);
     },
   );
 
@@ -128,7 +153,7 @@ function ReactGlobe({
           }
         },
       );
-      onMouseOutMarker && onMouseOutMarker(marker, event, activeMarkerObject);
+      onMouseOutMarker && onMouseOutMarker(marker, activeMarkerObject, event);
     },
   );
 
@@ -157,7 +182,7 @@ function ReactGlobe({
           }
         },
       );
-      onMouseOverMarker && onMouseOverMarker(marker, event, markerObject);
+      onMouseOverMarker && onMouseOverMarker(marker, markerObject, event);
     },
   );
 
@@ -335,5 +360,3 @@ ReactGlobe.defaultProps = {
   markers: [],
   markerOptions: defaultMarkerOptions,
 };
-
-export default ReactGlobe;

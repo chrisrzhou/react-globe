@@ -9,7 +9,7 @@ import {
   EasingFunction,
   FocusOptions,
   GlobeOptions,
-  LightsOptions,
+  LightOptions,
   Marker,
   MarkerOptions,
   MarkerType,
@@ -73,7 +73,7 @@ export const defaultGlobeOptions: GlobeOptions = {
   texture: globeTexture,
 };
 
-export const defaultLightOptions: LightsOptions = {
+export const defaultLightOptions: LightOptions = {
   ambientLightColor: 'white',
   ambientLightIntensity: 1,
   pointLightColor: 'white',
