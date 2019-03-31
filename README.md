@@ -22,22 +22,11 @@ Note that `react-globe` requires `react >= 16.8.0` and `three >= 0.102.0` as pee
 
 ## Examples
 
+### Documented Examples
+
 View all documented examples at https://react-globe.netlify.com/
 
-Here is a simple example with no props!
-
-```js
-import * as React from "react";
-import ReactGlobe from "react-globe";
-
-function MyApp() {
-  return (
-    <div style={{ width: 600, height: 400 }}>
-      <ReactGlobe />
-    </div>
-  );
-}
-```
+### Local Examples
 
 You can also run the examples locally:
 
@@ -48,6 +37,16 @@ cd react-globe
 yarn
 yarn dev
 ```
+
+### Simple Example (no props)
+
+<iframe src="https://codesandbox.io/embed/88645px230?fontsize=14" title="react-globe-simple" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+
+Here is a simple example with no props!
+
+### Interactive Example (with markers)
+
+<iframe src="https://codesandbox.io/embed/p5lwvkp7x?fontsize=14" title="react-globe-interactive" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
 ## Development
 
