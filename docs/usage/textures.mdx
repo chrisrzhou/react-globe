@@ -7,12 +7,6 @@ menu: Usage
 import { useState } from "react";
 import { Playground } from "docz";
 import ReactGlobe from "./ReactGlobe";
-import background1 from "../../textures/background.png";
-import background2 from "../../textures/background_milky_way.jpg";
-import clouds1 from "../../textures/clouds.png";
-import clouds2 from "../../textures/clouds2.png";
-import globe1 from "../../textures/globe.jpg";
-import globe2 from "../../textures/globe_dark.jpg";
 
 # Textures
 
@@ -20,27 +14,34 @@ Provide a valid image URL or relative image path to the `globeOptions` prop to s
 
 <Playground>
   {() => {
-    const [background, setBackground] = useState(0);
-    const [globe, setGlobe] = useState(0);
-    const [clouds, setClouds] = useState(0);
-    const backgroundTexture = background === 0 ? background1 : background2;
-    const texture = globe === 0 ? globe1 : globe2;
-    const cloudsTexture = clouds === 0 ? clouds1 : clouds2;
+    const background1 = "background.png";
+    const background2 = "background_milky_way.jpg";
+    const clouds1 = "clouds.png";
+    const clouds2 = "clouds2.png";
+    const globe1 = "globe.jpg";
+    const globe2 = "globe_dark.jpg";
+    const [background, setBackground] = useState(background1);
+    const [globe, setGlobe] = useState(globe1);
+    const [clouds, setClouds] = useState(clouds1);
     return (
       <div>
-        <button onClick={() => setGlobe(0)}>Globe (default)</button>
-        <button onClick={() => setGlobe(1)}>Globe (dark)</button>
+        <button onClick={() => setGlobe(globe1)}>Globe (default)</button>
+        <button onClick={() => setGlobe(globe2)}>Globe (dark)</button>
         <br />
-        <button onClick={() => setBackground(0)}>Background (default)</button>
-        <button onClick={() => setBackground(1)}>Background (Milky Way)</button>
+        <button onClick={() => setBackground(background1)}>
+          Background (default)
+        </button>
+        <button onClick={() => setBackground(background2)}>
+          Background (Milky Way)
+        </button>
         <br />
-        <button onClick={() => setClouds(0)}>Clouds (default)</button>
-        <button onClick={() => setClouds(1)}>Clouds (dense)</button>
+        <button onClick={() => setClouds(clouds1)}>Clouds (default)</button>
+        <button onClick={() => setClouds(clouds2)}>Clouds (dense)</button>
         <ReactGlobe
           globeOptions={{
-            backgroundTexture,
-            cloudsTexture,
-            texture
+            backgroundTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${background}`,
+            cloudsTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${clouds}`,
+            texture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${globe}`
           }}
         />
       </div>

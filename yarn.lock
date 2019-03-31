@@ -3359,20 +3359,20 @@ docz-core@1.0.0-rc.6:
     ws "^6.2.1"
     yargs "^13.2.2"
 
-docz-theme-default@^1.0.0-rc.4:
-  version "1.0.0-rc.21"
-  resolved "https://registry.yarnpkg.com/docz-theme-default/-/docz-theme-default-1.0.0-rc.21.tgz#96b1e9da82aa125289b8235c2b7f27377cc9ee18"
-  integrity sha512-Dduon0HtSUDJNQWAprcC6ZoIK/60yyKFkbBf6IX0TmiAzloctzFKMQe/1UzlOs13R2pEqvne936szYdMZeDg/A==
+docz-theme-default@^1.0.0-rc.6:
+  version "1.0.0-rc.6"
+  resolved "https://registry.yarnpkg.com/docz-theme-default/-/docz-theme-default-1.0.0-rc.6.tgz#8dd407224840604d4611e85f6c013cc78317f5a1"
+  integrity sha512-rkiUP6J9Aej0pKzB6k9QySAudeyzM4fHbt/SbK9CKg5OlLfT1qnDDYRmVEXFj1VObZf14RctuCMCdmIipnJcuw==
   dependencies:
     "@reach/router" "^1.2.1"
     "@tippy.js/react" "^2.1.2"
     codemirror "^5.45.0"
     copy-text-to-clipboard "^2.0.0"
-    docz "1.0.0-rc.21+2bae93b5"
+    docz "1.0.0-rc.6"
     facepaint "^1.2.1"
-    hotkeys-js "^3.6.1"
+    hotkeys-js "^3.6.2"
     lodash "^4.17.11"
-    polished "^3.1.0"
+    polished "^3.2.0"
     prop-types "15.7.2"
     re-resizable "^4.11.0"
     react "^16.8.6"
@@ -3412,7 +3412,7 @@ docz-utils@1.0.0-rc.6:
     unist-util-is "^2.1.2"
     unist-util-visit "^1.4.0"
 
-docz@1.0.0-rc.21+2bae93b5, docz@^1.0.0-rc.4:
+docz@1.0.0-rc.6, docz@^1.0.0-rc.6:
   version "1.0.0-rc.6"
   resolved "https://registry.yarnpkg.com/docz/-/docz-1.0.0-rc.6.tgz#365e3d65eb97bcda6af10723a0995c2b8a1a9dd7"
   integrity sha512-vXebQEB2k29me8aenXeb3UoIpcwgY0TnXxin+a6VXs4d6/dlPYnSAxijq6jlx8MyPVYUtMkQg1bp0vkNVzjqNQ==
@@ -4720,7 +4720,7 @@ hosted-git-info@^2.1.4:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
   integrity sha512-7T/BxH19zbcCTa8XkMlbK5lTo1WtgkFi3GvdWEyNuc4Vex7/9Dqbnpsf4JMydcfj9HCg4zUWFTL3Za6lapg5/w==
 
-hotkeys-js@^3.6.1:
+hotkeys-js@^3.6.2:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.6.2.tgz#4c44384cd71f51b7f208e08322d908fe34ec18f4"
   integrity sha512-CAO6dCycIRyxabrCx8ZW2MoEmNrHdGoYKN1WBw+DY/YdVvPhECGi7E4IIfCjOkaxbRLCik2TOYWox2EDHYPduw==
@@ -6776,7 +6776,7 @@ pkg-up@2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-polished@^3.1.0:
+polished@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/polished/-/polished-3.2.0.tgz#65045e080704a6ba524fb3f32eb99d4ed2e46c91"
   integrity sha512-uXIr2Nu5SU5khDa4JwWh8q5czi4GoJf+U1za5LN59Tk0mL/W3egZrPL0H0ADXeompCp0QhmiK9zs06gw0J5m4Q==
