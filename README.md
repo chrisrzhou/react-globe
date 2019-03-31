@@ -40,13 +40,11 @@ yarn dev
 
 ### Simple Example (no props)
 
-<iframe src="https://codesandbox.io/embed/88645px230?fontsize=14" title="react-globe-simple" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-Here is a simple example with no props!
+[![Edit react-globe-simple](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/88645px230?fontsize=14)
 
 ### Interactive Example (with markers)
 
-<iframe src="https://codesandbox.io/embed/p5lwvkp7x?fontsize=14" title="react-globe-interactive" style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+[![Edit react-globe-interactive](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/p5lwvkp7x?fontsize=14)
 
 ## Development
 
