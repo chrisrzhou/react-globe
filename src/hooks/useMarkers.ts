@@ -111,12 +111,12 @@ export default function useMarkers<T>(
       // @ts-ignore: three.interaction is untyped
       markerObject.on('click', event => {
         event.stopPropagation();
-        onClick(marker, event.data.originalEvent, markerObject);
+        onClick(marker, markerObject, event.data.originalEvent);
       });
       // @ts-ignore: three.interaction is untyped
       markerObject.on('mousemove', event => {
         event.stopPropagation();
-        onMouseOver(marker, event.data.originalEvent, markerObject);
+        onMouseOver(marker, markerObject, event.data.originalEvent);
       });
       markersRef.current.add(markerObject);
     });

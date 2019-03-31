@@ -6,60 +6,81 @@ menu: Usage
 
 import { useState } from "react";
 import { Playground } from "docz";
-import ReactGlobe from "../../src";
-import markers from "../markers";
+import ReactGlobe from "./ReactGlobe";
+import markers from "./markers";
 
 # Events
+
+`ReactGlobe` supports ways to capture interactive events through the `onClickMarker`, `onMouseOutMarker`, `onMouseOverMarker` and `onDefocus` props. Most events will capture the mouse event, active `marker` data and corresponding `THREE.Object3D` instance, providing enough data to build interactive appilcations. The example below demonstrates how to use the event handlers.
 
 <Playground>
   {() => {
     const [event, setEvent] = useState(null);
-    function onClickMarker(marker, event, target) {
+    const [details, setDetails] = useState(null);
+    function onClickMarker(marker, markerObject, event) {
       setEvent({
         type: "CLICK",
         marker,
-        pointerEventPosition: { x: event.clientX, y: event.clientY },
-        target
-      });
-    }
-    function onDefocus(previousMarker, event) {
-      setEvent({
-        type: "DEFOCUS",
-        previousMarker,
+        markerObjectID: markerObject.uuid,
         pointerEventPosition: { x: event.clientX, y: event.clientY }
       });
+      setDetails(`City: ${marker.city} (Sales: ${marker.value}.0M)`);
     }
-    function onMouseOutMarker(previousMarker, event, target) {
+    function onDefocus(previousCoordinates, event) {
+      setEvent({
+        type: "DEFOCUS",
+        previousCoordinates,
+        pointerEventPosition: { x: event.clientX, y: event.clientY }
+      });
+      setDetails(null);
+    }
+    function onMouseOutMarker(previousMarker, markerObject, event) {
       setEvent({
         type: "MOUSEOUT",
         previousMarker,
-        pointerEventPosition: { x: event.clientX, y: event.clientY },
-        targetMetadata: target.metadata
+        previousMarkerObjectID: markerObject.uuid,
+        pointerEventPosition: { x: event.clientX, y: event.clientY }
       });
     }
-    function onMouseOverMarker(marker, event, target) {
+    function onMouseOverMarker(marker, markerObject, event) {
       setEvent({
         type: "MOUSEOVER",
         marker,
-        pointerEventPosition: { x: event.clientX, y: event.clientY },
-        targetMetadata: target.metadata
+        markerObjectID: markerObject.uuid,
+        pointerEventPosition: { x: event.clientX, y: event.clientY }
       });
     }
     return (
-      <div>
-        <div style={{ background: "#efefef", height: 400, width: "100%" }}>
-          <ReactGlobe
-            markers={markers}
-            onClickMarker={onClickMarker}
-            onDefocus={onDefocus}
-            onMouseOutMarker={onMouseOutMarker}
-            onMouseOverMarker={onMouseOverMarker}
-          />
-        </div>
-        <h2>
-          <b>Event Name:</b> {event !== null ? event.type : "null"}
-        </h2>
-        <pre style={{ fontSize: 10 }}>{JSON.stringify(event, null, 2)}</pre>
+      <div style={{ position: "relative" }}>
+        <ReactGlobe
+          markers={markers}
+          onClickMarker={onClickMarker}
+          onDefocus={onDefocus}
+          onMouseOutMarker={onMouseOutMarker}
+          onMouseOverMarker={onMouseOverMarker}
+        />
+        {details && (
+          <div
+            style={{
+              background: "white",
+              position: "absolute",
+              fontSize: 24,
+              top: 0,
+              right: 0,
+              padding: 12
+            }}
+          >
+            {details}
+          </div>
+        )}
+        {event && (
+          <div>
+            <h2>
+              <b>Event Name:</b> {event.type}
+            </h2>
+            <pre style={{ fontSize: 10 }}>{JSON.stringify(event, null, 2)}</pre>
+          </div>
+        )}
       </div>
     );
   }}

@@ -1,5 +1,4 @@
 import babel from 'rollup-plugin-babel';
-import image from 'rollup-plugin-image';
 import typescript from 'rollup-plugin-typescript';
 
 export default [
@@ -8,7 +7,6 @@ export default [
       babel({
         exclude: 'node_modules/**',
       }),
-      image(),
       typescript(),
     ],
     input: 'src/index.ts',

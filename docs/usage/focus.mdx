@@ -5,14 +5,14 @@ menu: Usage
 ---
 
 import { Playground } from "docz";
-import { useEffect, useMemo, useState } from "react";
-import ReactGlobe from "../../src";
+import { useState } from "react";
+import ReactGlobe from "./ReactGlobe";
 
 # Focus
 
-To focus on a specific geo-coordinate (e.g. Singapore `[1.3521, 103.8198]`), pass an array of latitude-longitude coordinates to the component.
+## Behavior
 
-Resetting this to `undefined` unfocuses the globe.
+To focus on a specific lat-long coordinate (e.g. Singapore `[1.3521, 103.8198]`), pass an array of coordinates to the component. Clicking on the globe or resetting the `focus` prop to `undefined` unfocuses the globe.
 
 <Playground>
   {() => {
@@ -27,9 +27,44 @@ Resetting this to `undefined` unfocuses the globe.
           San Fransisco
         </button>
         <button onClick={() => setFocus(undefined)}>None</button>
-        <div style={{ background: "#efefef", height: 400, width: "100%" }}>
-          <ReactGlobe focus={focus} />
-        </div>
+        <ReactGlobe focus={focus} />
+      </div>
+    );
+  }}
+</Playground>
+
+## `FocusOptions`
+
+Use the `FocusOptions` to control how focused coordinates behave. You can pass any number of options to the prop. Default options can be imported from the module with
+
+```js
+import { defaultFocusOptions } from "react-globe";
+```
+
+Use the playground code editor to play around customizing the focus animations or enabling the defocus feature (i.e. clicking the globe after a focus has been applied).
+
+<Playground>
+  {() => {
+    const [focus, setFocus] = useState(undefined);
+    return (
+      <div>
+        <button onClick={() => setFocus([1.3521, 103.8198])}>Singapore</button>
+        <button onClick={() => setFocus([40.73061, -73.935242])}>
+          New York
+        </button>
+        <button onClick={() => setFocus([37.773972, -122.431297])}>
+          San Fransisco
+        </button>
+        <button onClick={() => setFocus(undefined)}>None</button>
+        <ReactGlobe
+          focus={focus}
+          focusOptions={{
+            animationDuration: 3000,
+            distanceRadiusScale: 2,
+            easingFunction: ["Elastic", "In"],
+            enableDefocus: false
+          }}
+        />
       </div>
     );
   }}

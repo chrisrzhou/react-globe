@@ -2,14 +2,14 @@
 
 Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
-![image](https://github.com/chrisrzhou/react-globe/raw/master/globe.png)
+![image](https://github.com/chrisrzhou/react-globe/raw/master/cover.png)
 
 ## Features
 
-- ☀️ Beautiful and complete with clouds + backgrounds + lighting.
+- ✨ Beautiful and complete with clouds, backgrounds and lighting.
 - ✌️ Incredibly simple to use and configure.
-- 📍 Render interactive markers easily on the globe with simple data.
-- 🤸‍ Globe animations simplified.
+- 🤸‍ Easy globe animations.
+- 📍 Render interactive markers on the globe with simple data.
 - ⚛️ Modern Javascript + build tools.
 
 ## Install
@@ -18,7 +18,7 @@ Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 yarn add react-globe
 ```
 
-Note that `react-globe` requires `react^16.8.0` as a peer dependency.
+Note that `react-globe` requires `react >= 16.8.0` and `three >= 0.102.0` as peer dependencies.
 
 ## Examples
 
@@ -63,7 +63,7 @@ yarn dev
 ### Codebase Overview
 
 - `ReactGlobe.tsx`: Core component that combines React + ThreeJS hooks into an animated scene supporting interactions.
-- `Tooltip.tsx`: Simple tooltip component powered by `tippy.js`.
+- `Tooltip.tsx`: Tooltip component powered by `tippy.js`.
 - `reducer.ts`: Simple state management for tracking focused coordinates and active markers.
 - `defaults.ts`: Default options and constants.
 - `utils.ts`: Various simple functions to compute derived data.
@@ -76,12 +76,12 @@ The code is written in `typescript`, linted with `eslint` + `prettier`, and buil
 
 These are some areas of improvements for `react-globe`. PRs and help is greatly appreciated!
 
-- [ ] Reduce bundle size by finding a way to ship the component without texture files. We might need to consider offline support, so a pure URL-based approach might not work.
 - [ ] Various dependencies are untyped. I am also fairly new to Typescript so PRs to improve type quality in the codebase is appreciated :)
 - [ ] Check that React hooks are decoupled, bugfree and performant.
 - [ ] Surface various hardcoded constants in `default.ts` as prop options. We need to be mindful about keeping the component props API simple and easy to use.
-- [ ] Provide better ways to 'script' animations. `react-spring` scripting is a good approach to do this.
+- [ ] Support more marker types e.g. `path`, `area`
 - [ ] Provide better ways to render custom globes and markers. We might want to avoid overcomplicating the component, and this could be moved into another package.
+- [ ] Provide better ways to 'script' animations vs the current simple approach of using an array of `Animation`. `react-spring`'s animation scripting is a good approach to do this.
 
 ## Donate
 

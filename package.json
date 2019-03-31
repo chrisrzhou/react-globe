@@ -6,9 +6,12 @@
   "module": "dist/index.module.js",
   "keywords": [
     "react",
+    "three",
     "threejs",
+    "three.js",
     "webgl",
     "visualization",
+    "interactive",
     "globe",
     "earth"
   ],
@@ -34,12 +37,10 @@
   "dependencies": {
     "@types/d3-array": "^1.2.6",
     "@types/d3-scale": "^2.1.1",
-    "@types/three": "^0.93.30",
     "d3-array": "^2.0.3",
     "d3-scale": "^3.0.0",
     "es6-tween": "^5.4.1",
     "resize-observer-polyfill": "^1.5.1",
-    "three": "^0.103.0",
     "three-orbitcontrols": "^2.102.1",
     "three.interaction": "^0.2.2",
     "tippy.js": "^4.2.1"
@@ -51,6 +52,7 @@
     "@babel/preset-typescript": "^7.1.0",
     "@emotion/core": "^10.0.10",
     "@types/react": "^16.8.10",
+    "@types/three": "^0.93.30",
     "@typescript-eslint/eslint-plugin": "^1.5.0",
     "@typescript-eslint/parser": "^1.5.0",
     "bundlesize": "^0.17.0",
@@ -66,18 +68,19 @@
     "react-dom": "^16.8.6",
     "rollup": "^1.7.4",
     "rollup-plugin-babel": "^4.1.0",
-    "rollup-plugin-image": "^1.0.2",
     "rollup-plugin-typescript": "^1.0.1",
+    "three": "^0.102.0",
     "tslib": "*",
     "typescript": "^3.4.1"
   },
   "bundlesize": [
     {
       "path": "./dist/*.js",
-      "maxSize": "10 MB"
+      "maxSize": "1 MB"
     }
   ],
   "peerDependencies": {
-    "react": "^16.8.0"
+    "react": ">= 16.8.0",
+    "three": ">= 0.102.0"
   }
 }

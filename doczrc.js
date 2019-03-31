@@ -21,7 +21,7 @@ export default {
     },
     {
       name: 'Gallery',
-      menu: ['metoorising'],
+      menu: ['Contributing', 'metoorising'],
     },
     'FAQ',
     'CHANGELOG',

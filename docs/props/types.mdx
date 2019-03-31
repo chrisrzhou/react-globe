@@ -16,36 +16,72 @@ import MarkerOptions from "./components/MarkerOptions";
 
 # Prop Types
 
-The following provides the detailed types and description of `ReactGlobe` props.
+The following provides detailed types and descriptions for `ReactGlobe` props.
 
-## Marker
+## `Marker`
+
+A `Marker` is a Javascript object with required `coordinates` and `size` fields that describe how it should be placed and drawn on the globe. It can contain additional fields that are useful for rendering tooltips and handling events.
 
 <Props of={Marker} />
 
-## Animation Easing Functions
+## `EasingFunction`
+
+Specify animation easing functions with two array parameters that are used to control animation behaviors in `ReactGlobe`. Easing functions are based on the following [TweenJS curves](https://sole.github.io/tween.js/examples/03_graphs.html).
 
 <Props of={EasingFunction} />
 
-## Animation
+## `Animation`
+
+An `Animation` is a Javascript object with four required fields that describe how an animation should behave. When passed in the `animations` prop as an array of `Animation`, `ReactGlobe` will sequentially execute the provided animation steps.
 
 <Props of={Animation} />
 
-## Camera Options
+## `CameraOptions`
+
+Use the `CameraOptions` to control the camera (i.e. how the globe is viewed). You can pass any number of options to the prop. Default options can be imported from the module with:
+
+```js
+import { defaultCameraOptions } from "react-globe";
+```
 
 <Props of={CameraOptions} />
 
-## Focus Options
+## `FocusOptions`
+
+Use the `FocusOptions` to control how focused coordinates behave. You can pass any number of options to the prop. Default options can be imported from the module with
+
+```js
+import { defaultFocusOptions } from "react-globe";
+```
 
 <Props of={FocusOptions} />
 
-## Globe Options
+## `GlobeOptions`
+
+Use the `GlobeOptions` to control the looks and behaviors of the globe. You can pass any number of options to the prop. Default options can be imported from the module with
+
+```js
+import { defaultGlobeOptions } from "react-globe";
+```
 
 <Props of={GlobeOptions} />
 
-## Light Options
+## `LightOptions`
+
+Use the `LightOptions` to control the color and intensity values of ambient and point lights. The ambient light illuminates all objects in the scene equally while the point light provides a source of light emitting from a single point. You can pass any number of options to the prop. Default options can be imported from the module with
+
+```js
+import { defaultLightOptions } from "react-globe";
+```
 
 <Props of={LightOptions} />
 
-## Marker Options
+## `MarkerOptions`
+
+Use the `MarkerOptions` to control the looks and behavior of markers. If you provide a valid marker `type` (e.g. `bar`, `dot`), `ReactGlobe` will render the corresponding supported marker. You can pass any number of options to the prop. Default options can be imported from the module with
+
+```js
+import { defaultMarkerOptions } from "react-globe";
+```
 
 <Props of={MarkerOptions} />

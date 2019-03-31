@@ -41,11 +41,11 @@ import { tween } from './utils';
 const { useEffect, useReducer, useRef } = React;
 
 export interface Props {
-  /** An array of animation steps to script globe animations. */
+  /** An array of animation steps to power globe animations. */
   animations: Animation[];
   /** Configure camera options (e.g. rotation, zoom, angles). */
   cameraOptions: CameraOptions;
-  /** A set of coordinates to be focused on. */
+  /** A set of [lat, lon] coordinates to be focused on. */
   focus?: Coordinates;
   /** Configure focusing options (e.g. animation duration, distance, easing function). */
   focusOptions: FocusOptions;
@@ -53,13 +53,13 @@ export interface Props {
   globeOptions: GlobeOptions;
   /** Configure light options (ambient and point light colors and intensity). */
   lightOptions: LightOptions;
-  /** A set of starting coordinates for the globe. */
+  /** A set of starting [lat, lon] coordinates for the globe. */
   lookAt: Coordinates;
   /** An array of data that will render interactive markers on the globe. */
   markers: Marker[];
   /** Configure marker options (e.g. tooltips, size, marker types and custom marker renderer). */
   markerOptions: MarkerOptions;
-  /** Callback to handle click events on a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
+  /** Callback to handle click events of a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
   onClickMarker?: (
     marker: Marker,
     markerObject?: THREE.Object3D,
@@ -67,20 +67,20 @@ export interface Props {
   ) => void;
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates and pointer event. */
   onDefocus?: (previousFocus: Coordinates, event?: PointerEvent) => void;
-  /** Callback to handle mouseout events of a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
+  /** Callback to handle mouseout events of a marker.  Captures the previously hovered marker, ThreeJS object and pointer event. */
   onMouseOutMarker?: (
     marker: Marker,
     markerObject?: THREE.Object3D,
     event?: PointerEvent,
   ) => void;
-  /** Callback to handle mouseover events a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
+  /** Callback to handle mouseover events of a marker.  Captures the hovered marker, ThreeJS object and pointer event. */
   onMouseOverMarker?: (
     marker: Marker,
     markerObject?: THREE.Object3D,
     event?: PointerEvent,
   ) => void;
   /** Set explicit [width, height] values for the canvas container.  This will disable responsive resizing. */
-  size: Size;
+  size?: Size;
 }
 
 export default function ReactGlobe({
@@ -117,8 +117,8 @@ export default function ReactGlobe({
   const handleClickMarker = useEventCallback(
     (
       marker: Marker,
-      event: PointerEvent,
       markerObject: THREE.Object3D,
+      event: PointerEvent,
     ): void => {
       dispatch({
         type: ActionType.SetFocus,
@@ -129,7 +129,11 @@ export default function ReactGlobe({
   );
 
   const handleMouseOutMarker = useEventCallback(
-    (marker: Marker, event: PointerEvent): void => {
+    (
+      marker: Marker,
+      markerObject: THREE.Object3D,
+      event: PointerEvent,
+    ): void => {
       dispatch({
         type: ActionType.SetActiveMarker,
         payload: {
@@ -160,8 +164,8 @@ export default function ReactGlobe({
   const handleMouseOverMarker = useEventCallback(
     (
       marker: Marker,
-      event: PointerEvent,
       markerObject: THREE.Object3D,
+      event: PointerEvent,
     ): void => {
       dispatch({
         type: ActionType.SetActiveMarker,
@@ -239,28 +243,32 @@ export default function ReactGlobe({
     let wait = 0;
     const timeouts: NodeJS.Timeout[] = [];
 
-    animations.forEach(animation => {
+    animations.forEach((animation, i) => {
       const {
         animationDuration,
         coordinates,
         distanceRadiusScale,
         easingFunction,
       } = animation;
-      const timeout: NodeJS.Timeout = setTimeout(
-        () =>
-          dispatch({
-            type: ActionType.Animate,
-            payload: {
-              focus: coordinates,
-              focusOptions: {
-                animationDuration,
-                distanceRadiusScale,
-                easingFunction,
-              },
+      const timeout: NodeJS.Timeout = setTimeout(() => {
+        dispatch({
+          type: ActionType.Animate,
+          payload: {
+            focus: coordinates,
+            focusOptions: {
+              animationDuration,
+              distanceRadiusScale,
+              easingFunction,
             },
-          }),
-        wait,
-      );
+          },
+        });
+        if (i === animations.length - 1) {
+          dispatch({
+            type: ActionType.SetFocus,
+            payload: undefined,
+          });
+        }
+      }, wait);
       timeouts.push(timeout);
       wait += animationDuration;
     });
@@ -294,8 +302,8 @@ export default function ReactGlobe({
       if (activeMarker) {
         handleMouseOutMarker(
           activeMarker,
-          event.data.originalEvent,
           activeMarkerObject,
+          event.data.originalEvent,
         );
       }
     });

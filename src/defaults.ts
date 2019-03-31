@@ -1,9 +1,3 @@
-// @ts-ignore: no types for images
-import * as backgroundTexture from './textures/background.png';
-// @ts-ignore: no types for images
-import * as cloudsTexture from './textures/clouds.png';
-// @ts-ignore: no types for images
-import * as globeTexture from './textures/globe.jpg';
 import {
   CameraOptions,
   EasingFunction,
@@ -59,10 +53,12 @@ export const defaultFocusOptions: FocusOptions = {
 };
 
 export const defaultGlobeOptions: GlobeOptions = {
-  backgroundTexture,
+  backgroundTexture:
+    'https://raw.githubusercontent.com/chrisrzhou/react-3d-globe/master/src/textures/space.png',
   cloudsSpeed: 0.5,
   cloudsOpacity: 0.3,
-  cloudsTexture,
+  cloudsTexture:
+    'https://raw.githubusercontent.com/chrisrzhou/react-3d-globe/master/src/textures/cloud.png',
   enableBackground: true,
   enableClouds: true,
   enableGlow: true,
@@ -70,14 +66,15 @@ export const defaultGlobeOptions: GlobeOptions = {
   glowColor: '#d1d1d1',
   glowPower: 3,
   glowRadiusScale: 0.2,
-  texture: globeTexture,
+  texture:
+    'https://raw.githubusercontent.com/chrisrzhou/react-3d-globe/master/src/textures/globe.jpg',
 };
 
 export const defaultLightOptions: LightOptions = {
   ambientLightColor: 'white',
-  ambientLightIntensity: 1,
+  ambientLightIntensity: 0.8,
   pointLightColor: 'white',
-  pointLightIntensity: 1.5,
+  pointLightIntensity: 1,
   pointLightPositionRadiusScales: [-2, 1, -1],
 };
 
