@@ -2,7 +2,7 @@
 
 Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
-![image](https://github.com/chrisrzhou/react-globe/raw/master/cover.png)
+![image](https://raw.githubusercontent.com/chrisrzhou/react-globe/master/cover.png)
 
 ## Features
 
