@@ -1,7 +1,7 @@
 {
   "name": "react-globe",
   "version": "3.0.0",
-  "description": "Build interactive globe visualizations with React and ThreeJS.",
+  "description": "Create beautiful and interactive React + ThreeJS globe visualizations with ease.",
   "main": "dist/index.js",
   "module": "dist/index.module.js",
   "keywords": [
@@ -15,7 +15,7 @@
     "globe",
     "earth"
   ],
-  "author": "Chris Zhou <christoper.r.zhou@gmail.com>",
+  "author": "Chris Zhou <christopher.r.zhou@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
