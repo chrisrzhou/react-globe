@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import tippy, { Instance } from 'tippy.js';
 
 const { useEffect, useRef } = React;

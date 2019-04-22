@@ -1,6 +1,5 @@
-import * as React from 'react';
-import * as THREE from 'three';
-// @ts-ignore: three-orbitcontrols is untyped
+import { useEffect, useRef } from 'react';
+import { AmbientLight, Color, PerspectiveCamera, PointLight } from 'three';
 import OrbitControls from 'three-orbitcontrols';
 
 import {
@@ -20,8 +19,6 @@ import {
   Size,
 } from '../types';
 import { coordinatesToPosition, tween } from '../utils';
-
-const { useEffect, useRef } = React;
 
 export default function useCamera<T>(
   {
@@ -53,23 +50,21 @@ export default function useCamera<T>(
   lookAt: Coordinates,
   focus?: Coordinates,
 ): [React.RefObject<THREE.PerspectiveCamera>, React.RefObject<OrbitControls>] {
-  const cameraRef = useRef<THREE.PerspectiveCamera>(
-    new THREE.PerspectiveCamera(),
-  );
+  const cameraRef = useRef<THREE.PerspectiveCamera>(new PerspectiveCamera());
   const ambientLightRef = useRef<THREE.AmbientLight>();
   const pointLightRef = useRef<THREE.PointLight>();
   const orbitControlsRef = useRef<OrbitControls>();
   const preFocusCoordinatesRef = useRef<Coordinates>();
 
   // init
-  useEffect((): React.EffectCallback => {
+  useEffect((): void => {
     const camera = cameraRef.current;
 
-    const ambientLight = new THREE.AmbientLight('white');
+    const ambientLight = new AmbientLight('white');
     ambientLightRef.current = ambientLight;
     camera.add(ambientLight);
 
-    const pointLight = new THREE.PointLight('white');
+    const pointLight = new PointLight('white');
     pointLightRef.current = pointLight;
     camera.add(pointLight);
 
@@ -80,7 +75,7 @@ export default function useCamera<T>(
   }, [rendererRef]);
 
   // update options
-  useEffect((): React.EffectCallback => {
+  useEffect((): void => {
     const camera = cameraRef.current;
     const orbitControls = orbitControlsRef.current;
     const ambientLight = ambientLightRef.current;
@@ -96,9 +91,9 @@ export default function useCamera<T>(
     camera.position.set(...position);
 
     // apply light options
-    ambientLight.color = new THREE.Color(ambientLightColor);
+    ambientLight.color = new Color(ambientLightColor);
     ambientLight.intensity = ambientLightIntensity;
-    pointLight.color = new THREE.Color(pointLightColor);
+    pointLight.color = new Color(pointLightColor);
     pointLight.intensity = pointLightIntensity;
     pointLight.position.set(
       RADIUS * pointLightPositionRadiusScales[0],

@@ -1,9 +1,7 @@
-import * as React from 'react';
-import * as THREE from 'three';
+import { useEffect, useRef } from 'react';
+import { WebGLRenderer } from 'three';
 
 import { Size } from '../types';
-
-const { useEffect, useRef } = React;
 
 export default function useRenderer<T>(
   size: Size,
@@ -13,7 +11,7 @@ export default function useRenderer<T>(
 
   // init
   useEffect((): void => {
-    rendererRef.current = new THREE.WebGLRenderer({
+    rendererRef.current = new WebGLRenderer({
       alpha: true,
       antialias: true,
       canvas: canvasRef.current,

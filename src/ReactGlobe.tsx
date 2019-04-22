@@ -1,8 +1,6 @@
-// @ts-ignore: es6-tween is untyped
 import * as TWEEN from 'es6-tween';
-import * as React from 'react';
-import * as THREE from 'three';
-// @ts-ignore: three.interaction is untyped
+import React, { useEffect, useReducer, useRef } from 'react';
+import { Scene } from 'three';
 import { Interaction } from 'three.interaction';
 
 import {
@@ -37,8 +35,6 @@ import {
   Size,
 } from './types';
 import { tween } from './utils';
-
-const { useEffect, useReducer, useRef } = React;
 
 export interface Props {
   /** An array of animation steps to power globe animations. */
@@ -295,7 +291,7 @@ export default function ReactGlobe({
     let animationFrameID: number;
 
     // create scene
-    const scene = new THREE.Scene();
+    const scene = new Scene();
     globe.add(markersRef.current);
     scene.add(camera);
     scene.add(globe);

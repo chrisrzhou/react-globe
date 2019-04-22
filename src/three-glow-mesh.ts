@@ -2,7 +2,7 @@
  * TODO: Make this into a NPM package
  * createGlowMaterial code is based off: http://stemkoski.blogspot.fr/2013/07/shaders-in-threejs-glow-and-halo.html
  * */
-import * as THREE from 'three';
+import { BackSide, Color, Face3, Mesh, ShaderMaterial } from 'three';
 
 interface GlowOptions {
   coefficient: number;
@@ -41,7 +41,7 @@ void main() {
   gl_FragColor = vec4(color, intensity);
 }`;
 
-  return new THREE.ShaderMaterial({
+  return new ShaderMaterial({
     depthWrite: false,
     fragmentShader,
     transparent: true,
@@ -56,7 +56,7 @@ void main() {
       },
       color: {
         type: 'c',
-        value: new THREE.Color(color),
+        value: new Color(color),
       },
     },
     vertexShader,
@@ -72,7 +72,7 @@ export function createGlowGeometry(
   const vertexNormals = new Array(glowGeometry.vertices.length);
   glowGeometry.faces.forEach(
     (face): void => {
-      if (face instanceof THREE.Face3) {
+      if (face instanceof Face3) {
         vertexNormals[face.a] = face.vertexNormals[0];
         vertexNormals[face.b] = face.vertexNormals[1];
         vertexNormals[face.c] = face.vertexNormals[2];
@@ -102,7 +102,7 @@ export function createGlowMesh(
   const glowGeometry = createGlowGeometry(geometry, length);
   const glowMaterial = createGlowMaterial(glowOptions);
   if (isBackSide) {
-    glowMaterial.side = THREE.BackSide;
+    glowMaterial.side = BackSide;
   }
-  return new THREE.Mesh(glowGeometry, glowMaterial);
+  return new Mesh(glowGeometry, glowMaterial);
 }

@@ -1,4 +1,3 @@
-// @ts-ignore: es6-tween is untyped
 import * as TWEEN from 'es6-tween';
 
 import { Coordinates, EasingFunction, Position } from './types';

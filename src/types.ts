@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 // Internal
 export enum ActionType {
   Animate = 'ANIMATE',

@@ -1,5 +1,13 @@
-import * as React from 'react';
-import * as THREE from 'three';
+import { useEffect, useRef } from 'react';
+import {
+  BackSide,
+  Group,
+  Mesh,
+  MeshBasicMaterial,
+  MeshLambertMaterial,
+  SphereGeometry,
+  TextureLoader,
+} from 'three';
 
 import {
   BACKGROUND_RADIUS_SCALE,
@@ -9,8 +17,6 @@ import {
 } from '../defaults';
 import { createGlowMesh } from '../three-glow-mesh';
 import { GlobeOptions } from '../types';
-
-const { useEffect, useRef } = React;
 
 const SECONDS_TO_MILLISECONDS = 1000;
 
@@ -28,10 +34,10 @@ export default function useGlobe<T>({
   glowRadiusScale,
   texture,
 }: GlobeOptions): React.RefObject<THREE.Group> {
-  const globeRef = useRef<THREE.Group>(new THREE.Group());
-  const sphereRef = useRef<THREE.Mesh>(new THREE.Mesh());
-  const backgroundRef = useRef<THREE.Mesh>(new THREE.Mesh());
-  const cloudsRef = useRef<THREE.Mesh>(new THREE.Mesh());
+  const globeRef = useRef<THREE.Group>(new Group());
+  const sphereRef = useRef<THREE.Mesh>(new Mesh());
+  const backgroundRef = useRef<THREE.Mesh>(new Mesh());
+  const cloudsRef = useRef<THREE.Mesh>(new Mesh());
 
   // init
   useEffect((): void => {
@@ -42,17 +48,17 @@ export default function useGlobe<T>({
 
     // add background if enabled
     if (enableBackground) {
-      new THREE.TextureLoader().load(
+      new TextureLoader().load(
         backgroundTexture,
         (map): void => {
-          background.geometry = new THREE.SphereGeometry(
+          background.geometry = new SphereGeometry(
             RADIUS * BACKGROUND_RADIUS_SCALE,
             GLOBE_SEGMENTS,
             GLOBE_SEGMENTS,
           );
-          background.material = new THREE.MeshBasicMaterial({
+          background.material = new MeshBasicMaterial({
             map,
-            side: THREE.BackSide,
+            side: BackSide,
           });
           globe.add(background);
         },
@@ -61,15 +67,15 @@ export default function useGlobe<T>({
 
     // add clouds if enabled
     if (enableClouds) {
-      new THREE.TextureLoader().load(
+      new TextureLoader().load(
         cloudsTexture,
         (map): void => {
-          clouds.geometry = new THREE.SphereGeometry(
+          clouds.geometry = new SphereGeometry(
             RADIUS + CLOUDS_RADIUS_OFFSET,
             GLOBE_SEGMENTS,
             GLOBE_SEGMENTS,
           );
-          clouds.material = new THREE.MeshLambertMaterial({
+          clouds.material = new MeshLambertMaterial({
             map,
             transparent: true,
           });
@@ -90,15 +96,15 @@ export default function useGlobe<T>({
       );
     }
 
-    new THREE.TextureLoader().load(
+    new TextureLoader().load(
       texture,
       (map): void => {
-        sphere.geometry = new THREE.SphereGeometry(
+        sphere.geometry = new SphereGeometry(
           RADIUS,
           GLOBE_SEGMENTS,
           GLOBE_SEGMENTS,
         );
-        sphere.material = new THREE.MeshLambertMaterial({
+        sphere.material = new MeshLambertMaterial({
           map,
         });
         globe.add(sphere);

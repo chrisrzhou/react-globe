@@ -1,9 +1,7 @@
-import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
 import { Size } from '../types';
-
-const { useEffect, useRef, useState } = React;
 
 export default function useResize<T>(
   initialSize?: Size,

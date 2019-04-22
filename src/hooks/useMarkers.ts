@@ -1,7 +1,15 @@
 import { max, min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
-import * as React from 'react';
-import * as THREE from 'three';
+import { useEffect, useRef } from 'react';
+import {
+  BoxGeometry,
+  Group,
+  Mesh,
+  MeshBasicMaterial,
+  MeshLambertMaterial,
+  SphereGeometry,
+  Vector3,
+} from 'three';
 
 import {
   MARKER_ANIMATION_DURATION,
@@ -17,8 +25,6 @@ import { createGlowMesh } from '../three-glow-mesh';
 import { Marker, MarkerCallback, MarkerOptions, MarkerType } from '../types';
 import { coordinatesToPosition, tween } from '../utils';
 
-const { useEffect, useRef } = React;
-
 interface Handlers {
   onClick: MarkerCallback;
   onMouseOver: MarkerCallback;
@@ -29,7 +35,7 @@ export default function useMarkers<T>(
   { radiusScaleRange, renderer, type }: MarkerOptions,
   { onClick, onMouseOver }: Handlers,
 ): React.RefObject<THREE.Group> {
-  const markersRef = useRef<THREE.Group>(new THREE.Group());
+  const markersRef = useRef<THREE.Group>(new Group());
   const unitRadius = RADIUS * MARKER_UNIT_RADIUS_SCALE;
 
   // init
@@ -56,7 +62,7 @@ export default function useMarkers<T>(
         } else {
           let from = { size: 0 };
           const to = { size };
-          const mesh = new THREE.Mesh();
+          const mesh = new Mesh();
           tween(
             from,
             to,
@@ -65,23 +71,23 @@ export default function useMarkers<T>(
             (): void => {
               switch (type) {
                 case MarkerType.Bar:
-                  mesh.geometry = new THREE.BoxGeometry(
+                  mesh.geometry = new BoxGeometry(
                     unitRadius,
                     unitRadius,
                     from.size,
                   );
-                  mesh.material = new THREE.MeshLambertMaterial({
+                  mesh.material = new MeshLambertMaterial({
                     color,
                   });
                   break;
                 case MarkerType.Dot:
                 default:
-                  mesh.geometry = new THREE.SphereGeometry(
+                  mesh.geometry = new SphereGeometry(
                     from.size,
                     MARKER_SEGMENTS,
                     MARKER_SEGMENTS,
                   );
-                  mesh.material = new THREE.MeshBasicMaterial({ color });
+                  mesh.material = new MeshBasicMaterial({ color });
                   // add glow
                   const glowMesh = createGlowMesh(
                     mesh.geometry.clone() as THREE.Geometry,
@@ -112,7 +118,7 @@ export default function useMarkers<T>(
           RADIUS + heightOffset,
         );
         markerObject.position.set(...position);
-        markerObject.lookAt(new THREE.Vector3(0, 0, 0));
+        markerObject.lookAt(new Vector3(0, 0, 0));
 
         // handle events
         // @ts-ignore: three.interaction is untyped
