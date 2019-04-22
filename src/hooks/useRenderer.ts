@@ -12,7 +12,7 @@ export default function useRenderer<T>(
   const canvasRef = useRef<HTMLCanvasElement>();
 
   // init
-  useEffect(() => {
+  useEffect((): void => {
     rendererRef.current = new THREE.WebGLRenderer({
       alpha: true,
       antialias: true,
@@ -21,7 +21,7 @@ export default function useRenderer<T>(
   }, []);
 
   // update size
-  useEffect(() => {
+  useEffect((): void => {
     rendererRef.current.setSize(...size);
   }, [size]);
 

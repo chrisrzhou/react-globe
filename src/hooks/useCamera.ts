@@ -62,7 +62,7 @@ export default function useCamera<T>(
   const preFocusCoordinatesRef = useRef<Coordinates>();
 
   // init
-  useEffect(() => {
+  useEffect((): React.EffectCallback => {
     const camera = cameraRef.current;
 
     const ambientLight = new THREE.AmbientLight('white');
@@ -80,7 +80,7 @@ export default function useCamera<T>(
   }, [rendererRef]);
 
   // update options
-  useEffect(() => {
+  useEffect((): React.EffectCallback => {
     const camera = cameraRef.current;
     const orbitControls = orbitControlsRef.current;
     const ambientLight = ambientLightRef.current;
@@ -141,14 +141,14 @@ export default function useCamera<T>(
   ]);
 
   // update size
-  useEffect(() => {
+  useEffect((): void => {
     const camera = cameraRef.current;
     camera.aspect = size[0] / size[1];
     camera.updateProjectionMatrix();
   }, [size]);
 
   // update focus
-  useEffect(() => {
+  useEffect((): void => {
     const orbitControls = orbitControlsRef.current;
     const camera = cameraRef.current;
     const preFocusCoordinates = preFocusCoordinatesRef.current;
@@ -168,9 +168,15 @@ export default function useCamera<T>(
         focus,
         RADIUS * focusDistanceRadiusScale,
       );
-      tween(from, to, focusAnimationDuration, focusEasingFunction, () => {
-        camera.position.set(...from);
-      });
+      tween(
+        from,
+        to,
+        focusAnimationDuration,
+        focusEasingFunction,
+        (): void => {
+          camera.position.set(...from);
+        },
+      );
     } else {
       if (preFocusCoordinates) {
         const from: Position = [
@@ -187,10 +193,10 @@ export default function useCamera<T>(
           to,
           focusAnimationDuration,
           focusEasingFunction,
-          () => {
+          (): void => {
             camera.position.set(...from);
           },
-          () => {
+          (): void => {
             orbitControls.enabled = true;
             orbitControls.autoRotate = enableAutoRotate;
           },

@@ -70,22 +70,26 @@ export function createGlowGeometry(
   // gather vertexNormals from geometry.faces
   const glowGeometry = geometry.clone();
   const vertexNormals = new Array(glowGeometry.vertices.length);
-  glowGeometry.faces.forEach(face => {
-    if (face instanceof THREE.Face3) {
-      vertexNormals[face.a] = face.vertexNormals[0];
-      vertexNormals[face.b] = face.vertexNormals[1];
-      vertexNormals[face.c] = face.vertexNormals[2];
-    } else {
-      console.assert('Face needs to be an instance of THREE.Face3.');
-    }
-  });
+  glowGeometry.faces.forEach(
+    (face): void => {
+      if (face instanceof THREE.Face3) {
+        vertexNormals[face.a] = face.vertexNormals[0];
+        vertexNormals[face.b] = face.vertexNormals[1];
+        vertexNormals[face.c] = face.vertexNormals[2];
+      } else {
+        console.assert('Face needs to be an instance of THREE.Face3.');
+      }
+    },
+  );
   // modify the vertices according to vertexNormal
-  glowGeometry.vertices.forEach((vertex, i) => {
-    const { x, y, z } = vertexNormals[i];
-    vertex.x += x * length;
-    vertex.y += y * length;
-    vertex.z += z * length;
-  });
+  glowGeometry.vertices.forEach(
+    (vertex, i): void => {
+      const { x, y, z } = vertexNormals[i];
+      vertex.x += x * length;
+      vertex.y += y * length;
+      vertex.z += z * length;
+    },
+  );
   return glowGeometry;
 }
 

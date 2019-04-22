@@ -7,4 +7,7 @@ export {
   defaultLightOptions,
   defaultMarkerOptions,
 } from './defaults';
+
+export { tween } from './utils';
+
 export { default } from './ReactGlobe';

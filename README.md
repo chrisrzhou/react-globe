@@ -2,7 +2,7 @@
 
 Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
-![image](https://raw.githubusercontent.com/chrisrzhou/react-globe/master/cover.png)
+![image](/public/react-globe.gif)
 
 ## Features
 
@@ -24,7 +24,7 @@ Note that `react-globe` requires `react >= 16.8.0` and `three >= 0.102.0` as pee
 
 ### Documented Examples
 
-View all documented examples at https://react-globe.netlify.com/
+View all documented examples and gallery of `react-globe` applications at https://react-globe.netlify.com/.
 
 ### Local Examples
 
@@ -38,13 +38,23 @@ yarn
 yarn dev
 ```
 
-### Simple Example (no props)
+### Basic Example (no props)
+
+![image](/public/react-globe-basic.gif)
 
 [![Edit react-globe-simple](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/88645px230?fontsize=14)
 
 ### Interactive Example (with markers)
 
+![image](/public/react-globe.gif)
+
 [![Edit react-globe-interactive](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/p5lwvkp7x?fontsize=14)
+
+### Application Example (Google Globe Trends)
+
+![image](/public/google-globe-trends.gif)
+
+[Link to app](https://google-globe-trends.netlify.com)
 
 ## Development
 
@@ -68,17 +78,6 @@ yarn dev
 - `/textures`: Default globe, clouds and background textures.
 
 The code is written in `typescript`, linted with `eslint` + `prettier`, and built with `rollup`. Examples and documentations are built with `docz`.
-
-## Areas of Improvements
-
-These are some areas of improvements for `react-globe`. PRs and help is greatly appreciated!
-
-- [ ] Various dependencies are untyped. I am also fairly new to Typescript so PRs to improve type quality in the codebase is appreciated :)
-- [ ] Check that React hooks are decoupled, bugfree and performant.
-- [ ] Surface various hardcoded constants in `default.ts` as prop options. We need to be mindful about keeping the component props API simple and easy to use.
-- [ ] Support more marker types e.g. `path`, `area`
-- [ ] Provide better ways to render custom globes and markers. We might want to avoid overcomplicating the component, and this could be moved into another package.
-- [ ] Provide better ways to 'script' animations vs the current simple approach of using an array of `Animation`. `react-spring`'s animation scripting is a good approach to do this.
 
 ## Donate
 

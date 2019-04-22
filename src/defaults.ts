@@ -81,7 +81,8 @@ export const defaultLightOptions: LightOptions = {
 export const defaultDotMarkerOptions: MarkerOptions = {
   activeScale: 1.3,
   enableTooltip: true,
-  getTooltipContent: (marker: Marker) => JSON.stringify(marker.coordinates),
+  getTooltipContent: (marker: Marker): string =>
+    JSON.stringify(marker.coordinates),
   radiusScaleRange: [0.005, 0.02],
   type: MarkerType.Dot,
 };
@@ -89,7 +90,8 @@ export const defaultDotMarkerOptions: MarkerOptions = {
 export const defaultBarMarkerOptions: MarkerOptions = {
   activeScale: 1.05,
   enableTooltip: true,
-  getTooltipContent: (marker: Marker) => JSON.stringify(marker.coordinates),
+  getTooltipContent: (marker: Marker): string =>
+    JSON.stringify(marker.coordinates),
   radiusScaleRange: [0.2, defaultFocusOptions.distanceRadiusScale - 1],
   type: MarkerType.Bar,
 };

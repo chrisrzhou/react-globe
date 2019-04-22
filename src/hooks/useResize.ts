@@ -11,7 +11,7 @@ export default function useResize<T>(
   const mountRef = useRef<HTMLDivElement>();
   const [size, setSize] = useState<Size>([0, 0]);
 
-  useEffect(() => {
+  useEffect((): React.EffectCallback => {
     const mount = mountRef.current;
     // update initial size
     let width = 0;
@@ -27,18 +27,20 @@ export default function useResize<T>(
     setSize([width, height]);
 
     // update resize using a resize observer
-    const resizeObserver = new ResizeObserver(entries => {
-      if (!entries || !entries.length) {
-        return;
-      }
-      if (initialSize === undefined) {
-        let { width, height } = entries[0].contentRect;
-        setSize([width, height]);
-      }
-    });
+    const resizeObserver = new ResizeObserver(
+      (entries): void => {
+        if (!entries || !entries.length) {
+          return;
+        }
+        if (initialSize === undefined) {
+          let { width, height } = entries[0].contentRect;
+          setSize([width, height]);
+        }
+      },
+    );
     resizeObserver.observe(mount);
 
-    return () => {
+    return (): void => {
       resizeObserver.unobserve(mount);
     };
   }, [initialSize]);

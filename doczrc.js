@@ -21,13 +21,13 @@ export default {
     },
     {
       name: 'Gallery',
-      menu: ['Contributing', 'metoorising'],
+      menu: ['Contributing', 'Google Globe Trends'],
     },
     'FAQ',
     'CHANGELOG',
     { name: 'Github', href: 'https://github.com/chrisrzhou/react-globe' },
   ],
-  public: 'docs/public',
+  public: '/public',
   themeConfig: {
     showPlaygroundEditor: true,
   },

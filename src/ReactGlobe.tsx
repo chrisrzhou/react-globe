@@ -151,7 +151,7 @@ export default function ReactGlobe({
         [1, 1, 1],
         MARKER_ACTIVE_ANIMATION_DURATION,
         MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
-        () => {
+        (): void => {
           if (activeMarkerObject) {
             activeMarkerObject.scale.set(...from);
           }
@@ -180,7 +180,7 @@ export default function ReactGlobe({
         [activeScale, activeScale, activeScale],
         MARKER_ACTIVE_ANIMATION_DURATION,
         MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
-        () => {
+        (): void => {
           if (markerObject) {
             markerObject.scale.set(...from);
           }
@@ -190,15 +190,17 @@ export default function ReactGlobe({
     },
   );
 
-  const handleDefocus = useEventCallback((event: PointerEvent) => {
-    if (focus && enableDefocus) {
-      dispatch({
-        type: ActionType.SetFocus,
-        payload: undefined,
-      });
-      onDefocus && onDefocus(focus, event);
-    }
-  });
+  const handleDefocus = useEventCallback(
+    (event: PointerEvent): void => {
+      if (focus && enableDefocus) {
+        dispatch({
+          type: ActionType.SetFocus,
+          payload: undefined,
+        });
+        onDefocus && onDefocus(focus, event);
+      }
+    },
+  );
 
   // initialize THREE instances
   const [mountRef, size] = useResize(initialSize);
@@ -220,18 +222,18 @@ export default function ReactGlobe({
   const mouseRef = useRef<{ x: number; y: number }>();
 
   // track mouse position
-  useEffect(() => {
+  useEffect((): React.EffectCallback => {
     function onMouseUpdate(e: MouseEvent): void {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     }
     document.addEventListener('mousemove', onMouseUpdate, false);
-    return () => {
+    return (): void => {
       document.removeEventListener('mousemove', onMouseUpdate, false);
     };
   }, []);
 
   // sync state with props
-  useEffect(() => {
+  useEffect((): void => {
     dispatch({
       type: ActionType.SetFocus,
       payload: initialFocus,
@@ -239,49 +241,53 @@ export default function ReactGlobe({
   }, [initialFocus]);
 
   // handle animations
-  useEffect(() => {
+  useEffect((): React.EffectCallback => {
     let wait = 0;
     const timeouts: NodeJS.Timeout[] = [];
 
-    animations.forEach((animation, i) => {
-      const {
-        animationDuration,
-        coordinates,
-        distanceRadiusScale,
-        easingFunction,
-      } = animation;
-      const timeout: NodeJS.Timeout = setTimeout(() => {
-        dispatch({
-          type: ActionType.Animate,
-          payload: {
-            focus: coordinates,
-            focusOptions: {
-              animationDuration,
-              distanceRadiusScale,
-              easingFunction,
-            },
-          },
-        });
-        if (i === animations.length - 1) {
+    animations.forEach(
+      (animation, i): void => {
+        const {
+          animationDuration,
+          coordinates,
+          distanceRadiusScale,
+          easingFunction,
+        } = animation;
+        const timeout: NodeJS.Timeout = setTimeout((): void => {
           dispatch({
-            type: ActionType.SetFocus,
-            payload: undefined,
+            type: ActionType.Animate,
+            payload: {
+              focus: coordinates,
+              focusOptions: {
+                animationDuration,
+                distanceRadiusScale,
+                easingFunction,
+              },
+            },
           });
-        }
-      }, wait);
-      timeouts.push(timeout);
-      wait += animationDuration;
-    });
+          if (i === animations.length - 1) {
+            dispatch({
+              type: ActionType.SetFocus,
+              payload: undefined,
+            });
+          }
+        }, wait);
+        timeouts.push(timeout);
+        wait += animationDuration;
+      },
+    );
 
-    return () => {
-      timeouts.forEach(timeout => {
-        clearTimeout(timeout);
-      });
+    return (): void => {
+      timeouts.forEach(
+        (timeout): void => {
+          clearTimeout(timeout);
+        },
+      );
     };
   }, [animations]);
 
   // handle scene and rendering loop
-  useEffect(() => {
+  useEffect((): React.EffectCallback => {
     const mount = mountRef.current;
     const renderer = rendererRef.current;
     const globe = globeRef.current;
@@ -298,20 +304,28 @@ export default function ReactGlobe({
     // initialize interaction events
     new Interaction(renderer, scene, camera);
     // @ts-ignore: three.interaction is untyped
-    scene.on('mousemove', event => {
-      if (activeMarker) {
-        handleMouseOutMarker(
-          activeMarker,
-          activeMarkerObject,
-          event.data.originalEvent,
-        );
-      }
-    });
+    scene.on(
+      'mousemove',
+      // @ts-ignore: three.interaction is untyped
+      (event): void => {
+        if (activeMarker) {
+          handleMouseOutMarker(
+            activeMarker,
+            activeMarkerObject,
+            event.data.originalEvent,
+          );
+        }
+      },
+    );
     if (enableDefocus && focus) {
       // @ts-ignore: three.interaction is untyped
-      scene.on('click', event => {
-        handleDefocus(event.data.originalEvent);
-      });
+      scene.on(
+        'click',
+        // @ts-ignore: three.interaction is untyped
+        (event): void => {
+          handleDefocus(event.data.originalEvent);
+        },
+      );
     }
 
     function animate(): void {
@@ -322,7 +336,7 @@ export default function ReactGlobe({
     }
     animate();
 
-    return () => {
+    return (): void => {
       if (animationFrameID) {
         cancelAnimationFrame(animationFrameID);
       }

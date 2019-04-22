@@ -15,7 +15,7 @@ interface Props {
 function Tooltip({ content, offset, x, y }: Props): React.ReactElement {
   const ref = useRef();
 
-  useEffect(() => {
+  useEffect((): React.EffectCallback => {
     document.body.style.cursor = 'pointer';
     tooltipInstance = tippy(ref.current, {
       animation: 'scale',
@@ -23,7 +23,7 @@ function Tooltip({ content, offset, x, y }: Props): React.ReactElement {
     }) as Instance;
     tooltipInstance.show();
 
-    return () => {
+    return (): void => {
       document.body.style.cursor = 'inherit';
       if (tooltipInstance) {
         tooltipInstance.destroy();

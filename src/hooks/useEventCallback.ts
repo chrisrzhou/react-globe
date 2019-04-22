@@ -4,9 +4,11 @@ import { useLayoutEffect, useMemo, useRef } from 'react';
 // @ts-ignore
 export default function useEventCallback(fn): any {
   let ref = useRef();
-  useLayoutEffect(() => {
-    ref.current = fn;
-  });
+  useLayoutEffect(
+    (): void => {
+      ref.current = fn;
+    },
+  );
   // @ts-ignore
-  return useMemo(() => (...args) => (0, ref.current)(...args), []);
+  return useMemo((): void => (...args): void => (0, ref.current)(...args), []);
 }
