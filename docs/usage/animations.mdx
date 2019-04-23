@@ -4,9 +4,9 @@ route: /usage/animations
 menu: Usage
 ---
 
-import { Playground } from "docz";
-import { useState } from "react";
-import ReactGlobe from "./ReactGlobe";
+import { Playground } from 'docz';
+import { useState } from 'react';
+import ReactGlobe from './ReactGlobe';
 
 # Animations
 
@@ -18,54 +18,54 @@ import ReactGlobe from "./ReactGlobe";
     const [animationSequence, setAnimationSequence] = useState();
     let animations = [];
     switch (animationSequence) {
-      case "Universal Studios":
+      case 'Universal Studios':
         animations = [
           {
             animationDuration: 5000,
             coordinates: [0, -102],
             distanceRadiusScale: 3,
-            easingFunction: ["Linear", "None"]
-          }
+            easingFunction: ['Linear', 'None'],
+          },
         ];
         break;
-      case "Travel Plans":
+      case 'Travel Plans':
         animations = [
           {
             animationDuration: 5000,
             coordinates: [1.3521, 103.8198],
             distanceRadiusScale: 2,
-            easingFunction: ["Linear", "None"]
+            easingFunction: ['Linear', 'None'],
           },
           {
             animationDuration: 3000,
             coordinates: [39.9042, 116.4074],
             distanceRadiusScale: 2,
-            easingFunction: ["Cubic", "InOut"]
+            easingFunction: ['Cubic', 'InOut'],
           },
           {
             animationDuration: 3000,
             coordinates: [37.773972, -122.431297],
             distanceRadiusScale: 2,
-            easingFunction: ["Back", "InOut"]
+            easingFunction: ['Back', 'InOut'],
           },
           {
             animationDuration: 3000,
             coordinates: [40.73061, -73.935242],
             distanceRadiusScale: 2,
-            easingFunction: ["Circular", "InOut"]
+            easingFunction: ['Circular', 'InOut'],
           },
           {
             animationDuration: 3000,
             coordinates: [51.5074, 0.1278],
             distanceRadiusScale: 2,
-            easingFunction: ["Quadratic", "InOut"]
+            easingFunction: ['Quadratic', 'InOut'],
           },
           {
             animationDuration: 5000,
             coordinates: [1.3521, 103.8198],
             distanceRadiusScale: 4,
-            easingFunction: ["Linear", "None"]
-          }
+            easingFunction: ['Linear', 'None'],
+          },
         ];
         break;
       default:
@@ -73,10 +73,10 @@ import ReactGlobe from "./ReactGlobe";
     }
     return (
       <div>
-        <button onClick={() => setAnimationSequence("Universal Studios")}>
+        <button onClick={() => setAnimationSequence('Universal Studios')}>
           Universal Studios
         </button>
-        <button onClick={() => setAnimationSequence("Travel Plans")}>
+        <button onClick={() => setAnimationSequence('Travel Plans')}>
           Travel Plans
         </button>
         <ReactGlobe animations={animations} lookAt={lookAt} />

@@ -1,3 +1,4 @@
+import pkg from './package.json';
 import babel from 'rollup-plugin-babel';
 import typescript from 'rollup-plugin-typescript';
 
@@ -24,11 +25,11 @@ export default [
     output: [
       {
         exports: 'named',
-        file: 'dist/index.js',
+        file: pkg.main,
         format: 'cjs',
       },
       {
-        file: 'dist/index.module.js',
+        file: pkg.module,
         format: 'esm',
       },
     ],

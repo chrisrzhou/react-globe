@@ -49,11 +49,11 @@ export default function useCamera<T>(
   size: Size,
   lookAt: Coordinates,
   focus?: Coordinates,
-): [React.RefObject<THREE.PerspectiveCamera>, React.RefObject<OrbitControls>] {
+): [React.RefObject<THREE.PerspectiveCamera>, React.RefObject<any>] {
   const cameraRef = useRef<THREE.PerspectiveCamera>(new PerspectiveCamera());
   const ambientLightRef = useRef<THREE.AmbientLight>();
   const pointLightRef = useRef<THREE.PointLight>();
-  const orbitControlsRef = useRef<OrbitControls>();
+  const orbitControlsRef = useRef<any>();
   const preFocusCoordinatesRef = useRef<Coordinates>();
 
   // init

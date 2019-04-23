@@ -4,9 +4,9 @@ route: /usage/textures
 menu: Usage
 ---
 
-import { useState } from "react";
-import { Playground } from "docz";
-import ReactGlobe from "./ReactGlobe";
+import { useState } from 'react';
+import { Playground } from 'docz';
+import ReactGlobe from './ReactGlobe';
 
 # Textures
 
@@ -14,12 +14,12 @@ Provide a valid image URL or relative image path to the `globeOptions` prop to s
 
 <Playground>
   {() => {
-    const background1 = "background.png";
-    const background2 = "background_milky_way.jpg";
-    const clouds1 = "clouds.png";
-    const clouds2 = "clouds2.png";
-    const globe1 = "globe.jpg";
-    const globe2 = "globe_dark.jpg";
+    const background1 = 'background.png';
+    const background2 = 'background_milky_way.jpg';
+    const clouds1 = 'clouds.png';
+    const clouds2 = 'clouds2.png';
+    const globe1 = 'globe.jpg';
+    const globe2 = 'globe_dark.jpg';
     const [background, setBackground] = useState(background1);
     const [globe, setGlobe] = useState(globe1);
     const [clouds, setClouds] = useState(clouds1);
@@ -41,7 +41,7 @@ Provide a valid image URL or relative image path to the `globeOptions` prop to s
           globeOptions={{
             backgroundTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${background}`,
             cloudsTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${clouds}`,
-            texture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${globe}`
+            texture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${globe}`,
           }}
         />
       </div>

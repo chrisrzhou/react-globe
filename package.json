@@ -30,7 +30,7 @@
     "build:docs": "yarn docz build",
     "clean": "rm -rf dist .docz",
     "dev": "yarn docz dev",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx, --fix src",
+    "lint": "tsc --noEmit && eslint --ext .js,.jsx,.ts,.tsx --fix src docs",
     "prepare": "yarn clean && yarn build",
     "size": "bundlesize"
   },
