@@ -1,6 +1,6 @@
 {
   "name": "react-globe",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Create beautiful and interactive React + ThreeJS globe visualizations with ease.",
   "main": "dist/index.js",
   "module": "dist/index.module.js",

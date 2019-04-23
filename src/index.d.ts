@@ -1,3 +1,7 @@
+import { Props } from './ReactGlobe';
+
 export * from './types';
 
-export as namespace ReactGlobe;
+declare const ReactGlobe: React.SFC<Props>;
+
+export default ReactGlobe;

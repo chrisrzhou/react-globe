@@ -34,4 +34,11 @@ export default [
     coordinates: [51.5074, 0.1278],
     value: 80,
   },
+  {
+    id: 6,
+    city: 'Los Angeles',
+    color: 'gold',
+    coordinates: [29.7604, -95.3698],
+    value: 54,
+  },
 ];

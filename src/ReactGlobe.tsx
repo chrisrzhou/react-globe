@@ -78,7 +78,7 @@ export interface Props {
   size?: Size;
 }
 
-export default function ReactGlobe({
+const ReactGlobe: React.SFC<Props> = ({
   animations,
   cameraOptions,
   focus: initialFocus,
@@ -93,7 +93,7 @@ export default function ReactGlobe({
   onMouseOutMarker,
   onMouseOverMarker,
   size: initialSize,
-}: Props): React.ReactElement {
+}: Props): JSX.Element => {
   // merge options with defaults to support incomplete options
   const mergedGlobeOptions = { ...defaultGlobeOptions, ...globeOptions };
   const mergedCameraOptions = { ...defaultCameraOptions, ...cameraOptions };
@@ -365,7 +365,7 @@ export default function ReactGlobe({
       )}
     </div>
   );
-}
+};
 
 ReactGlobe.defaultProps = {
   animations: [],
@@ -377,3 +377,5 @@ ReactGlobe.defaultProps = {
   markers: [],
   markerOptions: defaultMarkerOptions,
 };
+
+export default ReactGlobe;

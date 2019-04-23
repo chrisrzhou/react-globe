@@ -155,6 +155,7 @@ export default function useCamera<T>(
   useEffect((): void => {
     const orbitControls = orbitControlsRef.current;
     const camera = cameraRef.current;
+    const preFocusPosition = preFocusPositionRef.current;
 
     if (focus) {
       // disable orbit controls when focused
@@ -172,7 +173,8 @@ export default function useCamera<T>(
         focus,
         RADIUS * focusDistanceRadiusScale,
       );
-      preFocusPositionRef.current = from.slice() as Position;
+      preFocusPositionRef.current =
+        preFocusPosition || (from.slice() as Position);
       tween(
         from,
         to,
@@ -183,7 +185,6 @@ export default function useCamera<T>(
         },
       );
     } else {
-      const preFocusPosition = preFocusPositionRef.current;
       if (preFocusPosition) {
         const from: Position = [
           camera.position.x,
@@ -204,11 +205,13 @@ export default function useCamera<T>(
             orbitControls.autoRotate = enableAutoRotate;
             orbitControls.maxPolarAngle = maxPolarAngle;
             orbitControls.minPolarAngle = minPolarAngle;
+            preFocusPositionRef.current = undefined;
           },
         );
       }
     }
   }, [
+    distanceRadiusScale,
     enableAutoRotate,
     focus,
     focusAnimationDuration,
