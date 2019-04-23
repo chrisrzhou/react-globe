@@ -12,11 +12,7 @@ import {
 } from 'three';
 
 import {
-  MARKER_ANIMATION_DURATION,
   MARKER_DEFAULT_COLOR,
-  MARKER_GLOW_COEFFICIENT,
-  MARKER_GLOW_POWER,
-  MARKER_GLOW_RADIUS_SCALE,
   MARKER_SEGMENTS,
   MARKER_UNIT_RADIUS_SCALE,
   RADIUS,
@@ -32,7 +28,16 @@ interface Handlers {
 
 export default function useMarkers<T>(
   markers: Marker[],
-  { radiusScaleRange, renderer, type }: MarkerOptions,
+  {
+    animationDuration,
+    enableGlow,
+    glowCoefficient,
+    glowPower,
+    glowRadiusScale,
+    radiusScaleRange,
+    renderer,
+    type,
+  }: MarkerOptions,
   { onClick, onMouseOver }: Handlers,
 ): React.RefObject<THREE.Group> {
   const markersRef = useRef<THREE.Group>(new Group());
@@ -66,7 +71,7 @@ export default function useMarkers<T>(
           tween(
             from,
             to,
-            MARKER_ANIMATION_DURATION,
+            animationDuration,
             ['Linear', 'None'],
             (): void => {
               switch (type) {
@@ -88,19 +93,21 @@ export default function useMarkers<T>(
                     MARKER_SEGMENTS,
                   );
                   mesh.material = new MeshBasicMaterial({ color });
-                  // add glow
-                  const glowMesh = createGlowMesh(
-                    mesh.geometry.clone() as THREE.Geometry,
-                    from.size * MARKER_GLOW_RADIUS_SCALE,
-                    {
-                      color,
-                      coefficient: MARKER_GLOW_COEFFICIENT,
-                      power: MARKER_GLOW_POWER,
-                    },
-                    false,
-                  );
-                  mesh.children = [];
-                  mesh.add(glowMesh);
+                  if (enableGlow) {
+                    // add glow
+                    const glowMesh = createGlowMesh(
+                      mesh.geometry.clone() as THREE.Geometry,
+                      from.size * glowRadiusScale,
+                      {
+                        color,
+                        coefficient: glowCoefficient,
+                        power: glowPower,
+                      },
+                      false,
+                    );
+                    mesh.children = [];
+                    mesh.add(glowMesh);
+                  }
               }
             },
           );
@@ -109,7 +116,7 @@ export default function useMarkers<T>(
 
         let heightOffset = 0;
         if (type === MarkerType.Dot) {
-          heightOffset = (size * (1 + MARKER_GLOW_RADIUS_SCALE)) / 2;
+          heightOffset = (size * (1 + glowRadiusScale)) / 2;
         }
 
         // place markers
@@ -122,14 +129,14 @@ export default function useMarkers<T>(
 
         // handle events
         // @ts-ignore: three.interaction is untyped
-        markerObject.on(
-          'click',
-          // @ts-ignore: three.interaction is untyped
-          (event): void => {
-            event.stopPropagation();
-            onClick(marker, markerObject, event.data.originalEvent);
-          },
-        );
+        function handleClick(event): void {
+          event.stopPropagation();
+          onClick(marker, markerObject, event.data.originalEvent);
+        }
+        // @ts-ignore: three.interaction is untyped
+        markerObject.on('click', handleClick);
+        // @ts-ignore: three.interaction is untyped
+        markerObject.on('touchstart', handleClick);
         // @ts-ignore: three.interaction is untyped
         markerObject.on(
           'mousemove',
@@ -143,6 +150,11 @@ export default function useMarkers<T>(
       },
     );
   }, [
+    animationDuration,
+    enableGlow,
+    glowCoefficient,
+    glowPower,
+    glowRadiusScale,
     markers,
     onClick,
     onMouseOver,

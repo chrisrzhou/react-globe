@@ -1,2 +1,3 @@
-export type Position = [number, number, number];
-export type Size = [number, number];
+export * from './types';
+
+export as namespace ReactGlobe;

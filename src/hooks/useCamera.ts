@@ -6,7 +6,9 @@ import {
   CAMERA_DAMPING_FACTOR,
   CAMERA_FAR,
   CAMERA_FOV,
+  CAMERA_MAX_POLAR_ANGLE,
   CAMERA_MIN_DISTANCE_RADIUS_SCALE,
+  CAMERA_MIN_POLAR_ANGLE,
   CAMERA_NEAR,
   RADIUS,
 } from '../defaults';
@@ -54,7 +56,12 @@ export default function useCamera<T>(
   const ambientLightRef = useRef<THREE.AmbientLight>();
   const pointLightRef = useRef<THREE.PointLight>();
   const orbitControlsRef = useRef<any>();
-  const preFocusCoordinatesRef = useRef<Coordinates>();
+  const preFocusPositionRef = useRef<Position>();
+  const [
+    pointLightRadiusScaleX,
+    pointLightRadiusScaleY,
+    pointLightRadiusScaleZ,
+  ] = pointLightPositionRadiusScales;
 
   // init
   useEffect((): void => {
@@ -96,9 +103,9 @@ export default function useCamera<T>(
     pointLight.color = new Color(pointLightColor);
     pointLight.intensity = pointLightIntensity;
     pointLight.position.set(
-      RADIUS * pointLightPositionRadiusScales[0],
-      RADIUS * pointLightPositionRadiusScales[1],
-      RADIUS * pointLightPositionRadiusScales[2],
+      RADIUS * pointLightRadiusScaleX,
+      RADIUS * pointLightRadiusScaleY,
+      RADIUS * pointLightRadiusScaleZ,
     );
 
     // apply orbit controls options
@@ -130,7 +137,9 @@ export default function useCamera<T>(
     minPolarAngle,
     pointLightColor,
     pointLightIntensity,
-    pointLightPositionRadiusScales,
+    pointLightRadiusScaleX,
+    pointLightRadiusScaleY,
+    pointLightRadiusScaleZ,
     rotateSpeed,
     zoomSpeed,
   ]);
@@ -146,13 +155,13 @@ export default function useCamera<T>(
   useEffect((): void => {
     const orbitControls = orbitControlsRef.current;
     const camera = cameraRef.current;
-    const preFocusCoordinates = preFocusCoordinatesRef.current;
 
     if (focus) {
       // disable orbit controls when focused
       orbitControls.autoRotate = false;
       orbitControls.enabled = false;
-      preFocusCoordinatesRef.current = focus;
+      orbitControls.minPolarAngle = CAMERA_MIN_POLAR_ANGLE;
+      orbitControls.maxPolarAngle = CAMERA_MAX_POLAR_ANGLE;
 
       const from: Position = [
         camera.position.x,
@@ -163,6 +172,7 @@ export default function useCamera<T>(
         focus,
         RADIUS * focusDistanceRadiusScale,
       );
+      preFocusPositionRef.current = from.slice() as Position;
       tween(
         from,
         to,
@@ -173,16 +183,14 @@ export default function useCamera<T>(
         },
       );
     } else {
-      if (preFocusCoordinates) {
+      const preFocusPosition = preFocusPositionRef.current;
+      if (preFocusPosition) {
         const from: Position = [
           camera.position.x,
           camera.position.y,
           camera.position.z,
         ];
-        const to: Position = coordinatesToPosition(
-          preFocusCoordinates,
-          RADIUS * distanceRadiusScale,
-        );
+        const to: Position = preFocusPosition;
         tween(
           from,
           to,
@@ -194,17 +202,20 @@ export default function useCamera<T>(
           (): void => {
             orbitControls.enabled = true;
             orbitControls.autoRotate = enableAutoRotate;
+            orbitControls.maxPolarAngle = maxPolarAngle;
+            orbitControls.minPolarAngle = minPolarAngle;
           },
         );
       }
     }
   }, [
-    distanceRadiusScale,
     enableAutoRotate,
     focus,
     focusAnimationDuration,
     focusDistanceRadiusScale,
     focusEasingFunction,
+    maxPolarAngle,
+    minPolarAngle,
   ]);
 
   return [cameraRef, orbitControlsRef];

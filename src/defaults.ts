@@ -16,14 +16,12 @@ export const CAMERA_FAR = RADIUS * 100;
 export const CAMERA_FOV = 45;
 export const CAMERA_NEAR = 1;
 export const CAMERA_DAMPING_FACTOR = 0.1;
+export const CAMERA_MAX_POLAR_ANGLE = Math.PI;
+export const CAMERA_MIN_POLAR_ANGLE = 0;
 export const CAMERA_MIN_DISTANCE_RADIUS_SCALE = 1.1;
 export const CLOUDS_RADIUS_OFFSET = 1;
 export const GLOBE_SEGMENTS = 50;
-export const MARKER_ANIMATION_DURATION = 2000;
 export const MARKER_DEFAULT_COLOR = 'gold';
-export const MARKER_GLOW_COEFFICIENT = 0;
-export const MARKER_GLOW_POWER = 3;
-export const MARKER_GLOW_RADIUS_SCALE = 2;
 export const MARKER_SEGMENTS = 10;
 export const MARKER_UNIT_RADIUS_SCALE = 0.01;
 export const MARKER_ACTIVE_ANIMATION_DURATION = 100;
@@ -39,8 +37,8 @@ export const defaultCameraOptions: CameraOptions = {
   enableRotate: true,
   enableZoom: true,
   maxDistanceRadiusScale: 4,
-  maxPolarAngle: Math.PI,
-  minPolarAngle: 0,
+  maxPolarAngle: CAMERA_MAX_POLAR_ANGLE,
+  minPolarAngle: CAMERA_MIN_POLAR_ANGLE,
   rotateSpeed: 0.02,
   zoomSpeed: 1,
 };
@@ -80,18 +78,28 @@ export const defaultLightOptions: LightOptions = {
 
 export const defaultDotMarkerOptions: MarkerOptions = {
   activeScale: 1.3,
+  animationDuration: 1000,
+  enableGlow: true,
   enableTooltip: true,
   getTooltipContent: (marker: Marker): string =>
     JSON.stringify(marker.coordinates),
+  glowCoefficient: 0,
+  glowPower: 3,
+  glowRadiusScale: 2,
   radiusScaleRange: [0.005, 0.02],
   type: MarkerType.Dot,
 };
 
 export const defaultBarMarkerOptions: MarkerOptions = {
   activeScale: 1.05,
+  animationDuration: 2000,
+  enableGlow: false,
   enableTooltip: true,
   getTooltipContent: (marker: Marker): string =>
     JSON.stringify(marker.coordinates),
+  glowCoefficient: 0,
+  glowPower: 3,
+  glowRadiusScale: 2,
   radiusScaleRange: [0.2, defaultFocusOptions.distanceRadiusScale - 1],
   type: MarkerType.Bar,
 };

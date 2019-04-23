@@ -1,5 +1,20 @@
 # Change Log
 
+## [3.0.1](https://github.com/chrisrzhou/react-globe/compare/v3.0.0...v3.0.1) (2019-04-23)
+
+### Bug Fixes
+
+- Fix component re-renders when `pointLightPositionRadiusScales` is updated.
+- Export `tween` method.
+- Support customizing markers glow options.
+- Dissable min/max polar angles when focus is applied.
+- Support TouchEvents on markers
+- Export types
+
+### Other
+
+- Update dependencies and docs
+
 ## [3.0.0] `react-globe` is live!
 
 Check the [documentation](https://react-globe.netlify.com) to begin building interactive globe visualizations!

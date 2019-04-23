@@ -1,22 +1,3 @@
-// Internal
-export enum ActionType {
-  Animate = 'ANIMATE',
-  SetFocus = 'SET_FOCUS',
-  SetActiveMarker = 'SET_ACTIVE_MANAGER',
-}
-
-export interface Action {
-  type: ActionType;
-  payload: any;
-}
-
-export interface State {
-  activeMarker?: Marker;
-  activeMarkerObject?: THREE.Object3D;
-  focus?: Coordinates;
-  focusOptions: FocusOptions;
-}
-
 export type Coordinates = [number, number];
 
 export type MarkerCallback = (
@@ -181,10 +162,20 @@ export interface Marker {
 export interface MarkerOptions {
   /** Scale factor of marker size when active (i.e. hovered). */
   activeScale: number;
+  /** Duration of marker animation (in milliseconds) */
+  animationDuration: number;
+  /** Enable glow effect of the marker. */
+  enableGlow: boolean;
   /** Enable tooltip features. */
   enableTooltip: boolean;
   /** Callback to set the tooltip string content based on the marker data. */
   getTooltipContent: (marker: Marker) => string;
+  /** Glow coefficient (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
+  glowCoefficient: number;
+  /** Glow power (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
+  glowPower: number;
+  /** Size of the glow radius (measured as a scale factor to the globe radius). */
+  glowRadiusScale: number;
   /** [min, max] size of markers (measured as scale factors to the globe radius). */
   radiusScaleRange: [number, number];
   /** Custom marker renderer returning a THREE.Object3D object. */

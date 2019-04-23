@@ -20,10 +20,9 @@ import {
   useRenderer,
   useResize,
 } from './hooks';
-import reducer from './reducer';
+import reducer, { ActionType } from './reducer';
 import Tooltip from './Tooltip';
 import {
-  ActionType,
   Animation,
   CameraOptions,
   Coordinates,
