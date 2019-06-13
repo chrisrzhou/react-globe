@@ -1,5 +1,16 @@
 # Change Log
 
+## [3.0.3](https://github.com/chrisrzhou/react-globe/compare/v3.0.2...v3.0.3) (2019-06-15)
+
+Update dependencies and emit types. Use `three-glow-mesh`.
+
+### Bug Fixes and enhancements
+
+- Update hooks when object option props change.
+- Add loading event for globe and background.
+- Better control of marker position.
+- Typescript bugs
+
 ## [3.0.2](https://github.com/chrisrzhou/react-globe/compare/v3.0.0...v3.0.2) (2019-04-23)
 
 ### Bug Fixes

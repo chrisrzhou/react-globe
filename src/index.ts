@@ -11,3 +11,4 @@ export {
 export { tween } from './utils';
 
 export { default } from './ReactGlobe';
+export * from './ReactGlobe';

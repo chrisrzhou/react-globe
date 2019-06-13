@@ -10,6 +10,7 @@ import {
   SphereGeometry,
   Vector3,
 } from 'three';
+import { createGlowMesh } from 'three-glow-mesh';
 
 import {
   MARKER_DEFAULT_COLOR,
@@ -17,7 +18,6 @@ import {
   MARKER_UNIT_RADIUS_SCALE,
   RADIUS,
 } from '../defaults';
-import { createGlowMesh } from '../three-glow-mesh';
 import { Marker, MarkerCallback, MarkerOptions, MarkerType } from '../types';
 import { coordinatesToPosition, tween } from '../utils';
 
@@ -53,102 +53,94 @@ export default function useMarkers<T>(
       .range([RADIUS * radiusScaleRange[0], RADIUS * radiusScaleRange[1]]);
 
     markersRef.current.children = []; // clear data before adding
-    markers.forEach(
-      (marker): void => {
-        const { coordinates, value } = marker;
-        const shouldUseCustomMarker = renderer !== undefined;
+    markers.forEach((marker): void => {
+      const { coordinates, value } = marker;
+      const shouldUseCustomMarker = renderer !== undefined;
 
-        const color = marker.color || MARKER_DEFAULT_COLOR;
-        const size = sizeScale(value);
-        let markerObject: THREE.Object3D;
+      const color = marker.color || MARKER_DEFAULT_COLOR;
+      const size = sizeScale(value);
+      let markerObject: THREE.Object3D;
 
-        if (shouldUseCustomMarker) {
-          markerObject = renderer(marker);
-        } else {
-          let from = { size: 0 };
-          const to = { size };
-          const mesh = new Mesh();
-          tween(
-            from,
-            to,
-            animationDuration,
-            ['Linear', 'None'],
-            (): void => {
-              switch (type) {
-                case MarkerType.Bar:
-                  mesh.geometry = new BoxGeometry(
-                    unitRadius,
-                    unitRadius,
-                    from.size,
-                  );
-                  mesh.material = new MeshLambertMaterial({
+      if (shouldUseCustomMarker) {
+        markerObject = renderer(marker);
+      } else {
+        let from = { size: 0 };
+        const to = { size };
+        const mesh = new Mesh();
+        tween(from, to, animationDuration, ['Linear', 'None'], (): void => {
+          switch (type) {
+            case MarkerType.Bar:
+              mesh.geometry = new BoxGeometry(
+                unitRadius,
+                unitRadius,
+                from.size,
+              );
+              mesh.material = new MeshLambertMaterial({
+                color,
+              });
+              break;
+            case MarkerType.Dot:
+            default:
+              mesh.geometry = new SphereGeometry(
+                from.size,
+                MARKER_SEGMENTS,
+                MARKER_SEGMENTS,
+              );
+              mesh.material = new MeshBasicMaterial({ color });
+              if (enableGlow) {
+                // add glow
+                const glowMesh = createGlowMesh(
+                  mesh.geometry.clone() as THREE.Geometry,
+                  {
+                    backside: false,
                     color,
-                  });
-                  break;
-                case MarkerType.Dot:
-                default:
-                  mesh.geometry = new SphereGeometry(
-                    from.size,
-                    MARKER_SEGMENTS,
-                    MARKER_SEGMENTS,
-                  );
-                  mesh.material = new MeshBasicMaterial({ color });
-                  if (enableGlow) {
-                    // add glow
-                    const glowMesh = createGlowMesh(
-                      mesh.geometry.clone() as THREE.Geometry,
-                      from.size * glowRadiusScale,
-                      {
-                        color,
-                        coefficient: glowCoefficient,
-                        power: glowPower,
-                      },
-                      false,
-                    );
-                    mesh.children = [];
-                    mesh.add(glowMesh);
-                  }
+                    coefficient: glowCoefficient,
+                    power: glowPower,
+                    size: from.size * glowRadiusScale,
+                  },
+                );
+                mesh.children = [];
+                mesh.add(glowMesh);
               }
-            },
-          );
-          markerObject = mesh;
-        }
+          }
+        });
+        markerObject = mesh;
+      }
 
-        let heightOffset = 0;
-        if (type === MarkerType.Dot) {
-          heightOffset = (size * (1 + glowRadiusScale)) / 2;
-        }
+      let heightOffset = 0;
+      if (type === MarkerType.Dot) {
+        heightOffset = (size * (1 + glowRadiusScale)) / 2;
+      }
 
-        // place markers
-        const position = coordinatesToPosition(
-          coordinates,
-          RADIUS + heightOffset,
-        );
-        markerObject.position.set(...position);
-        markerObject.lookAt(new Vector3(0, 0, 0));
+      // place markers
+      const position = coordinatesToPosition(
+        coordinates,
+        RADIUS + heightOffset,
+      );
+      markerObject.position.set(...position);
+      markerObject.lookAt(new Vector3(0, 0, 0));
 
-        // handle events
+      // handle events
+      // @ts-ignore: three.interaction is untyped
+      function handleClick(event): void {
+        event.stopPropagation();
+        onClick(marker, markerObject, event.data.originalEvent);
+      }
+      // @ts-ignore: three.interaction is untyped
+      markerObject.on('click', handleClick);
+      // @ts-ignore: three.interaction is untyped
+      markerObject.on('touchstart', handleClick);
+      // @ts-ignore: three.interaction is untyped
+      markerObject.on(
+        'mousemove',
         // @ts-ignore: three.interaction is untyped
-        function handleClick(event): void {
+        (event): void => {
           event.stopPropagation();
-          onClick(marker, markerObject, event.data.originalEvent);
-        }
-        // @ts-ignore: three.interaction is untyped
-        markerObject.on('click', handleClick);
-        // @ts-ignore: three.interaction is untyped
-        markerObject.on('touchstart', handleClick);
-        // @ts-ignore: three.interaction is untyped
-        markerObject.on(
-          'mousemove',
-          // @ts-ignore: three.interaction is untyped
-          (event): void => {
-            event.stopPropagation();
-            onMouseOver(marker, markerObject, event.data.originalEvent);
-          },
-        );
-        markersRef.current.add(markerObject);
-      },
-    );
+          onMouseOver(marker, markerObject, event.data.originalEvent);
+        },
+      );
+      markersRef.current.add(markerObject);
+    });
   }, [
     animationDuration,
     enableGlow,

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import ReactGlobeSrc from '../../src';
+import ReactGlobeSrc, { Props } from '../../src';
 
-export default function ReactGlobe({ ...otherProps }): React.ReactNode {
+export default function ReactGlobe({ ...otherProps }: Props) {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <ReactGlobeSrc {...otherProps} />

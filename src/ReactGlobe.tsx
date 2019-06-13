@@ -185,17 +185,15 @@ const ReactGlobe: React.SFC<Props> = ({
     },
   );
 
-  const handleDefocus = useEventCallback(
-    (event: PointerEvent): void => {
-      if (focus && enableDefocus) {
-        dispatch({
-          type: ActionType.SetFocus,
-          payload: undefined,
-        });
-        onDefocus && onDefocus(focus, event);
-      }
-    },
-  );
+  const handleDefocus = useEventCallback((event: PointerEvent): void => {
+    if (focus && enableDefocus) {
+      dispatch({
+        type: ActionType.SetFocus,
+        payload: undefined,
+      });
+      onDefocus && onDefocus(focus, event);
+    }
+  });
 
   // initialize THREE instances
   const [mountRef, size] = useResize(initialSize);
@@ -240,44 +238,40 @@ const ReactGlobe: React.SFC<Props> = ({
     let wait = 0;
     const timeouts: NodeJS.Timeout[] = [];
 
-    animations.forEach(
-      (animation, i): void => {
-        const {
-          animationDuration,
-          coordinates,
-          distanceRadiusScale,
-          easingFunction,
-        } = animation;
-        const timeout: NodeJS.Timeout = setTimeout((): void => {
-          dispatch({
-            type: ActionType.Animate,
-            payload: {
-              focus: coordinates,
-              focusOptions: {
-                animationDuration,
-                distanceRadiusScale,
-                easingFunction,
-              },
+    animations.forEach((animation, i): void => {
+      const {
+        animationDuration,
+        coordinates,
+        distanceRadiusScale,
+        easingFunction,
+      } = animation;
+      const timeout: NodeJS.Timeout = setTimeout((): void => {
+        dispatch({
+          type: ActionType.Animate,
+          payload: {
+            focus: coordinates,
+            focusOptions: {
+              animationDuration,
+              distanceRadiusScale,
+              easingFunction,
             },
+          },
+        });
+        if (i === animations.length - 1) {
+          dispatch({
+            type: ActionType.SetFocus,
+            payload: undefined,
           });
-          if (i === animations.length - 1) {
-            dispatch({
-              type: ActionType.SetFocus,
-              payload: undefined,
-            });
-          }
-        }, wait);
-        timeouts.push(timeout);
-        wait += animationDuration;
-      },
-    );
+        }
+      }, wait);
+      timeouts.push(timeout);
+      wait += animationDuration;
+    });
 
     return (): void => {
-      timeouts.forEach(
-        (timeout): void => {
-          clearTimeout(timeout);
-        },
-      );
+      timeouts.forEach((timeout): void => {
+        clearTimeout(timeout);
+      });
     };
   }, [animations]);
 

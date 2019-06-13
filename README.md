@@ -42,15 +42,15 @@ yarn dev
 
 ![image](/public/react-globe-basic.gif)
 
-[![Edit react-globe-simple](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/88645px230?fontsize=14)
+[![Edit react-globe-simple](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/88645px230)
 
 ### Interactive Example (with markers)
 
 ![image](/public/react-globe.gif)
 
-[![Edit react-globe-interactive](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/p5lwvkp7x?fontsize=14)
+[![Edit react-globe-interactive](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/p5lwvkp7x)
 
-### Application Example (Google Globe Trends)
+### Google Globe Trends
 
 ![image](/public/google-globe-trends.gif)
 
@@ -62,6 +62,7 @@ yarn dev
 
 - `react`
 - `three`
+- `three-glow-mesh`
 - `three-orbitcontrols`
 - `three.interaction`
 - `es6-tween`
@@ -73,11 +74,13 @@ yarn dev
 - `Tooltip.tsx`: Tooltip component powered by `tippy.js`.
 - `reducer.ts`: Simple state management for tracking focused coordinates and active markers.
 - `defaults.ts`: Default options and constants.
-- `utils.ts`: Various simple functions to compute derived data.
+- `utils.ts`: Simple functions to compute derived data.
 - `/hooks`: React hooks to handle updating various ThreeJS entities (e.g. camera, globe, markers, renderer).
 - `/textures`: Default globe, clouds and background textures.
 
 The code is written in `typescript`, linted with `eslint` + `prettier`, and built with `rollup`. Examples and documentations are built with `docz`.
+
+Feel free to contribute by submitting a pull request.
 
 ## Author's Note
 

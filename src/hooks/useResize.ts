@@ -25,17 +25,15 @@ export default function useResize<T>(
     setSize([width, height]);
 
     // update resize using a resize observer
-    const resizeObserver = new ResizeObserver(
-      (entries): void => {
-        if (!entries || !entries.length) {
-          return;
-        }
-        if (initialSize === undefined) {
-          let { width, height } = entries[0].contentRect;
-          setSize([width, height]);
-        }
-      },
-    );
+    const resizeObserver = new ResizeObserver((entries): void => {
+      if (!entries || !entries.length) {
+        return;
+      }
+      if (initialSize === undefined) {
+        let { width, height } = entries[0].contentRect;
+        setSize([width, height]);
+      }
+    });
     resizeObserver.observe(mount);
 
     return (): void => {

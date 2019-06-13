@@ -175,15 +175,9 @@ export default function useCamera<T>(
       );
       preFocusPositionRef.current =
         preFocusPosition || (from.slice() as Position);
-      tween(
-        from,
-        to,
-        focusAnimationDuration,
-        focusEasingFunction,
-        (): void => {
-          camera.position.set(...from);
-        },
-      );
+      tween(from, to, focusAnimationDuration, focusEasingFunction, (): void => {
+        camera.position.set(...from);
+      });
     } else {
       if (preFocusPosition) {
         const from: Position = [
