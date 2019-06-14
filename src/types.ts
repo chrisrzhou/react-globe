@@ -1,7 +1,7 @@
 export type Coordinates = [number, number];
 
 export type MarkerCallback = (
-  marker: Marker,
+  marker?: Marker,
   markerObject?: THREE.Object3D,
   event?: PointerEvent,
 ) => void;
@@ -18,36 +18,36 @@ export type Size = [number, number];
 // Props
 export interface Animation {
   /** Duration of the animation. */
-  animationDuration: number;
+  animationDuration?: number;
   /** Coordinates that the globe will animate to. */
-  coordinates: Coordinates;
+  coordinates?: Coordinates;
   /** Distance (measured as a scale factor to the globe radius) that the globe will animate to. */
-  distanceRadiusScale: number;
+  distanceRadiusScale?: number;
   /** Easing function applied for the animation. */
-  easingFunction: EasingFunction;
+  easingFunction?: EasingFunction;
 }
 
 export interface CameraOptions {
   /** Auto-rotate speed. */
-  autoRotateSpeed: number;
+  autoRotateSpeed?: number;
   /** Distance (measured as a scale factor to the globe radius) that the camera is placed.  This value should be greater than 1. */
-  distanceRadiusScale: number;
+  distanceRadiusScale?: number;
   /** Enable the auto-rotate feature of the globe. */
-  enableAutoRotate: boolean;
+  enableAutoRotate?: boolean;
   /** Enable the rotate feature of the globe. */
-  enableRotate: boolean;
+  enableRotate?: boolean;
   /** Enable the zoom feature of the globe. */
-  enableZoom: boolean;
+  enableZoom?: boolean;
   /** Max distance (measured as a scale factor to the globe radius) that the camera is allowed to be zoomed out.  This value should be greater than distanceRadiusScale. */
-  maxDistanceRadiusScale: number;
+  maxDistanceRadiusScale?: number;
   /** The maximum angle to orbit vertically.  This value should be between 0 to Math.PI radians. */
-  maxPolarAngle: number;
+  maxPolarAngle?: number;
   /** The minimum angle to orbit vertically.  This value should be between 0 to Math.PI radians. */
-  minPolarAngle: number;
+  minPolarAngle?: number;
   /** Speed of rotation. */
-  rotateSpeed: number;
+  rotateSpeed?: number;
   /** Speed of zoom. */
-  zoomSpeed: number;
+  zoomSpeed?: number;
 }
 
 export type EasingFunction =
@@ -101,85 +101,85 @@ export type EasingFunction =
 
 export interface FocusOptions {
   /** Duration of the focus animation. */
-  animationDuration: number;
+  animationDuration?: number;
   /** Distance (measured as a scale factor to the globe radius) that the focus will be viewed from. */
-  distanceRadiusScale: number;
+  distanceRadiusScale?: number;
   /** Easing function applied for the animation. */
-  easingFunction: EasingFunction;
+  easingFunction?: EasingFunction;
   /** Enable the defocus feature (i.e. clicking the globe after a focus has been applied). */
-  enableDefocus: boolean;
+  enableDefocus?: boolean;
 }
 
 export interface GlobeOptions {
   /** Background texture.  Accepts a URL or image data. */
-  backgroundTexture: string;
+  backgroundTexture?: string;
   /** Opacity of clouds with values from 0 to 1. */
-  cloudsOpacity: number;
+  cloudsOpacity?: number;
   /** Speed of clouds. */
-  cloudsSpeed: number;
+  cloudsSpeed?: number;
   /** Cloud texture.  Accepts a URL or image data. */
-  cloudsTexture: string;
+  cloudsTexture?: string;
   /** Enable background.  If disabled, the canvas will be transparent, allowing use of custom div backgrounds. */
-  enableBackground: boolean;
+  enableBackground?: boolean;
   /** Enable clouds. */
-  enableClouds: boolean;
+  enableClouds?: boolean;
   /** Enable glow effect of the globe. */
-  enableGlow: boolean;
+  enableGlow?: boolean;
   /** Glow coefficient (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
-  glowCoefficient: number;
+  glowCoefficient?: number;
   /** Glow color. */
-  glowColor: string;
+  glowColor?: string;
   /** Glow power (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
-  glowPower: number;
+  glowPower?: number;
   /** Size of the glow radius (measured as a scale factor to the globe radius). */
-  glowRadiusScale: number;
+  glowRadiusScale?: number;
   /** Globe texture.  Accepts a URL or image data. */
-  texture: string;
+  texture?: string;
 }
 
 export interface LightOptions {
   /** Ambient light color. */
-  ambientLightColor: string;
+  ambientLightColor?: string;
   /** Ambient light intensity. */
-  ambientLightIntensity: number;
+  ambientLightIntensity?: number;
   /** Point light color. */
-  pointLightColor: string;
+  pointLightColor?: string;
   /** Point light intensity. */
-  pointLightIntensity: number;
+  pointLightIntensity?: number;
   /** [x, y, z] position of the point light (measured as scale factors to the globe radius). */
-  pointLightPositionRadiusScales: Position;
+  pointLightPositionRadiusScales?: Position;
 }
 
 export interface Marker {
   /** Color of the marker */
   color?: string;
   /** [lat, lon] coordinates of the marker. */
-  coordinates: Coordinates;
+  coordinates?: Coordinates;
   /** Numeric value used to determine the size of the marker. */
-  value: number;
+  value?: number;
 }
 
 export interface MarkerOptions {
   /** Scale factor of marker size when active (i.e. hovered). */
-  activeScale: number;
+  activeScale?: number;
   /** Duration of marker animation (in milliseconds) */
-  animationDuration: number;
+  animationDuration?: number;
   /** Enable glow effect of the marker. */
-  enableGlow: boolean;
+  enableGlow?: boolean;
   /** Enable tooltip features. */
-  enableTooltip: boolean;
+  enableTooltip?: boolean;
   /** Callback to set the tooltip string content based on the marker data. */
-  getTooltipContent: (marker: Marker) => string;
+  getTooltipContent?: (marker: Marker) => string;
   /** Glow coefficient (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
-  glowCoefficient: number;
+  glowCoefficient?: number;
   /** Glow power (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
-  glowPower: number;
+  glowPower?: number;
   /** Size of the glow radius (measured as a scale factor to the globe radius). */
-  glowRadiusScale: number;
+  glowRadiusScale?: number;
   /** [min, max] size of markers (measured as scale factors to the globe radius). */
-  radiusScaleRange: [number, number];
+  radiusScaleRange?: [number, number];
   /** Custom marker renderer returning a THREE.Object3D object. */
   renderer?: (marker: Marker) => THREE.Object3D;
   /** If a valid type is passed, ReactGlobe will render the supported markers. */
-  type: MarkerType;
+  type?: MarkerType;
 }
