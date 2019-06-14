@@ -37,23 +37,23 @@ import { tween } from './utils';
 
 export interface Props {
   /** An array of animation steps to power globe animations. */
-  animations: Animation[];
+  animations?: Animation[];
   /** Configure camera options (e.g. rotation, zoom, angles). */
-  cameraOptions: CameraOptions;
+  cameraOptions?: CameraOptions;
   /** A set of [lat, lon] coordinates to be focused on. */
   focus?: Coordinates;
   /** Configure focusing options (e.g. animation duration, distance, easing function). */
-  focusOptions: FocusOptions;
+  focusOptions?: FocusOptions;
   /** Configure globe options (e.g. textures, background, clouds, glow). */
-  globeOptions: GlobeOptions;
+  globeOptions?: GlobeOptions;
   /** Configure light options (ambient and point light colors and intensity). */
-  lightOptions: LightOptions;
+  lightOptions?: LightOptions;
   /** A set of starting [lat, lon] coordinates for the globe. */
-  lookAt: Coordinates;
+  lookAt?: Coordinates;
   /** An array of data that will render interactive markers on the globe. */
-  markers: Marker[];
+  markers?: Marker[];
   /** Configure marker options (e.g. tooltips, size, marker types and custom marker renderer). */
-  markerOptions: MarkerOptions;
+  markerOptions?: MarkerOptions;
   /** Callback to handle click events of a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
   onClickMarker?: (
     marker: Marker,
@@ -338,19 +338,19 @@ const ReactGlobe: React.SFC<Props> = ({
       mount.removeChild(renderer.domElement);
     };
   }, [
-    activeMarker,
-    activeMarkerObject,
-    cameraRef,
-    enableDefocus,
-    focus,
-    globeRef,
-    handleDefocus,
-    handleMouseOutMarker,
-    markersRef,
-    mountRef,
-    orbitControlsRef,
-    rendererRef,
-  ]);
+      activeMarker,
+      activeMarkerObject,
+      cameraRef,
+      enableDefocus,
+      focus,
+      globeRef,
+      handleDefocus,
+      handleMouseOutMarker,
+      markersRef,
+      mountRef,
+      orbitControlsRef,
+      rendererRef,
+    ]);
 
   return (
     <div ref={mountRef} style={{ height: '100%', width: '100%' }}>
