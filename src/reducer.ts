@@ -6,8 +6,9 @@ export enum ActionType {
   SetActiveMarker = 'SET_ACTIVE_MANAGER',
 }
 
-export interface Action {
+interface Action {
   type: ActionType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
 }
 
@@ -32,9 +33,10 @@ export default function reducer(state: State, action: Action): State {
     case ActionType.SetFocus:
       return {
         ...state,
-        focus: payload,
         activeMarker: undefined,
         activeMarkerObject: undefined,
+        focus: payload.focus,
+        focusOptions: payload.focusOptions || state.focusOptions,
       };
     case ActionType.SetActiveMarker:
       return {

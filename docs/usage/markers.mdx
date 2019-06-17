@@ -6,6 +6,7 @@ menu: Usage
 
 import { Playground } from 'docz';
 import { useState } from 'react';
+
 import {
   BoxGeometry,
   Color,
@@ -15,13 +16,13 @@ import {
 } from 'three';
 import markers from './markers';
 import ReactGlobe from './ReactGlobe';
-import { defaultBarMarkerOptions, defaultDotMarkerOptions } from './../../src';
+import { defaultBarMarkerOptions, defaultDotMarkerOptions } from '../../src';
 
 # Markers
 
 In the [Focus](./focus.mdx) section, we explored the ways we can focus on a coordinate specified explicitly via the `focus` props. In most practical scenarios, we will need to render a number of markers on the globe that can be focused.
 
-`ReactGlobe` provides an extremely simple way to do this by passing an array of marker data using the `markers` props. Based on the `coordinates`, `color` and `value` fields of the marker data, `ReactGlobe` will render these values accordingly on the globe. Markers support focusing/defocusing behaviors, and provide a rich ways to interact with the globe.
+`react-globe` provides an extremely simple way to do this by passing an array of marker data using the `markers` props. Based on the `coordinates`, `color` and `value` fields of the marker data, `react-globe` will render these values accordingly on the globe. Markers support focusing/defocusing behaviors, and provide a rich ways to interact with the globe.
 
 We will be using the following `markers` dataset for the examples:
 
@@ -29,7 +30,7 @@ We will be using the following `markers` dataset for the examples:
 
 ## Point/Bar Markers
 
-`ReactGlobe` supports rendering point and bar markers natively. This can be controlled by setting the `type` field on the `markerOptions` prop. You can import some useful defaults for point and bar markers with:
+`react-globe` supports rendering point and bar markers natively. This can be controlled by setting the `type` field on the `markerOptions` prop. You can import some useful defaults for point and bar markers with:
 
 ```js
 import { defaultBarMarkerOptions, defaultDotMarkerOptions } from 'react-globe';
@@ -54,7 +55,7 @@ import { defaultBarMarkerOptions, defaultDotMarkerOptions } from 'react-globe';
 
 ## Marker Options and Tooltips
 
-You can configure various marker features using the `markerOptions` prop. This includes setting size range of the marker using the `radiusScaleRange` field, and the active/hovered size of the marker using the `activeScale` field.
+You can configure various marker features using the `markerOptions` prop. This includes setting the size range of the marker using the `radiusScaleRange` field, and the active/hovered size of the marker using the `activeScale` field.
 
 By default, tooltips are enabled for markers and the default value of the tooltip is the marker's coordinates. The `getTooltipContent` method allows you to return custom tooltip strings based on the marker data. Use the playground code editor to play around with some of these options.
 
@@ -72,7 +73,7 @@ By default, tooltips are enabled for markers and the default value of the toolti
 
 ## Custom Renderer
 
-If the `renderer` field of the `markerOptions` is provided, `ReactGlobe` will use this callback to render the markers. The return type of `renderer` has to be an instance of `THREE.Object3D`. `ReactGlobe` will still handle placing the markers and supporting focus/defocus and pointer events. This is an extremely powerful data-driven way to render custom objects on the globe. Go crazy!
+If the `renderer` field of the `markerOptions` is provided, `react-globe` will use this callback to render the markers. The return type of `renderer` has to be an instance of `THREE.Object3D`. `react-globe` will still handle placing the markers and supporting focus/defocus and pointer events. This is an extremely powerful data-driven way to render custom objects on the globe. Go crazy!
 
 <Playground>
   <ReactGlobe

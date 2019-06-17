@@ -1,15 +1,15 @@
 # Change Log
 
-## [3.0.3](https://github.com/chrisrzhou/react-globe/compare/v3.0.2...v3.0.3) (2019-06-15)
+## [3.1.0](https://github.com/chrisrzhou/react-globe/compare/v3.0.2...v3.1.0) (2019-06-17)
 
-Update dependencies and emit types. Use `three-glow-mesh`.
+### Bug Fixes and Enhancements
 
-### Bug Fixes and enhancements
-
-- Update hooks when object option props change.
-- Add loading event for globe and background.
-- Better control of marker position.
-- Typescript bugs
+- Use `three-glow-mesh` and `react-cached-callback`.
+- Add `onTextureLoaded` callback to detect if globe texture has successfully loaded. Updated `Texture.mdx` docs. ([#2](https://github.com/chrisrzhou/react-globe/issues/2))
+- Fix `focusOptions.distanceRadiusScale` not updating on change. ([#4](https://github.com/chrisrzhou/react-globe/issues/4))
+- Support customizing offset of markers using `markersOptions.offsetRadiusScale`.([#5](https://github.com/chrisrzhou/react-globe/issues/5))
+- Fix Typescript bugs. ([#7](https://github.com/chrisrzhou/react-globe/issues/7))
+- Type `*Options` props with optional fields. ([#9](https://github.com/chrisrzhou/react-globe/issues/9))
 
 ## [3.0.2](https://github.com/chrisrzhou/react-globe/compare/v3.0.0...v3.0.2) (2019-04-23)
 

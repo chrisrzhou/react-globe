@@ -10,7 +10,7 @@ export default function useRenderer<T>(
   const canvasRef = useRef<HTMLCanvasElement>();
 
   // init
-  useEffect((): void => {
+  useEffect(() => {
     rendererRef.current = new WebGLRenderer({
       alpha: true,
       antialias: true,
@@ -19,7 +19,7 @@ export default function useRenderer<T>(
   }, []);
 
   // update size
-  useEffect((): void => {
+  useEffect(() => {
     rendererRef.current.setSize(...size);
   }, [size]);
 

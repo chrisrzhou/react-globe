@@ -6,11 +6,12 @@ menu: Usage
 
 import { Playground } from 'docz';
 import { useState } from 'react';
+
 import ReactGlobe from './ReactGlobe';
 
 # Animations
 
-`ReactGlobe` provides a simple way to execute globe animations through a series of steps. Simply pass an array of animation steps to the `animations` prop and `ReactGlobe` will sequentially execute the animations. Each animation requires specifying the `animationDuration`, `coordinates`, `distanceRadiusScale` and `easingFunction`.
+`react-globe` provides a simple way to execute globe animations through a series of steps. Simply pass an array of animation steps to the `animations` prop and `react-globe` will sequentially execute the animations. Each animation requires specifying the `animationDuration`, `coordinates`, `distanceRadiusScale` and `easingFunction`.
 
 <Playground>
   {() => {
@@ -26,7 +27,6 @@ import ReactGlobe from './ReactGlobe';
             distanceRadiusScale: 2,
             easingFunction: ['Linear', 'None'],
           },
-          ,
         ];
         break;
       case 'Travel Plans':

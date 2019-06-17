@@ -7293,6 +7293,11 @@ re-resizable@^4.11.0:
   resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-4.11.0.tgz#d5df10bda445c4ec0945751a223bf195afb61890"
   integrity sha512-dye+7rERqNf/6mDT1iwps+4Gf42420xuZgygF33uX178DxffqcyeuHbBuJ382FIcB5iP6mMZOhfW7kI0uXwb/Q==
 
+react-cached-callback@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-cached-callback/-/react-cached-callback-2.0.0.tgz#049ded59f15a955d03edad64c62d89e04eb17dfa"
+  integrity sha512-0Y8COSEHlvk7nbz+8/490IvJ4kllxgi3Gi2anZHr6mjUxkm/m1YeHkWA/6lCgUG3ZQwb+sFeZJIihp666Mkz6w==
+
 react-codemirror2@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-6.0.0.tgz#180065df57a64026026cde569a9708fdf7656525"

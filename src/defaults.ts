@@ -4,7 +4,6 @@ import {
   FocusOptions,
   GlobeOptions,
   LightOptions,
-  Marker,
   MarkerOptions,
   MarkerType,
 } from './types';
@@ -81,8 +80,7 @@ export const defaultDotMarkerOptions: MarkerOptions = {
   animationDuration: 1000,
   enableGlow: true,
   enableTooltip: true,
-  getTooltipContent: (marker: Marker): string =>
-    JSON.stringify(marker.coordinates),
+  getTooltipContent: marker => JSON.stringify(marker.coordinates),
   glowCoefficient: 0,
   glowPower: 3,
   glowRadiusScale: 2,
@@ -95,11 +93,11 @@ export const defaultBarMarkerOptions: MarkerOptions = {
   animationDuration: 2000,
   enableGlow: false,
   enableTooltip: true,
-  getTooltipContent: (marker: Marker): string =>
-    JSON.stringify(marker.coordinates),
+  getTooltipContent: marker => JSON.stringify(marker.coordinates),
   glowCoefficient: 0,
   glowPower: 3,
   glowRadiusScale: 2,
+  offsetRadiusScale: 0,
   radiusScaleRange: [0.2, defaultFocusOptions.distanceRadiusScale - 1],
   type: MarkerType.Bar,
 };

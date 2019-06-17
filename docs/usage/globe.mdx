@@ -5,6 +5,7 @@ menu: Usage
 ---
 
 import { Playground } from 'docz';
+
 import ReactGlobe from './ReactGlobe';
 
 # Globe
@@ -14,14 +15,12 @@ import ReactGlobe from './ReactGlobe';
 Render a simple globe with one line of code and no props! Feel free to rotate and zoom on the globe!
 
 <Playground>
-  <div style={{ height: 400, width: '100%' }}>
-    <ReactGlobe />
-  </div>
+  <ReactGlobe />
 </Playground>
 
 ## Size
 
-By default, `ReactGlobe` is responsively sized to the parent container's size. You can pass an explicit `size` prop to disable responsive sizing.
+By default, `react-globe` is responsively sized to the parent container's size. You can pass an explicit `size` prop to disable responsive sizing.
 
 <Playground>
   <ReactGlobe size={[300, 300]} />
@@ -29,10 +28,13 @@ By default, `ReactGlobe` is responsively sized to the parent container's size. Y
 
 ## Background
 
-By default, `ReactGlobe` uses the specified `backgroundTexture` to render the background in the canvas. You can also disable texture backgrounds by setting the `enableBackground` value of `globeOptions` to `false`. This will allow you to use the parent container's background instead:
+By default, `react-globe` uses the specified `backgroundTexture` to render the background in the canvas. You can also disable texture backgrounds by setting the `enableBackground` value of `globeOptions` to `false`. This will allow you to use the parent container's background instead:
 
 <Playground>
-  <div style={{ backgroundImage: 'linear-gradient(to right, red , yellow)' }}>
+  <div
+    style={{
+      backgroundImage: 'linear-gradient(to right, red , yellow)',
+    }}>
     <ReactGlobe
       globeOptions={{
         enableBackground: false,

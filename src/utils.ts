@@ -18,13 +18,15 @@ export function coordinatesToPosition(
 }
 
 export function tween(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   from: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   to: any,
   animationDuration: number,
   easingFunction: EasingFunction,
   onUpdate: () => void,
   onEnd?: () => void,
-): void {
+) {
   new TWEEN.Tween(from)
     .to(to, animationDuration)
     .easing(TWEEN.Easing[easingFunction[0]][easingFunction[1]])

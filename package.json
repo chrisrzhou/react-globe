@@ -1,6 +1,6 @@
 {
   "name": "react-globe",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Create beautiful and interactive React + ThreeJS globe visualizations with ease.",
   "main": "dist/index.js",
   "module": "dist/index.module.js",
@@ -40,6 +40,7 @@
     "d3-array": "^2.2.0",
     "d3-scale": "^3.0.0",
     "es6-tween": "^5.5.10",
+    "react-cached-callback": "^2.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "three-glow-mesh": "^0.1.0",
     "three-orbitcontrols": "^2.102.1",

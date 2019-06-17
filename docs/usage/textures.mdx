@@ -6,11 +6,12 @@ menu: Usage
 
 import { useState } from 'react';
 import { Playground } from 'docz';
+
 import ReactGlobe from './ReactGlobe';
 
 # Textures
 
-Provide a valid image URL or relative image path to the `globeOptions` prop to set the textures for the globe, background and clouds.
+Provide a valid image URL or relative image path to the `globeOptions` prop to set the textures for the globe, background and clouds. You can use the `onTextureLoaded` prop to capture whether the globe texture has successfully loaded.
 
 <Playground>
   {() => {
@@ -20,13 +21,46 @@ Provide a valid image URL or relative image path to the `globeOptions` prop to s
     const clouds2 = 'clouds2.png';
     const globe1 = 'globe.jpg';
     const globe2 = 'globe_dark.jpg';
+
+    const [loaded, setLoaded] = useState(false);
     const [background, setBackground] = useState(background1);
     const [globe, setGlobe] = useState(globe1);
     const [clouds, setClouds] = useState(clouds1);
+
+    const loader = (
+      <div
+        style={{
+          alignItems: 'center',
+          background: 'black',
+          bottom: 0,
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'center',
+          left: 0,
+          position: 'absolute',
+          right: 0,
+          top: 0,
+        }}>
+        Loading "{globe}"...
+      </div>
+    );
+
     return (
       <div>
-        <button onClick={() => setGlobe(globe1)}>Globe (default)</button>
-        <button onClick={() => setGlobe(globe2)}>Globe (dark)</button>
+        <button
+          onClick={() => {
+            setLoaded(false);
+            setGlobe(globe1);
+          }}>
+          Globe (default)
+        </button>
+        <button
+          onClick={() => {
+            setLoaded(false);
+            setGlobe(globe2);
+          }}>
+          Globe (dark)
+        </button>
         <br />
         <button onClick={() => setBackground(background1)}>
           Background (default)
@@ -37,14 +71,20 @@ Provide a valid image URL or relative image path to the `globeOptions` prop to s
         <br />
         <button onClick={() => setClouds(clouds1)}>Clouds (default)</button>
         <button onClick={() => setClouds(clouds2)}>Clouds (dense)</button>
-        <ReactGlobe
-          globeOptions={{
-            backgroundTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${background}`,
-            cloudsTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${clouds}`,
-            texture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${globe}`,
-          }}
-        />
+        <>
+          {!loaded && loader}
+          <ReactGlobe
+            globeOptions={{
+              backgroundTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${background}`,
+              cloudsTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${clouds}`,
+              texture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/${globe}`,
+            }}
+            onTextureLoaded={() => setLoaded(true)}
+          />
+        </>
       </div>
     );
-  }}
+
+}}
+
 </Playground>

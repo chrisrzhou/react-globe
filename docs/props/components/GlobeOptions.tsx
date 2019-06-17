@@ -1,8 +1,6 @@
-import { defaultGlobeOptions } from '../../../src/defaults';
-import { GlobeOptions as GlobeOptionsType } from '../../../src/types';
+import { defaultGlobeOptions, GlobeOptions as Props } from '../../../src';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function GlobeOptions(props: GlobeOptionsType): null {
+export default function GlobeOptions(_props: Props) {
   return null;
 }
 

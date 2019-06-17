@@ -1,14 +1,4 @@
-export {
-  defaultBarMarkerOptions,
-  defaultDotMarkerOptions,
-  defaultCameraOptions,
-  defaultFocusOptions,
-  defaultGlobeOptions,
-  defaultLightOptions,
-  defaultMarkerOptions,
-} from './defaults';
-
-export { tween } from './utils';
-
-export { default } from './ReactGlobe';
+export { coordinatesToPosition, tween } from './utils';
+export * from './defaults';
 export * from './ReactGlobe';
+export { default } from './ReactGlobe';

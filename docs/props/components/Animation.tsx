@@ -1,6 +1,5 @@
-import { Animation as AnimationType } from '../../../src/types';
+import { Animation as Props } from '../../../src';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function Animation(props: AnimationType): null {
+export default function Component(_props: Props) {
   return null;
 }

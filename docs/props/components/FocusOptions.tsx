@@ -1,8 +1,6 @@
-import { defaultFocusOptions } from '../../../src/defaults';
-import { FocusOptions as FocusOptionsType } from '../../../src/types';
+import { defaultFocusOptions, FocusOptions as Props } from '../../../src';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function FocusOptions(props: FocusOptionsType): null {
+export default function FocusOptions(_props: Props) {
   return null;
 }
 

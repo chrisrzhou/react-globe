@@ -6,6 +6,7 @@ menu: Usage
 
 import { Playground } from 'docz';
 import { useState } from 'react';
+
 import ReactGlobe from './ReactGlobe';
 
 # Focus
@@ -35,13 +36,13 @@ To focus on a specific lat-long coordinate (e.g. Singapore `[1.3521, 103.8198]`)
 
 ## `FocusOptions`
 
-Use the `FocusOptions` to control how focused coordinates behave. You can pass any number of options to the prop. Default options can be imported from the module with
+Use the `FocusOptions` to control how focused coordinates behave. You can pass any number of option fields. Default options can be imported from the module with:
 
 ```js
 import { defaultFocusOptions } from 'react-globe';
 ```
 
-Use the playground code editor to play around customizing the focus animations or enabling the defocus feature (i.e. clicking the globe after a focus has been applied).
+Use the playground code editor to explore customizing the focus animations or disabling the defocus feature.
 
 <Playground>
   {() => {

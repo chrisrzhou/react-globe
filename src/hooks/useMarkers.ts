@@ -18,7 +18,14 @@ import {
   MARKER_UNIT_RADIUS_SCALE,
   RADIUS,
 } from '../defaults';
-import { Marker, MarkerCallback, MarkerOptions, MarkerType } from '../types';
+import {
+  InteractableObject3D,
+  InteractionEvent,
+  Marker,
+  MarkerCallback,
+  MarkerOptions,
+  MarkerType,
+} from '../types';
 import { coordinatesToPosition, tween } from '../utils';
 
 interface Handlers {
@@ -34,6 +41,7 @@ export default function useMarkers<T>(
     glowCoefficient,
     glowPower,
     glowRadiusScale,
+    offsetRadiusScale,
     radiusScaleRange,
     renderer,
     type,
@@ -44,22 +52,22 @@ export default function useMarkers<T>(
   const unitRadius = RADIUS * MARKER_UNIT_RADIUS_SCALE;
 
   // init
-  useEffect((): void => {
+  useEffect(() => {
     const sizeScale = scaleLinear()
       .domain([
-        min(markers, (marker): number => marker.value),
-        max(markers, (marker): number => marker.value),
+        min(markers, marker => marker.value),
+        max(markers, marker => marker.value),
       ])
       .range([RADIUS * radiusScaleRange[0], RADIUS * radiusScaleRange[1]]);
 
     markersRef.current.children = []; // clear data before adding
-    markers.forEach((marker): void => {
+    markers.forEach(marker => {
       const { coordinates, value } = marker;
       const shouldUseCustomMarker = renderer !== undefined;
 
       const color = marker.color || MARKER_DEFAULT_COLOR;
       const size = sizeScale(value);
-      let markerObject: THREE.Object3D;
+      let markerObject: InteractableObject3D;
 
       if (shouldUseCustomMarker) {
         markerObject = renderer(marker);
@@ -67,7 +75,7 @@ export default function useMarkers<T>(
         let from = { size: 0 };
         const to = { size };
         const mesh = new Mesh();
-        tween(from, to, animationDuration, ['Linear', 'None'], (): void => {
+        tween(from, to, animationDuration, ['Linear', 'None'], () => {
           switch (type) {
             case MarkerType.Bar:
               mesh.geometry = new BoxGeometry(
@@ -107,12 +115,17 @@ export default function useMarkers<T>(
         markerObject = mesh;
       }
 
-      let heightOffset = 0;
-      if (type === MarkerType.Dot) {
-        heightOffset = (size * (1 + glowRadiusScale)) / 2;
-      }
-
       // place markers
+      let heightOffset = 0;
+      if (offsetRadiusScale !== undefined) {
+        heightOffset = RADIUS * offsetRadiusScale;
+      } else {
+        if (type === MarkerType.Dot) {
+          heightOffset = (size * (1 + glowRadiusScale)) / 2;
+        } else {
+          heightOffset = 0;
+        }
+      }
       const position = coordinatesToPosition(
         coordinates,
         RADIUS + heightOffset,
@@ -121,24 +134,16 @@ export default function useMarkers<T>(
       markerObject.lookAt(new Vector3(0, 0, 0));
 
       // handle events
-      // @ts-ignore: three.interaction is untyped
-      function handleClick(event): void {
+      function handleClick(event: InteractionEvent) {
         event.stopPropagation();
         onClick(marker, markerObject, event.data.originalEvent);
       }
-      // @ts-ignore: three.interaction is untyped
       markerObject.on('click', handleClick);
-      // @ts-ignore: three.interaction is untyped
       markerObject.on('touchstart', handleClick);
-      // @ts-ignore: three.interaction is untyped
-      markerObject.on(
-        'mousemove',
-        // @ts-ignore: three.interaction is untyped
-        (event): void => {
-          event.stopPropagation();
-          onMouseOver(marker, markerObject, event.data.originalEvent);
-        },
-      );
+      markerObject.on('mousemove', event => {
+        event.stopPropagation();
+        onMouseOver(marker, markerObject, event.data.originalEvent);
+      });
       markersRef.current.add(markerObject);
     });
   }, [
@@ -148,6 +153,7 @@ export default function useMarkers<T>(
     glowPower,
     glowRadiusScale,
     markers,
+    offsetRadiusScale,
     onClick,
     onMouseOver,
     radiusScaleRange,

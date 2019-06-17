@@ -20,35 +20,39 @@ import { GlobeOptions } from '../types';
 
 const SECONDS_TO_MILLISECONDS = 1000;
 
-export default function useGlobe<T>({
-  backgroundTexture,
-  cloudsOpacity,
-  cloudsSpeed,
-  cloudsTexture,
-  enableBackground,
-  enableClouds,
-  enableGlow,
-  glowCoefficient,
-  glowColor,
-  glowPower,
-  glowRadiusScale,
-  texture,
-}: GlobeOptions): React.RefObject<THREE.Group> {
+export default function useGlobe<T>(
+  {
+    backgroundTexture,
+    cloudsOpacity,
+    cloudsSpeed,
+    cloudsTexture,
+    enableBackground,
+    enableClouds,
+    enableGlow,
+    glowCoefficient,
+    glowColor,
+    glowPower,
+    glowRadiusScale,
+    texture,
+  }: GlobeOptions,
+  onTextureLoaded?: () => void,
+): React.RefObject<THREE.Group> {
   const globeRef = useRef<THREE.Group>(new Group());
   const sphereRef = useRef<THREE.Mesh>(new Mesh());
   const backgroundRef = useRef<THREE.Mesh>(new Mesh());
   const cloudsRef = useRef<THREE.Mesh>(new Mesh());
 
   // init
-  useEffect((): void => {
+  useEffect(() => {
     const globe = globeRef.current;
     const sphere = sphereRef.current;
     const background = backgroundRef.current;
     const clouds = cloudsRef.current;
+    let cloudsAnimationFrameID: number;
 
     // add background if enabled
     if (enableBackground) {
-      new TextureLoader().load(backgroundTexture, (map): void => {
+      new TextureLoader().load(backgroundTexture, map => {
         background.geometry = new SphereGeometry(
           RADIUS * BACKGROUND_RADIUS_SCALE,
           GLOBE_SEGMENTS,
@@ -64,7 +68,7 @@ export default function useGlobe<T>({
 
     // add clouds if enabled
     if (enableClouds) {
-      new TextureLoader().load(cloudsTexture, (map): void => {
+      new TextureLoader().load(cloudsTexture, map => {
         clouds.geometry = new SphereGeometry(
           RADIUS + CLOUDS_RADIUS_OFFSET,
           GLOBE_SEGMENTS,
@@ -77,20 +81,21 @@ export default function useGlobe<T>({
         clouds.material.opacity = cloudsOpacity;
         globe.add(clouds);
 
-        function animateClouds(): void {
+        function animateClouds() {
           clouds.rotation.x +=
             (Math.random() * cloudsSpeed) / SECONDS_TO_MILLISECONDS;
           clouds.rotation.y +=
             (Math.random() * cloudsSpeed) / SECONDS_TO_MILLISECONDS;
           clouds.rotation.z +=
             (Math.random() * cloudsSpeed) / SECONDS_TO_MILLISECONDS;
-          requestAnimationFrame(animateClouds);
+          cloudsAnimationFrameID = requestAnimationFrame(animateClouds);
         }
+
         animateClouds();
       });
     }
 
-    new TextureLoader().load(texture, (map): void => {
+    new TextureLoader().load(texture, map => {
       sphere.geometry = new SphereGeometry(
         RADIUS,
         GLOBE_SEGMENTS,
@@ -101,7 +106,7 @@ export default function useGlobe<T>({
       });
       globe.add(sphere);
 
-      // Add glow if enabled
+      // add glow if enabled
       if (enableGlow) {
         const glowMesh = createGlowMesh(sphere.geometry, {
           backside: true,
@@ -113,7 +118,15 @@ export default function useGlobe<T>({
         sphere.children = []; // remove all glow instances
         sphere.add(glowMesh);
       }
+
+      onTextureLoaded && onTextureLoaded();
     });
+
+    return () => {
+      if (enableClouds && cloudsAnimationFrameID) {
+        cancelAnimationFrame(cloudsAnimationFrameID);
+      }
+    };
   }, [
     backgroundTexture,
     cloudsOpacity,
@@ -126,6 +139,7 @@ export default function useGlobe<T>({
     glowColor,
     glowPower,
     glowRadiusScale,
+    onTextureLoaded,
     texture,
   ]);
 

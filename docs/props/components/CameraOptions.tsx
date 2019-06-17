@@ -1,8 +1,6 @@
-import { defaultCameraOptions } from '../../../src/defaults';
-import { CameraOptions as CameraOptionsType } from '../../../src/types';
+import { CameraOptions as Props, defaultCameraOptions } from '../../../src';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function CameraOptions(props: CameraOptionsType): null {
+export default function CameraOptions(_props: Props) {
   return null;
 }
 

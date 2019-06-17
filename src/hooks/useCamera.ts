@@ -51,11 +51,11 @@ export default function useCamera<T>(
   size: Size,
   lookAt: Coordinates,
   focus?: Coordinates,
-): [React.RefObject<THREE.PerspectiveCamera>, React.RefObject<any>] {
+): [React.RefObject<THREE.PerspectiveCamera>, React.RefObject<OrbitControls>] {
   const cameraRef = useRef<THREE.PerspectiveCamera>(new PerspectiveCamera());
   const ambientLightRef = useRef<THREE.AmbientLight>();
   const pointLightRef = useRef<THREE.PointLight>();
-  const orbitControlsRef = useRef<any>();
+  const orbitControlsRef = useRef<OrbitControls>();
   const preFocusPositionRef = useRef<Position>();
   const [
     pointLightRadiusScaleX,
@@ -64,7 +64,7 @@ export default function useCamera<T>(
   ] = pointLightPositionRadiusScales;
 
   // init
-  useEffect((): void => {
+  useEffect(() => {
     const camera = cameraRef.current;
 
     const ambientLight = new AmbientLight('white');
@@ -82,7 +82,7 @@ export default function useCamera<T>(
   }, [rendererRef]);
 
   // update options
-  useEffect((): void => {
+  useEffect(() => {
     const camera = cameraRef.current;
     const orbitControls = orbitControlsRef.current;
     const ambientLight = ambientLightRef.current;
@@ -145,14 +145,14 @@ export default function useCamera<T>(
   ]);
 
   // update size
-  useEffect((): void => {
+  useEffect(() => {
     const camera = cameraRef.current;
     camera.aspect = size[0] / size[1];
     camera.updateProjectionMatrix();
   }, [size]);
 
   // update focus
-  useEffect((): void => {
+  useEffect(() => {
     const orbitControls = orbitControlsRef.current;
     const camera = cameraRef.current;
     const preFocusPosition = preFocusPositionRef.current;
@@ -175,7 +175,7 @@ export default function useCamera<T>(
       );
       preFocusPositionRef.current =
         preFocusPosition || (from.slice() as Position);
-      tween(from, to, focusAnimationDuration, focusEasingFunction, (): void => {
+      tween(from, to, focusAnimationDuration, focusEasingFunction, () => {
         camera.position.set(...from);
       });
     } else {
@@ -191,10 +191,10 @@ export default function useCamera<T>(
           to,
           focusAnimationDuration,
           focusEasingFunction,
-          (): void => {
+          () => {
             camera.position.set(...from);
           },
-          (): void => {
+          () => {
             orbitControls.enabled = true;
             orbitControls.autoRotate = enableAutoRotate;
             orbitControls.maxPolarAngle = maxPolarAngle;
@@ -205,7 +205,6 @@ export default function useCamera<T>(
       }
     }
   }, [
-    distanceRadiusScale,
     enableAutoRotate,
     focus,
     focusAnimationDuration,

@@ -5,9 +5,9 @@ menu: Props
 ---
 
 import { Props } from 'docz';
+
 import Animation from './components/Animation';
 import CameraOptions from './components/CameraOptions';
-import EasingFunction from './components/EasingFunction';
 import FocusOptions from './components/FocusOptions';
 import GlobeOptions from './components/GlobeOptions';
 import LightOptions from './components/LightOptions';
@@ -16,29 +16,75 @@ import MarkerOptions from './components/MarkerOptions';
 
 # Prop Types
 
-The following provides detailed types and descriptions for `ReactGlobe` props.
+The following provides detailed types and descriptions for `react-globe` props.
 
 ## `Marker`
 
-A `Marker` is a Javascript object with required `coordinates` and `size` fields that describe how it should be placed and drawn on the globe. It can contain additional fields that are useful for rendering tooltips and handling events.
+A `Marker` is a Javascript object with required `coordinates` and `size` fields that describe how it should be placed and drawn on the globe. It can contain any other additional fields that are useful for rendering tooltips and handling pointer events.
 
 <Props of={Marker} />
 
 ## `EasingFunction`
 
-Specify animation easing functions with two array parameters that are used to control animation behaviors in `ReactGlobe`. Easing functions are based on the following [TweenJS curves](https://sole.github.io/tween.js/examples/03_graphs.html).
+Easing functions are specified using two array parameters and define animations in `react-globe`. They are based on the following [TweenJS curves](https://sole.github.io/tween.js/examples/03_graphs.html).
 
-<Props of={EasingFunction} />
+- ['Back', 'In']
+- ['Back', 'Out']
+- ['Back', 'InOut']
+- ['Bounce', 'In']
+- ['Bounce', 'Out']
+- ['Bounce', 'InOut']
+- ['Circular', 'In']
+- ['Circular', 'Out']
+- ['Circular', 'InOut']
+- ['Cubic', 'In']
+- ['Cubic', 'Out']
+- ['Cubic', 'InOut']
+- ['Elastic', 'In']
+- ['Elastic', 'Out']
+- ['Elastic', 'InOut']
+- ['Linear', 'None']
+- ['Exponential', 'In']
+- ['Exponential', 'Out']
+- ['Exponential', 'InOut']
+- ['Quadratic', 'In']
+- ['Quadratic', 'Out']
+- ['Quadratic', 'InOut']
+- ['Linear', 'None']
+- ['Cubic', 'In']
+- ['Cubic', 'Out']
+- ['Cubic', 'InOut']
+- ['Quartic', 'In']
+- ['Quartic', 'Out']
+- ['Quartic', 'InOut']
+- ['Quintic', 'In']
+- ['Quintic', 'Out']
+- ['Quintic', 'InOut']
+- ['Sinusoidal', 'In']
+- ['Sinusoidal', 'Out']
+- ['Sinusoidal', 'InOut']
+- ['Exponential', 'In']
+- ['Exponential', 'Out']
+- ['Exponential', 'InOut']
+- ['Circular', 'In']
+- ['Circular', 'Out']
+- ['Circular', 'InOut']
+- ['Elastic', 'In']
+- ['Elastic', 'Out']
+- ['Elastic', 'InOut']
+- ['Quadratic', 'In']
+- ['Quadratic', 'Out']
+- ['Quadratic', 'InOut']
 
 ## `Animation`
 
-An `Animation` is a Javascript object with four required fields that describe how an animation should behave. When passed in the `animations` prop as an array of `Animation`, `ReactGlobe` will sequentially execute the provided animation steps.
+An `Animation` is a Javascript object with four required fields that describe how an animation should behave. When passed in the `animations` prop as an array of `Animation`, `react-globe` will sequentially execute the animation steps.
 
 <Props of={Animation} />
 
 ## `CameraOptions`
 
-Use the `CameraOptions` to control the camera (i.e. how the globe is viewed). You can pass any number of options to the prop. Default options can be imported from the module with:
+Use the `CameraOptions` to control the globe camera (i.e. how the globe is viewed). You can pass any number of option fields. Default options can be imported from the module with:
 
 ```js
 import { defaultCameraOptions } from 'react-globe';
@@ -48,7 +94,7 @@ import { defaultCameraOptions } from 'react-globe';
 
 ## `FocusOptions`
 
-Use the `FocusOptions` to control how focused coordinates behave. You can pass any number of options to the prop. Default options can be imported from the module with
+Use the `FocusOptions` to control how focused coordinates behave. You can pass any number of option fields. Default options can be imported from the module with:
 
 ```js
 import { defaultFocusOptions } from 'react-globe';
@@ -58,7 +104,7 @@ import { defaultFocusOptions } from 'react-globe';
 
 ## `GlobeOptions`
 
-Use the `GlobeOptions` to control the looks and behaviors of the globe. You can pass any number of options to the prop. Default options can be imported from the module with
+Use the `GlobeOptions` to control the looks and behaviors of the globe. You can pass any number of option fields. Default options can be imported from the module with:
 
 ```js
 import { defaultGlobeOptions } from 'react-globe';
@@ -68,7 +114,7 @@ import { defaultGlobeOptions } from 'react-globe';
 
 ## `LightOptions`
 
-Use the `LightOptions` to control the color and intensity values of ambient and point lights. The ambient light illuminates all objects in the scene equally while the point light provides a source of light emitting from a single point. You can pass any number of options to the prop. Default options can be imported from the module with
+Use the `LightOptions` to control the color and intensity values of ambient and point lights. The ambient light illuminates all objects in the scene equally while the point light provides a source of light emitting from a single point. You can pass any number of option fields. Default options can be imported from the module with:
 
 ```js
 import { defaultLightOptions } from 'react-globe';
@@ -78,7 +124,7 @@ import { defaultLightOptions } from 'react-globe';
 
 ## `MarkerOptions`
 
-Use the `MarkerOptions` to control the looks and behavior of markers. If you provide a valid marker `type` (e.g. `bar`, `dot`), `ReactGlobe` will render the corresponding supported marker. You can pass any number of options to the prop. Default options can be imported from the module with
+Use the `MarkerOptions` to control the looks and behavior of markers. If you provide a valid marker `type` (e.g. `bar`, `dot`), `react-globe` will render the corresponding supported marker. You can pass any number of option fields. Default options can be imported from the module with:
 
 ```js
 import { defaultMarkerOptions } from 'react-globe';

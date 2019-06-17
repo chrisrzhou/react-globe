@@ -1,8 +1,6 @@
-import { defaultMarkerOptions } from '../../../src/defaults';
-import { MarkerOptions as MarkerOptionsType } from '../../../src/types';
+import { defaultMarkerOptions, MarkerOptions as Props } from '../../../src';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function MarkerOptions(props: MarkerOptionsType): null {
+export default function MarkerOptions(_props: Props) {
   return null;
 }
 

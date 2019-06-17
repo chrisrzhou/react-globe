@@ -1,8 +1,6 @@
-import { defaultLightOptions } from '../../../src/defaults';
-import { LightOptions as LightOptionsType } from '../../../src/types';
+import { defaultLightOptions, LightOptions as Props } from '../../../src';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function LightOptions(props: LightOptionsType): null {
+export default function LightOptions(_props: Props) {
   return null;
 }
 

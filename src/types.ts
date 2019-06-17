@@ -1,4 +1,22 @@
+import { Object3D, Scene } from 'three';
+
 export type Coordinates = [number, number];
+
+export type Position = [number, number, number];
+
+export type Size = [number, number];
+
+export interface Marker {
+  /** Color of the marker */
+  color?: string;
+  /** [lat, lon] coordinates of the marker. */
+  coordinates: Coordinates;
+  /** Numeric value used to determine the size of the marker. */
+  value: number;
+  /** Any other custom fields */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [customField: string]: any;
+}
 
 export type MarkerCallback = (
   marker: Marker,
@@ -9,45 +27,6 @@ export type MarkerCallback = (
 export enum MarkerType {
   Bar = 'bar',
   Dot = 'dot',
-}
-
-export type Position = [number, number, number];
-
-export type Size = [number, number];
-
-// Props
-export interface Animation {
-  /** Duration of the animation. */
-  animationDuration: number;
-  /** Coordinates that the globe will animate to. */
-  coordinates: Coordinates;
-  /** Distance (measured as a scale factor to the globe radius) that the globe will animate to. */
-  distanceRadiusScale: number;
-  /** Easing function applied for the animation. */
-  easingFunction: EasingFunction;
-}
-
-export interface CameraOptions {
-  /** Auto-rotate speed. */
-  autoRotateSpeed: number;
-  /** Distance (measured as a scale factor to the globe radius) that the camera is placed.  This value should be greater than 1. */
-  distanceRadiusScale: number;
-  /** Enable the auto-rotate feature of the globe. */
-  enableAutoRotate: boolean;
-  /** Enable the rotate feature of the globe. */
-  enableRotate: boolean;
-  /** Enable the zoom feature of the globe. */
-  enableZoom: boolean;
-  /** Max distance (measured as a scale factor to the globe radius) that the camera is allowed to be zoomed out.  This value should be greater than distanceRadiusScale. */
-  maxDistanceRadiusScale: number;
-  /** The maximum angle to orbit vertically.  This value should be between 0 to Math.PI radians. */
-  maxPolarAngle: number;
-  /** The minimum angle to orbit vertically.  This value should be between 0 to Math.PI radians. */
-  minPolarAngle: number;
-  /** Speed of rotation. */
-  rotateSpeed: number;
-  /** Speed of zoom. */
-  zoomSpeed: number;
 }
 
 export type EasingFunction =
@@ -98,6 +77,61 @@ export type EasingFunction =
   | ['Quadratic', 'In']
   | ['Quadratic', 'Out']
   | ['Quadratic', 'InOut'];
+
+export interface InteractionEvent extends Event {
+  data: {
+    originalEvent: PointerEvent;
+  };
+}
+
+export interface Interactable {
+  on?(
+    type: string,
+    callback: (interactionEvent: InteractionEvent) => void,
+  ): void;
+}
+
+export interface InteractableObject3D extends Interactable, Object3D {}
+
+export interface InteractableScene extends Interactable, Scene {}
+
+export type Optional<T> = {
+  [P in keyof T]?: T[P];
+};
+
+export interface Animation {
+  /** Duration of the animation. */
+  animationDuration: number;
+  /** Coordinates that the globe will animate to. */
+  coordinates: Coordinates;
+  /** Distance (measured as a scale factor to the globe radius) that the globe will animate to. */
+  distanceRadiusScale: number;
+  /** Easing function applied for the animation. */
+  easingFunction: EasingFunction;
+}
+
+export interface CameraOptions {
+  /** Speed of auto-rotation. */
+  autoRotateSpeed: number;
+  /** Distance (measured as a scale factor to the globe radius) that the camera is placed.  This value should be greater than 1. */
+  distanceRadiusScale: number;
+  /** Enable the auto-rotate feature of the globe. */
+  enableAutoRotate: boolean;
+  /** Enable the rotate feature of the globe. */
+  enableRotate: boolean;
+  /** Enable the zoom feature of the globe. */
+  enableZoom: boolean;
+  /** Max distance (measured as a scale factor to the globe radius) that the camera is allowed to be zoomed out.  This value should be greater than the distanceRadiusScale. */
+  maxDistanceRadiusScale: number;
+  /** The maximum angle to orbit vertically.  This value should be between 0 to Math.PI radians. */
+  maxPolarAngle: number;
+  /** The minimum angle to orbit vertically.  This value should be between 0 to Math.PI radians. */
+  minPolarAngle: number;
+  /** Speed of rotation. */
+  rotateSpeed: number;
+  /** Speed of zoom. */
+  zoomSpeed: number;
+}
 
 export interface FocusOptions {
   /** Duration of the focus animation. */
@@ -150,19 +184,10 @@ export interface LightOptions {
   pointLightPositionRadiusScales: Position;
 }
 
-export interface Marker {
-  /** Color of the marker */
-  color?: string;
-  /** [lat, lon] coordinates of the marker. */
-  coordinates: Coordinates;
-  /** Numeric value used to determine the size of the marker. */
-  value: number;
-}
-
 export interface MarkerOptions {
   /** Scale factor of marker size when active (i.e. hovered). */
   activeScale: number;
-  /** Duration of marker animation (in milliseconds) */
+  /** Duration of marker animation (in milliseconds). */
   animationDuration: number;
   /** Enable glow effect of the marker. */
   enableGlow: boolean;
@@ -176,6 +201,8 @@ export interface MarkerOptions {
   glowPower: number;
   /** Size of the glow radius (measured as a scale factor to the globe radius). */
   glowRadiusScale: number;
+  /** Marker position offset from surface of the globe (measured as a scale factor to the globe radius).  If undefined, an automated offset is applied based on the marker type used. */
+  offsetRadiusScale?: number;
   /** [min, max] size of markers (measured as scale factors to the globe radius). */
   radiusScaleRange: [number, number];
   /** Custom marker renderer returning a THREE.Object3D object. */

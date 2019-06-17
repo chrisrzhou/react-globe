@@ -1,6 +1,5 @@
-import { Marker as MarkerType } from '../../../src/types';
+import { Marker as Props } from '../../../src';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function Marker(props: MarkerType): null {
+export default function Marker(_props: Props) {
   return null;
 }
