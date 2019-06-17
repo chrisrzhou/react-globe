@@ -1,6 +1,6 @@
 # Change Log
 
-## [3.1.0](https://github.com/chrisrzhou/react-globe/compare/v3.0.2...v3.1.0) (2019-06-17)
+## [3.1.1](https://github.com/chrisrzhou/react-globe/compare/v3.0.2...v3.1.1) (2019-06-17)
 
 ### Bug Fixes and Enhancements
 
