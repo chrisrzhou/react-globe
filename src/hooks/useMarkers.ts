@@ -72,7 +72,7 @@ export default function useMarkers<T>(
       if (shouldUseCustomMarker) {
         markerObject = renderer(marker);
       } else {
-        let from = { size: 0 };
+        const from = { size: 0 };
         const to = { size };
         const mesh = new Mesh();
         tween(from, to, animationDuration, ['Linear', 'None'], () => {
@@ -134,7 +134,7 @@ export default function useMarkers<T>(
       markerObject.lookAt(new Vector3(0, 0, 0));
 
       // handle events
-      function handleClick(event: InteractionEvent) {
+      function handleClick(event: InteractionEvent): void {
         event.stopPropagation();
         onClick(marker, markerObject, event.data.originalEvent);
       }

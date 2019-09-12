@@ -2,10 +2,7 @@ export default {
   dest: 'dist/docs',
   menu: [
     'README',
-    {
-      name: 'Props',
-      menu: ['Component', 'Types'],
-    },
+    'Props',
     {
       name: 'Usage',
       menu: [

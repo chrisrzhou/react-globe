@@ -1,6 +1,6 @@
 import * as TWEEN from 'es6-tween';
 
-import { Coordinates, EasingFunction, Position } from './types';
+import { Any, Coordinates, EasingFunction, Position } from './types';
 
 export function coordinatesToPosition(
   coordinates: Coordinates,
@@ -18,15 +18,13 @@ export function coordinatesToPosition(
 }
 
 export function tween(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  from: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  to: any,
+  from: Any,
+  to: Any,
   animationDuration: number,
   easingFunction: EasingFunction,
   onUpdate: () => void,
   onEnd?: () => void,
-) {
+): void {
   new TWEEN.Tween(from)
     .to(to, animationDuration)
     .easing(TWEEN.Easing[easingFunction[0]][easingFunction[1]])

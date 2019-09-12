@@ -1,5 +1,17 @@
 # Change Log
 
+## [3.2.0](https://github.com/chrisrzhou/react-globe/compare/v3.1.1...v3.2.0) (2019-09-12)
+
+- [ ] Allow dynamic updates to markers without re-rendering the globe.
+- [ ] Support `onPause` and `onResume` callbacks.
+- [ ] Internal code improvements.
+- [x] Simplify types.
+- [x] Update and improve documentation for props.
+
+### Small breaking changes
+
+- Certain typescript type exports may have changed. Noticeably, the `*Options` props should now be referred to as `*OptionsProp`. You can still refer to the `*Options` types, but these are used internally while the `*OptionsProp` express the desired behavior of allowing optional prop fields.
+
 ## [3.1.1](https://github.com/chrisrzhou/react-globe/compare/v3.0.2...v3.1.1) (2019-06-17)
 
 ### Bug Fixes and Enhancements

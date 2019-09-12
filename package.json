@@ -1,6 +1,6 @@
 {
   "name": "react-globe",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Create beautiful and interactive React + ThreeJS globe visualizations with ease.",
   "main": "dist/index.js",
   "module": "dist/index.module.js",
@@ -15,7 +15,7 @@
     "globe",
     "earth"
   ],
-  "author": "Chris Zhou <christopher.r.zhou@gmail.com>",
+  "author": "Chris Zhou <chrisrzhou@pm.me>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -32,7 +32,8 @@
     "dev": "yarn docz dev",
     "lint": "yarn tsc && eslint --ext .js,.jsx,.ts,.tsx --fix src docs",
     "prepare": "yarn clean && yarn build",
-    "size": "bundlesize"
+    "size": "bundlesize",
+    "unused": "yarn no-unused-export src/*.ts* --exclude src/*.d.ts"
   },
   "dependencies": {
     "@types/d3-array": "^2.0.0",
@@ -42,7 +43,7 @@
     "es6-tween": "^5.5.10",
     "react-cached-callback": "^2.0.0",
     "resize-observer-polyfill": "^1.5.1",
-    "three-glow-mesh": "^0.1.0",
+    "three-glow-mesh": "^0.1.1",
     "three-orbitcontrols": "^2.102.1",
     "three.interaction": "^0.2.2",
     "tippy.js": "^4.3.4"
@@ -54,25 +55,26 @@
     "@babel/preset-typescript": "^7.1.0",
     "@emotion/core": "^10.0.10",
     "@types/react": "^16.8.19",
-    "@typescript-eslint/eslint-plugin": "^1.10.2",
-    "@typescript-eslint/parser": "^1.10.2",
-    "bundlesize": "^0.17.2",
+    "@typescript-eslint/eslint-plugin": "^2.2.0",
+    "@typescript-eslint/parser": "^2.2.0",
+    "bundlesize": "^0.18.0",
     "docz": "^1.2.0",
     "docz-theme-default": "^1.2.0",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.3.0",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
-    "eslint-plugin-react-hooks": "^1.6.0",
+    "eslint-plugin-react-hooks": "^2.0.1",
+    "no-unused-export": "^1.9.0",
     "prettier": "^1.18.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "rollup": "^1.15.0",
+    "rollup": "^1.21.2",
     "rollup-plugin-babel": "^4.1.0",
-    "rollup-plugin-typescript2": "^0.21.1",
-    "three": "^0.105.2",
+    "rollup-plugin-typescript2": "^0.24.1",
+    "three": "^0.108.0",
     "tslib": "1.10.0",
-    "typescript": "^3.5.1"
+    "typescript": "^3.6.3"
   },
   "bundlesize": [
     {

@@ -1,4 +1,4 @@
-import { Coordinates, FocusOptions, Marker } from './types';
+import { Any, Coordinates, FocusOptions, Marker } from './types';
 
 export enum ActionType {
   Animate = 'ANIMATE',
@@ -8,11 +8,10 @@ export enum ActionType {
 
 interface Action {
   type: ActionType;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  payload: any;
+  payload: Any;
 }
 
-export interface State {
+interface State {
   activeMarker?: Marker;
   activeMarkerObject?: THREE.Object3D;
   focus?: Coordinates;

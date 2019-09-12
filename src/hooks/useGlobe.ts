@@ -81,7 +81,7 @@ export default function useGlobe<T>(
         clouds.material.opacity = cloudsOpacity;
         globe.add(clouds);
 
-        function animateClouds() {
+        function animateClouds(): void {
           clouds.rotation.x +=
             (Math.random() * cloudsSpeed) / SECONDS_TO_MILLISECONDS;
           clouds.rotation.y +=
@@ -122,7 +122,7 @@ export default function useGlobe<T>(
       onTextureLoaded && onTextureLoaded();
     });
 
-    return () => {
+    return (): void => {
       if (enableClouds && cloudsAnimationFrameID) {
         cancelAnimationFrame(cloudsAnimationFrameID);
       }

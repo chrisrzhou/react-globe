@@ -12,20 +12,19 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
-    }
+    },
   },
-  plugins: [
-    '@typescript-eslint',
-    'prettier',
-    'react-hooks',
-  ],
+  plugins: ['@typescript-eslint', 'prettier', 'react-hooks'],
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      'error', 
+    '@typescript-eslint/explicit-function-return-type': [
+      'warn',
       {
-        'argsIgnorePattern': '^_',
+        allowTypedFunctionExpressions: true,
       },
+    ],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      { argsIgnorePattern: '^_', ignoreRestSiblings: true },
     ],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',

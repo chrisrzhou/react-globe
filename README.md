@@ -50,6 +50,12 @@ yarn dev
 
 [![Edit react-globe-interactive](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/p5lwvkp7x)
 
+### Custom Marker Renderer Example
+
+![image](/public/react-globe-custom-marker-renderer.gif)
+
+[![Edit react-globe-interactive](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/knhlr)
+
 ### Google Globe Trends
 
 ![image](/public/google-globe-trends.gif)
@@ -81,9 +87,3 @@ yarn dev
 The code is written in `typescript`, linted with `eslint` + `prettier`, and built with `rollup`. Examples and documentations are built with `docz`.
 
 Feel free to contribute by submitting a pull request.
-
-## Author's Note
-
-My projects will always be (ads-)free. I constantly learn from the community, so these projects are a way of giving back to the community. If you liked this project or find it useful, feel free to buy me a cup of coffee ☕️ through a small donation!
-
-[![paypal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/chrisrzhou/5)

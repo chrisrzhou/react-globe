@@ -1,5 +1,12 @@
 import { Object3D, Scene } from 'three';
 
+export type Optional<T> = {
+  [P in keyof T]?: T[P];
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Any = any;
+
 export type Coordinates = [number, number];
 
 export type Position = [number, number, number];
@@ -14,8 +21,7 @@ export interface Marker {
   /** Numeric value used to determine the size of the marker. */
   value: number;
   /** Any other custom fields */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [customField: string]: any;
+  [customField: string]: Any;
 }
 
 export type MarkerCallback = (
@@ -95,10 +101,6 @@ export interface InteractableObject3D extends Interactable, Object3D {}
 
 export interface InteractableScene extends Interactable, Scene {}
 
-export type Optional<T> = {
-  [P in keyof T]?: T[P];
-};
-
 export interface Animation {
   /** Duration of the animation. */
   animationDuration: number;
@@ -132,6 +134,7 @@ export interface CameraOptions {
   /** Speed of zoom. */
   zoomSpeed: number;
 }
+export type CameraOptionsProp = Optional<CameraOptions>;
 
 export interface FocusOptions {
   /** Duration of the focus animation. */
@@ -143,6 +146,7 @@ export interface FocusOptions {
   /** Enable the defocus feature (i.e. clicking the globe after a focus has been applied). */
   enableDefocus: boolean;
 }
+export type FocusOptionsProp = Optional<FocusOptions>;
 
 export interface GlobeOptions {
   /** Background texture.  Accepts a URL or image data. */
@@ -170,6 +174,7 @@ export interface GlobeOptions {
   /** Globe texture.  Accepts a URL or image data. */
   texture: string;
 }
+export type GlobeOptionsProp = Optional<GlobeOptions>;
 
 export interface LightOptions {
   /** Ambient light color. */
@@ -183,6 +188,7 @@ export interface LightOptions {
   /** [x, y, z] position of the point light (measured as scale factors to the globe radius). */
   pointLightPositionRadiusScales: Position;
 }
+export type LightOptionsProp = Optional<LightOptions>;
 
 export interface MarkerOptions {
   /** Scale factor of marker size when active (i.e. hovered). */
@@ -210,3 +216,4 @@ export interface MarkerOptions {
   /** If a valid type is passed, ReactGlobe will render the supported markers. */
   type: MarkerType;
 }
+export type MarkerOptionsProp = Optional<MarkerOptions>;

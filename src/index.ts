@@ -1,4 +1,5 @@
-export { coordinatesToPosition, tween } from './utils';
-export * from './defaults';
-export * from './ReactGlobe';
 export { default } from './ReactGlobe';
+export * from './ReactGlobe';
+export * from './defaults';
+export * from './types';
+export * from './utils';

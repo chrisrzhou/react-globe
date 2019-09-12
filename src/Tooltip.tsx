@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import tippy, { Instance } from 'tippy.js';
 
-const { useEffect, useRef } = React;
+const OFFSET = 10;
 
 let tooltipInstance: Instance;
 
 interface Props {
   content: string;
-  offset: number;
   x: number;
   y: number;
 }
 
-function Tooltip({ content, offset, x, y }: Props) {
+export default function Tooltip({ content, x, y }: Props): JSX.Element {
   const ref = useRef();
 
   useEffect(() => {
@@ -23,7 +22,7 @@ function Tooltip({ content, offset, x, y }: Props) {
     }) as Instance;
     tooltipInstance.show();
 
-    return () => {
+    return (): void => {
       document.body.style.cursor = 'inherit';
       if (tooltipInstance) {
         tooltipInstance.destroy();
@@ -35,12 +34,10 @@ function Tooltip({ content, offset, x, y }: Props) {
     <div
       ref={ref}
       style={{
-        left: x + offset,
+        left: x + OFFSET,
         position: 'fixed',
-        top: y + offset,
+        top: y + OFFSET,
       }}
     />
   );
 }
-
-export default Tooltip;

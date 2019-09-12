@@ -6,13 +6,13 @@
         "loose": true
       }
     ],
+    "@babel/react",
     [
       "@babel/preset-typescript",
       {
         "isTSX": true,
         "allExtensions": true
       }
-    ],
-    "@babel/react"
+    ]
   ]
 }
