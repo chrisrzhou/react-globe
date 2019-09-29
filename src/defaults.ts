@@ -30,7 +30,7 @@ export const MARKER_ACTIVE_ANIMATION_EASING_FUNCTION: EasingFunction = [
 ];
 
 export const defaultCameraOptions: CameraOptions = {
-  autoRotateSpeed: 0.02,
+  autoRotateSpeed: 0.2,
   distanceRadiusScale: 3,
   enableAutoRotate: true,
   enableRotate: true,
@@ -38,7 +38,7 @@ export const defaultCameraOptions: CameraOptions = {
   maxDistanceRadiusScale: 4,
   maxPolarAngle: CAMERA_MAX_POLAR_ANGLE,
   minPolarAngle: CAMERA_MIN_POLAR_ANGLE,
-  rotateSpeed: 0.02,
+  rotateSpeed: 0.2,
   zoomSpeed: 1,
 };
 

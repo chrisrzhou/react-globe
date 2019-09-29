@@ -26,6 +26,13 @@ module.exports = {
       'warn',
       { argsIgnorePattern: '^_', ignoreRestSiblings: true },
     ],
+    'prettier/prettier': [
+      'warn',
+      {
+        singleQuote: true,
+        trailingComma: 'all',
+      },
+    ],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
   },

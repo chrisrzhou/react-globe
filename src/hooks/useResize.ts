@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
 import { Size } from '../types';
 
-export default function useResize<T>(
+export function useResize<T>(
+  mountRef: React.RefObject<HTMLDivElement>,
   initialSize?: Size,
-): [React.RefObject<HTMLDivElement>, Size] {
-  const mountRef = useRef<HTMLDivElement>();
+): Size {
   const [size, setSize] = useState<Size>([0, 0]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function useResize<T>(
     return (): void => {
       resizeObserver.unobserve(mount);
     };
-  }, [initialSize]);
+  }, [initialSize, mountRef]);
 
-  return [mountRef, size];
+  return size;
 }

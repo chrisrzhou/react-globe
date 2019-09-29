@@ -134,7 +134,6 @@ export interface CameraOptions {
   /** Speed of zoom. */
   zoomSpeed: number;
 }
-export type CameraOptionsProp = Optional<CameraOptions>;
 
 export interface FocusOptions {
   /** Duration of the focus animation. */
@@ -146,7 +145,6 @@ export interface FocusOptions {
   /** Enable the defocus feature (i.e. clicking the globe after a focus has been applied). */
   enableDefocus: boolean;
 }
-export type FocusOptionsProp = Optional<FocusOptions>;
 
 export interface GlobeOptions {
   /** Background texture.  Accepts a URL or image data. */
@@ -174,7 +172,6 @@ export interface GlobeOptions {
   /** Globe texture.  Accepts a URL or image data. */
   texture: string;
 }
-export type GlobeOptionsProp = Optional<GlobeOptions>;
 
 export interface LightOptions {
   /** Ambient light color. */
@@ -188,7 +185,6 @@ export interface LightOptions {
   /** [x, y, z] position of the point light (measured as scale factors to the globe radius). */
   pointLightPositionRadiusScales: Position;
 }
-export type LightOptionsProp = Optional<LightOptions>;
 
 export interface MarkerOptions {
   /** Scale factor of marker size when active (i.e. hovered). */
@@ -216,4 +212,16 @@ export interface MarkerOptions {
   /** If a valid type is passed, ReactGlobe will render the supported markers. */
   type: MarkerType;
 }
-export type MarkerOptionsProp = Optional<MarkerOptions>;
+
+export enum ObjectName {
+  AmbientLight = 'AMBIENT_LIGHT',
+  Background = 'BACKGROUND',
+  Camera = 'CAMERA',
+  Clouds = 'CLOUDS',
+  Globe = 'GLOBE',
+  Glow = 'GLOW',
+  MarkerObjects = 'MARKER_OBJECTS',
+  PointLight = 'POINT_LIGHT',
+  Scene = 'SCENE',
+  Sphere = 'SPHERE',
+}

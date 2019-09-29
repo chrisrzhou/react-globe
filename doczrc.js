@@ -20,7 +20,6 @@ export default {
       name: 'Gallery',
       menu: ['Contributing', 'Google Globe Trends'],
     },
-    'FAQ',
     'CHANGELOG',
     { name: 'Github', href: 'https://github.com/chrisrzhou/react-globe' },
   ],
