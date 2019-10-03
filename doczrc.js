@@ -12,7 +12,7 @@ export default {
         'Lights',
         'Focus',
         'Markers',
-        'Events',
+        'Callbacks',
         'Animations',
       ],
     },

@@ -1,18 +1,18 @@
 ---
-name: Events
-route: /usage/events
+name: Callbacks
+route: /usage/callbacks
 menu: Usage
 ---
 
-import { useState } from 'react';
-import { Playground } from 'docz';
+import { useState } from "react";
+import { Playground } from "docz";
 
-import ReactGlobe from './ReactGlobe';
-import markers from './markers';
+import ReactGlobe from "./ReactGlobe";
+import markers from "./markers";
 
-# Events
+# Callbacks
 
-`react-globe` supports ways to capture interactive events through the `onClickMarker`, `onMouseOutMarker`, `onMouseOverMarker` and `onDefocus` props. Most events will capture the pointer event, active `marker` data and corresponding `THREE.Object3D` object, providing enough data to build interactive applications. The example below demonstrates how to use the event handlers.
+`react-globe` supports ways to capture interactive events through various callback props. These callbacks support ways to capture the pointer event, active `marker` data and corresponding `THREE.Object3D` object, providing enough data to build interactive applications. The example below demonstrates how to use the event handlers.
 
 <Playground>
   {() => {
@@ -59,11 +59,11 @@ import markers from './markers';
     return (
       <div style={{ position: 'relative' }}>
         <ReactGlobe
-          markers={markers}
           onClickMarker={onClickMarker}
           onDefocus={onDefocus}
           onMouseOutMarker={onMouseOutMarker}
           onMouseOverMarker={onMouseOverMarker}
+          markers={markers}
         />
         {details && (
           <div

@@ -1,92 +1,76 @@
 import { max, min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import {
-  AmbientLight,
-  BackSide,
-  BoxGeometry,
-  Color,
-  Group,
-  Mesh,
-  MeshBasicMaterial,
-  MeshLambertMaterial,
-  Object3D,
-  PerspectiveCamera,
-  PointLight,
-  Scene,
-  SphereGeometry,
-  TextureLoader,
-  Vector3,
-  WebGLRenderer,
+    AmbientLight, BackSide, BoxGeometry, Color, Group, Mesh, MeshBasicMaterial, MeshLambertMaterial,
+    Object3D, PerspectiveCamera, PointLight, Scene, SphereGeometry, TextureLoader, Vector3,
+    WebGLRenderer
 } from 'three';
 import { createGlowMesh } from 'three-glow-mesh';
 import OrbitControls from 'three-orbitcontrols';
+import { Interaction } from 'three.interaction';
+import tippy, { Instance } from 'tippy.js';
 
 import {
-  BACKGROUND_RADIUS_SCALE,
-  CAMERA_DAMPING_FACTOR,
-  CAMERA_FAR,
-  CAMERA_FOV,
-  CAMERA_MAX_POLAR_ANGLE,
-  CAMERA_MIN_DISTANCE_RADIUS_SCALE,
-  CAMERA_MIN_POLAR_ANGLE,
-  CAMERA_NEAR,
-  CLOUDS_RADIUS_OFFSET,
-  GLOBE_SEGMENTS,
-  MARKER_DEFAULT_COLOR,
-  MARKER_SEGMENTS,
-  MARKER_UNIT_RADIUS_SCALE,
-  RADIUS,
+    BACKGROUND_RADIUS_SCALE, CAMERA_DAMPING_FACTOR, CAMERA_FAR, CAMERA_FOV, CAMERA_MAX_POLAR_ANGLE,
+    CAMERA_MIN_DISTANCE_RADIUS_SCALE, CAMERA_MIN_POLAR_ANGLE, CAMERA_NEAR, CLOUDS_RADIUS_OFFSET,
+    defaultCameraOptions, defaultFocusOptions, defaultGlobeOptions, defaultLightOptions,
+    defaultMarkerOptions, GLOBE_SEGMENTS, MARKER_ACTIVE_ANIMATION_DURATION,
+    MARKER_ACTIVE_ANIMATION_EASING_FUNCTION, MARKER_DEFAULT_COLOR, MARKER_SEGMENTS,
+    MARKER_UNIT_RADIUS_SCALE, RADIUS, TOOLTIP_OFFSET
 } from './defaults';
 import {
-  CameraOptions,
-  Coordinates,
-  FocusOptions,
-  GlobeOptions,
-  InteractableObject3D,
-  InteractableScene,
-  InteractionEvent,
-  LightOptions,
-  Marker,
-  MarkerOptions,
-  MarkerType,
-  ObjectName,
-  Optional,
-  Position,
-  Size,
+    Callbacks, CameraOptions, Coordinates, FocusOptions, GlobeOptions, InteractableObject3D,
+    InteractableScene, InteractionEvent, LightOptions, Marker, MarkerOptions, MarkerType,
+    ObjectName, Optional, Options, Position, Size
 } from './types';
 import { coordinatesToPosition, tween } from './utils';
 
+const emptyFunction = (): void => {};
+
+const defaultCallbacks = {
+  onClickMarker: emptyFunction,
+  onDefocus: emptyFunction,
+  onMouseOutMarker: emptyFunction,
+  onMouseOverMarker: emptyFunction,
+  onTextureLoaded: emptyFunction,
+};
+
 export default class Globe {
+  activeMarker: Marker;
+  activeMarkerObject: Object3D;
   ambientLight: AmbientLight;
-  camera: PerspectiveCamera;
-  cameraOptions: CameraOptions;
   background: Mesh;
+  callbacks: Callbacks;
+  camera: PerspectiveCamera;
   clouds: Mesh;
-  focusOptions: FocusOptions;
+  focus?: Coordinates;
   globe: Group;
-  globeOptions: GlobeOptions;
   glow: Mesh;
-  lightOptions: LightOptions;
   markerObjects: Group;
-  markerOptions: MarkerOptions;
+  options: Options;
   orbitControls: OrbitControls;
   pointLight: PointLight;
   preFocusPosition: Position;
-  scene: Scene;
+  scene: InteractableScene;
   sphere: Mesh;
   renderer: WebGLRenderer;
+  tooltipDiv: HTMLDivElement;
+  tooltipInstance: Instance;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, tooltipDiv: HTMLDivElement) {
     this.renderer = new WebGLRenderer({
       alpha: true,
       antialias: true,
       canvas,
     });
-    this.createScene();
-    this.createLights();
-    this.createCamera(this.renderer);
-    this.createGlobe();
-    this.createMarkerObjects();
+    this.tooltipDiv = tooltipDiv;
+    this.initializeCallbacks();
+    this.initializeOptions();
+    this.initializeCamera(this.renderer);
+    this.initializeLights();
+    this.initializeGlobe();
+    this.initializeMarkerObjects();
+    this.initializeScene(this.renderer, this.camera);
     this.buildScene();
   }
 
@@ -94,7 +78,7 @@ export default class Globe {
     const SECONDS_TO_MILLISECONDS = 1000;
     ['x', 'y', 'z'].forEach(axis => {
       this.clouds.rotation[axis] +=
-        (Math.random() * this.globeOptions.cloudsSpeed) /
+        (Math.random() * this.options.globe.cloudsSpeed) /
         SECONDS_TO_MILLISECONDS;
     });
   }
@@ -112,14 +96,24 @@ export default class Globe {
     this.scene.add(this.globe);
   }
 
-  createCamera(renderer: WebGLRenderer): void {
+  destroy(): void {
+    if (this.tooltipInstance) {
+      this.tooltipInstance.destroy();
+    }
+  }
+
+  initializeCallbacks(): void {
+    this.callbacks = defaultCallbacks;
+  }
+
+  initializeCamera(renderer: WebGLRenderer): void {
     this.camera = new PerspectiveCamera();
     this.camera.name = ObjectName.Camera;
 
     this.orbitControls = new OrbitControls(this.camera, renderer.domElement);
   }
 
-  createGlobe(): void {
+  initializeGlobe(): void {
     this.background = new Mesh();
     this.background.name = ObjectName.Background;
 
@@ -136,7 +130,7 @@ export default class Globe {
     this.sphere.name = ObjectName.Sphere;
   }
 
-  createLights(): void {
+  initializeLights(): void {
     this.ambientLight = new AmbientLight('white');
     this.ambientLight.name = ObjectName.AmbientLight;
 
@@ -144,14 +138,65 @@ export default class Globe {
     this.pointLight.name = ObjectName.PointLight;
   }
 
-  createMarkerObjects(): void {
+  initializeMarkerObjects(): void {
     this.markerObjects = new Group();
     this.markerObjects.name = ObjectName.MarkerObjects;
   }
 
-  createScene(): void {
+  initializeOptions(): void {
+    this.options = {
+      camera: defaultCameraOptions,
+      globe: defaultGlobeOptions,
+      focus: defaultFocusOptions,
+      marker: defaultMarkerOptions,
+      light: defaultLightOptions,
+    };
+  }
+
+  initializeScene(renderer: WebGLRenderer, camera: PerspectiveCamera): void {
     this.scene = new Scene() as InteractableScene;
     this.scene.name = ObjectName.Scene;
+    new Interaction(renderer, this.scene, camera);
+
+    this.scene.on('mousemove', (event: InteractionEvent) => {
+      if (this.activeMarker) {
+        const { activeScale } = this.options.marker;
+        const from = [activeScale, activeScale, activeScale] as Position;
+        tween(
+          from,
+          [1, 1, 1],
+          MARKER_ACTIVE_ANIMATION_DURATION,
+          MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
+          () => {
+            if (this.activeMarkerObject) {
+              this.activeMarkerObject.scale.set(...from);
+            }
+          },
+          () => {
+            this.activeMarker = undefined;
+            this.activeMarkerObject = undefined;
+          },
+        );
+        this.callbacks.onMouseOutMarker(
+          this.activeMarker,
+          this.activeMarkerObject,
+          event.data.originalEvent,
+        );
+        if (this.tooltipInstance) {
+          document.body.style.cursor = 'inherit';
+          this.tooltipDiv.style.position = 'fixed';
+          this.tooltipDiv.style.left = '0';
+          this.tooltipDiv.style.top = '0';
+          this.tooltipInstance.hide();
+        }
+      }
+    });
+    this.scene.on('click', (event: InteractionEvent) => {
+      if (this.options.focus.enableDefocus && this.preFocusPosition) {
+        this.callbacks.onDefocus(this.focus, event.data.originalEvent);
+        this.updateFocus(undefined, this.options.focus);
+      }
+    });
   }
 
   getObjectByName(name: ObjectName): Object3D {
@@ -169,8 +214,20 @@ export default class Globe {
     this.camera.updateProjectionMatrix();
   }
 
-  updateCamera(cameraOptions: CameraOptions, lookAt: Coordinates): void {
-    this.cameraOptions = cameraOptions;
+  updateCallbacks(callbacks: Optional<Callbacks>): void {
+    Object.keys(defaultCallbacks).forEach(key => {
+      this.callbacks[key] = callbacks[key] || defaultCallbacks[key];
+    });
+  }
+
+  updateCamera(
+    lookAt: Coordinates,
+    cameraOptions: Optional<CameraOptions>,
+  ): void {
+    this.options.camera = {
+      ...defaultCameraOptions,
+      ...cameraOptions,
+    };
     const {
       autoRotateSpeed,
       distanceRadiusScale,
@@ -182,7 +239,7 @@ export default class Globe {
       minPolarAngle,
       rotateSpeed,
       zoomSpeed,
-    } = cameraOptions;
+    } = this.options.camera;
 
     const [x, y, z] = coordinatesToPosition(
       lookAt,
@@ -210,20 +267,27 @@ export default class Globe {
     });
   }
 
-  updateFocus(focusOptions: FocusOptions, focus: Coordinates): void {
-    this.focusOptions = focusOptions;
+  updateFocus(
+    focus: Coordinates,
+    focusOptions: Optional<FocusOptions> = {},
+  ): void {
+    this.options.focus = {
+      ...defaultFocusOptions,
+      ...focusOptions,
+    };
+    this.focus = focus;
     const {
       animationDuration,
       distanceRadiusScale,
       easingFunction,
-    } = focusOptions;
+    } = this.options.focus;
     const {
       enableAutoRotate,
       maxPolarAngle,
       minPolarAngle,
-    } = this.cameraOptions;
+    } = this.options.camera;
 
-    if (focus) {
+    if (this.focus) {
       // disable orbit controls when focused
       this.updateOrbitControls({
         autoRotate: false,
@@ -238,7 +302,7 @@ export default class Globe {
         this.camera.position.z,
       ];
       const to: Position = coordinatesToPosition(
-        focus,
+        this.focus,
         RADIUS * distanceRadiusScale,
       );
       this.preFocusPosition = this.preFocusPosition || ([...from] as Position);
@@ -275,8 +339,11 @@ export default class Globe {
     }
   }
 
-  updateGlobe(globeOptions: GlobeOptions, onTextureLoaded: () => void): void {
-    this.globeOptions = globeOptions;
+  updateGlobe(globeOptions: Optional<GlobeOptions>): void {
+    this.options.globe = {
+      ...defaultGlobeOptions,
+      ...globeOptions,
+    };
     const {
       backgroundTexture,
       cloudsOpacity,
@@ -289,7 +356,7 @@ export default class Globe {
       glowPower,
       glowRadiusScale,
       texture,
-    } = globeOptions;
+    } = this.options.globe;
 
     new TextureLoader().load(texture, map => {
       this.sphere.geometry = new SphereGeometry(
@@ -311,7 +378,7 @@ export default class Globe {
         });
         this.sphere.add(this.glow);
       }
-      onTextureLoaded && onTextureLoaded();
+      this.callbacks.onTextureLoaded();
     });
 
     if (enableBackground) {
@@ -344,15 +411,18 @@ export default class Globe {
     }
   }
 
-  updateLights(lightOptions: LightOptions): void {
-    this.lightOptions = lightOptions;
+  updateLights(lightOptions: Optional<LightOptions>): void {
+    this.options.light = {
+      ...defaultLightOptions,
+      ...lightOptions,
+    };
     const {
       ambientLightColor,
       ambientLightIntensity,
       pointLightColor,
       pointLightIntensity,
       pointLightPositionRadiusScales,
-    } = lightOptions;
+    } = this.options.light;
 
     const [
       pointLightRadiusScaleX,
@@ -371,11 +441,20 @@ export default class Globe {
     );
   }
 
-  updateMarkers(markerOptions: MarkerOptions, markers: Marker[]): void {
-    this.markerOptions = markerOptions;
+  updateMarkers(
+    markers: Marker[],
+    markerOptions: Optional<MarkerOptions>,
+  ): void {
+    this.options.marker = {
+      ...defaultMarkerOptions,
+      ...markerOptions,
+    };
     const {
+      activeScale,
       animationDuration,
       enableGlow,
+      enableTooltip,
+      getTooltipContent,
       glowCoefficient,
       glowPower,
       glowRadiusScale,
@@ -383,7 +462,7 @@ export default class Globe {
       radiusScaleRange,
       renderer,
       type,
-    } = markerOptions;
+    } = this.options.marker;
 
     const unitRadius = RADIUS * MARKER_UNIT_RADIUS_SCALE;
     const sizeScale = scaleLinear()
@@ -469,22 +548,58 @@ export default class Globe {
       // handle events
       function handleClick(event: InteractionEvent): void {
         event.stopPropagation();
-        // onClick(marker, markerObject, event.data.originalEvent);
+        this.updateFocus(marker.coordinates);
+        this.callbacks.onClickMarker(
+          marker,
+          markerObject,
+          event.data.originalEvent,
+        );
       }
 
-      // markerObject.on('click', handleClick);
-      // markerObject.on('touchstart', handleClick);
-      // markerObject.on('mousemove', event => {
-      // event.stopPropagation();
-      // onMouseOver(marker, markerObject, event.data.originalEvent);
-      // });
+      markerObject.on('click', handleClick.bind(this));
+      markerObject.on('touchstart', handleClick.bind(this));
+      markerObject.on('mousemove', event => {
+        event.stopPropagation();
+        const from = markerObject.scale.toArray() as Position;
+        tween(
+          from,
+          [activeScale, activeScale, activeScale],
+          MARKER_ACTIVE_ANIMATION_DURATION,
+          MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
+          () => {
+            if (markerObject) {
+              markerObject.scale.set(...from);
+            }
+          },
+        );
+        const { originalEvent } = event.data;
+        this.activeMarker = marker;
+        this.activeMarkerObject = markerObject;
+        this.callbacks.onMouseOverMarker(marker, markerObject, originalEvent);
+
+        if (enableTooltip) {
+          document.body.style.cursor = 'pointer';
+          this.tooltipDiv.style.position = 'fixed';
+          this.tooltipDiv.style.left = `${originalEvent.clientX +
+            TOOLTIP_OFFSET}px`;
+          this.tooltipDiv.style.top = `${originalEvent.clientY +
+            TOOLTIP_OFFSET}px`;
+          if (!this.tooltipInstance) {
+            this.tooltipInstance = tippy(this.tooltipDiv, {
+              animation: 'scale',
+            }) as Instance;
+          }
+          this.tooltipInstance.setContent(getTooltipContent(marker));
+          this.tooltipInstance.show();
+        }
+      });
       this.markerObjects.add(markerObject);
     });
   }
 
-  updateOrbitControls(options: Optional<OrbitControls>): void {
-    Object.keys(options).forEach(key => {
-      this.orbitControls[key] = options[key];
+  updateOrbitControls(orbitControlOptions: Optional<OrbitControls>): void {
+    Object.keys(orbitControlOptions).forEach(key => {
+      this.orbitControls[key] = orbitControlOptions[key];
     });
   }
 }

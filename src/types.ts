@@ -1,17 +1,30 @@
 import { Object3D, Scene } from 'three';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Any = any;
+
 export type Optional<T> = {
   [P in keyof T]?: T[P];
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Any = any;
 
 export type Coordinates = [number, number];
 
 export type Position = [number, number, number];
 
 export type Size = [number, number];
+
+export enum ObjectName {
+  AmbientLight = 'AMBIENT_LIGHT',
+  Background = 'BACKGROUND',
+  Camera = 'CAMERA',
+  Clouds = 'CLOUDS',
+  Globe = 'GLOBE',
+  Glow = 'GLOW',
+  MarkerObjects = 'MARKER_OBJECTS',
+  PointLight = 'POINT_LIGHT',
+  Scene = 'SCENE',
+  Sphere = 'SPHERE',
+}
 
 export interface Marker {
   /** Color of the marker */
@@ -23,12 +36,6 @@ export interface Marker {
   /** Any other custom fields */
   [customField: string]: Any;
 }
-
-export type MarkerCallback = (
-  marker: Marker,
-  markerObject?: THREE.Object3D,
-  event?: PointerEvent,
-) => void;
 
 export enum MarkerType {
   Bar = 'bar',
@@ -84,6 +91,17 @@ export type EasingFunction =
   | ['Quadratic', 'Out']
   | ['Quadratic', 'InOut'];
 
+export interface Animation {
+  /** Duration of the animation. */
+  animationDuration: number;
+  /** Coordinates that the globe will animate to. */
+  coordinates: Coordinates;
+  /** Distance (measured as a scale factor to the globe radius) that the globe will animate to. */
+  distanceRadiusScale: number;
+  /** Easing function applied for the animation. */
+  easingFunction: EasingFunction;
+}
+
 export interface InteractionEvent extends Event {
   data: {
     originalEvent: PointerEvent;
@@ -100,17 +118,6 @@ export interface Interactable {
 export interface InteractableObject3D extends Interactable, Object3D {}
 
 export interface InteractableScene extends Interactable, Scene {}
-
-export interface Animation {
-  /** Duration of the animation. */
-  animationDuration: number;
-  /** Coordinates that the globe will animate to. */
-  coordinates: Coordinates;
-  /** Distance (measured as a scale factor to the globe radius) that the globe will animate to. */
-  distanceRadiusScale: number;
-  /** Easing function applied for the animation. */
-  easingFunction: EasingFunction;
-}
 
 export interface CameraOptions {
   /** Speed of auto-rotation. */
@@ -213,15 +220,26 @@ export interface MarkerOptions {
   type: MarkerType;
 }
 
-export enum ObjectName {
-  AmbientLight = 'AMBIENT_LIGHT',
-  Background = 'BACKGROUND',
-  Camera = 'CAMERA',
-  Clouds = 'CLOUDS',
-  Globe = 'GLOBE',
-  Glow = 'GLOW',
-  MarkerObjects = 'MARKER_OBJECTS',
-  PointLight = 'POINT_LIGHT',
-  Scene = 'SCENE',
-  Sphere = 'SPHERE',
+export type Options = {
+  camera: CameraOptions;
+  focus: FocusOptions;
+  globe: GlobeOptions;
+  light: LightOptions;
+  marker: MarkerOptions;
+};
+
+export type FocusCallback = (focus: Coordinates, event?: PointerEvent) => void;
+
+export type MarkerCallback = (
+  marker: Marker,
+  markerObject?: THREE.Object3D,
+  event?: PointerEvent,
+) => void;
+
+export interface Callbacks {
+  onDefocus: FocusCallback;
+  onClickMarker: MarkerCallback;
+  onMouseOutMarker: MarkerCallback;
+  onMouseOverMarker: MarkerCallback;
+  onTextureLoaded: () => void;
 }
