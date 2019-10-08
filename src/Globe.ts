@@ -22,7 +22,6 @@ import {
 import { createGlowMesh } from 'three-glow-mesh';
 import OrbitControls from 'three-orbitcontrols';
 import { Interaction } from 'three.interaction';
-import tippy, { Instance } from 'tippy.js';
 
 import {
   BACKGROUND_RADIUS_SCALE,
@@ -46,8 +45,8 @@ import {
   MARKER_SEGMENTS,
   MARKER_UNIT_RADIUS_SCALE,
   RADIUS,
-  TOOLTIP_OFFSET,
 } from './defaults';
+import Tooltip from './Tooltip';
 import {
   Animation,
   Callbacks,
@@ -88,7 +87,7 @@ const defaultCallbacks = {
   onTextureLoaded: emptyFunction,
 };
 
-export default class GlobeManager {
+export default class Globe {
   activeMarker: Marker;
   activeMarkerObject: Object3D;
   animationFrameId: number;
@@ -103,8 +102,7 @@ export default class GlobeManager {
   preFocusPosition: Position;
   renderer: WebGLRenderer;
   scene: InteractableScene;
-  tooltipDiv: HTMLDivElement;
-  tooltipInstance: Instance;
+  tooltip: Tooltip;
 
   constructor(canvas: HTMLCanvasElement, tooltipDiv: HTMLDivElement) {
     // create objects
@@ -123,6 +121,7 @@ export default class GlobeManager {
     const markerObjects = new Group();
     const orbitControls = new OrbitControls(camera, renderer.domElement);
     const scene = new Scene() as InteractableScene;
+    const tooltip = new Tooltip(tooltipDiv);
 
     // name objects
     camera.name = ObjectName.Camera;
@@ -174,13 +173,7 @@ export default class GlobeManager {
           this.activeMarkerObject,
           event.data.originalEvent,
         );
-        if (this.tooltipInstance) {
-          document.body.style.cursor = 'inherit';
-          this.tooltipDiv.style.position = 'fixed';
-          this.tooltipDiv.style.left = '0';
-          this.tooltipDiv.style.top = '0';
-          this.tooltipInstance.hide();
-        }
+        this.tooltip.hide();
       }
     });
     scene.on('click', (event: InteractionEvent) => {
@@ -208,8 +201,7 @@ export default class GlobeManager {
     this.preFocusPosition = undefined;
     this.renderer = renderer;
     this.scene = scene;
-    this.tooltipDiv = tooltipDiv;
-    this.tooltipInstance = undefined;
+    this.tooltip = tooltip;
   }
 
   applyAnimations(animations: Animation[]): () => void {
@@ -261,9 +253,7 @@ export default class GlobeManager {
   }
 
   destroy(): void {
-    if (this.tooltipInstance) {
-      this.tooltipInstance.destroy();
-    }
+    this.tooltip.destroy();
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
@@ -641,9 +631,7 @@ export default class GlobeManager {
       // handle events
       function handleClick(event: InteractionEvent): void {
         if (this.isFocusing) {
-          if (this.tooltipInstance) {
-            this.tooltipInstance.hide();
-          }
+          this.tooltip.hide();
           return;
         }
         event.stopPropagation();
@@ -659,9 +647,7 @@ export default class GlobeManager {
       markerObject.on('touchstart', handleClick.bind(this));
       markerObject.on('mousemove', event => {
         if (this.isFocusing) {
-          if (this.tooltipInstance) {
-            this.tooltipInstance.hide();
-          }
+          this.tooltip.hide();
           return;
         }
         event.stopPropagation();
@@ -683,19 +669,11 @@ export default class GlobeManager {
         this.callbacks.onMouseOverMarker(marker, markerObject, originalEvent);
 
         if (enableTooltip) {
-          document.body.style.cursor = 'pointer';
-          this.tooltipDiv.style.position = 'fixed';
-          this.tooltipDiv.style.left = `${originalEvent.clientX +
-            TOOLTIP_OFFSET}px`;
-          this.tooltipDiv.style.top = `${originalEvent.clientY +
-            TOOLTIP_OFFSET}px`;
-          if (!this.tooltipInstance) {
-            this.tooltipInstance = tippy(this.tooltipDiv, {
-              animation: 'scale',
-            }) as Instance;
-          }
-          this.tooltipInstance.setContent(getTooltipContent(marker));
-          this.tooltipInstance.show();
+          this.tooltip.show(
+            originalEvent.clientX,
+            originalEvent.clientY,
+            getTooltipContent(marker),
+          );
         }
       });
       this.markerObjects.add(markerObject);

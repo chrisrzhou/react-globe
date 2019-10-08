@@ -7,7 +7,7 @@ import {
   defaultLightOptions,
   defaultMarkerOptions,
 } from './defaults';
-import GlobeManager from './GlobeManager';
+import Globe from './Globe';
 import {
   Animation,
   CameraOptions,
@@ -74,40 +74,29 @@ export default function ReactGlobe({
   size: initialSize,
 }: Props): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>();
-  const globeManagerRef = useRef<GlobeManager>();
+  const globeInstanceRef = useRef<Globe>();
   const mountRef = useRef<HTMLDivElement>();
-  const mouseRef = useRef<{ x: number; y: number }>();
   const tooltipRef = useRef<HTMLDivElement>();
   const size = useResize(mountRef, initialSize);
-
-  function onMouseMove(e: MouseEvent): void {
-    mouseRef.current = { x: e.clientX, y: e.clientY };
-  }
 
   // init
   useEffect(() => {
     const mount = mountRef.current;
-    const globeManager = new GlobeManager(
-      canvasRef.current,
-      tooltipRef.current,
-    );
-    mount.appendChild(globeManager.renderer.domElement);
-    globeManager.animate();
-    globeManagerRef.current = globeManager;
-
-    document.addEventListener('mousemove', onMouseMove, false);
+    const globeInstance = new Globe(canvasRef.current, tooltipRef.current);
+    mount.appendChild(globeInstance.renderer.domElement);
+    globeInstance.animate();
+    globeInstanceRef.current = globeInstance;
 
     return (): void => {
-      mount.removeChild(globeManager.renderer.domElement);
-      globeManager.destroy();
-      document.removeEventListener('mousemove', onMouseMove, false);
+      mount.removeChild(globeInstance.renderer.domElement);
+      globeInstance.destroy();
     };
   }, []);
 
   // update callbacks
   useEffect(() => {
     console.log('callbacks');
-    globeManagerRef.current.updateCallbacks({
+    globeInstanceRef.current.updateCallbacks({
       onClickMarker,
       onDefocus,
       onMouseOutMarker,
@@ -124,37 +113,37 @@ export default function ReactGlobe({
 
   // update camera
   useEffect(() => {
-    globeManagerRef.current.updateCamera(lookAt, cameraOptions);
+    globeInstanceRef.current.updateCamera(lookAt, cameraOptions);
   }, [cameraOptions, lookAt]);
 
   // update focus
   useEffect(() => {
-    globeManagerRef.current.updateFocus(focus, focusOptions);
+    globeInstanceRef.current.updateFocus(focus, focusOptions);
   }, [focus, focusOptions]);
 
   // update globe
   useEffect(() => {
-    globeManagerRef.current.updateGlobe(globeOptions);
+    globeInstanceRef.current.updateGlobe(globeOptions);
   }, [globeOptions]);
 
   // update lights
   useEffect(() => {
-    globeManagerRef.current.updateLights(lightOptions);
+    globeInstanceRef.current.updateLights(lightOptions);
   }, [lightOptions]);
 
   // update markers
   useEffect(() => {
-    globeManagerRef.current.updateMarkers(markers, markerOptions);
+    globeInstanceRef.current.updateMarkers(markers, markerOptions);
   }, [markerOptions, markers]);
 
   // apply animations
   useEffect(() => {
-    return globeManagerRef.current.applyAnimations(animations);
+    return globeInstanceRef.current.applyAnimations(animations);
   }, [animations]);
 
   // resize
   useEffect(() => {
-    globeManagerRef.current.resize(size);
+    globeInstanceRef.current.resize(size);
   }, [size]);
 
   return (
