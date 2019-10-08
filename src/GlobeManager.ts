@@ -1,5 +1,6 @@
 import { max, min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
+import * as TWEEN from 'es6-tween';
 import {
   AmbientLight,
   BackSide,
@@ -48,6 +49,7 @@ import {
   TOOLTIP_OFFSET,
 } from './defaults';
 import {
+  Animation,
   Callbacks,
   CameraOptions,
   Coordinates,
@@ -89,10 +91,12 @@ const defaultCallbacks = {
 export default class GlobeManager {
   activeMarker: Marker;
   activeMarkerObject: Object3D;
+  animationFrameId: number;
   callbacks: Callbacks;
   camera: PerspectiveCamera;
   focus?: Coordinates;
   globe: Group;
+  isFocusing: boolean;
   markerObjects: Group;
   options: Options;
   orbitControls: OrbitControls;
@@ -115,7 +119,6 @@ export default class GlobeManager {
     const globe = new Group();
     const globeBackground = new Mesh();
     const globeClouds = new Mesh();
-    const globeGlow = new Mesh();
     const globeSphere = new Mesh();
     const markerObjects = new Group();
     const orbitControls = new OrbitControls(camera, renderer.domElement);
@@ -128,7 +131,6 @@ export default class GlobeManager {
     globe.name = ObjectName.Globe;
     globeBackground.name = ObjectName.GlobeBackground;
     globeClouds.name = ObjectName.GlobeClouds;
-    globeGlow.name = ObjectName.GlobeGlow;
     globeSphere.name = ObjectName.GlobeSphere;
     markerObjects.name = ObjectName.MarkerObjects;
     scene.name = ObjectName.Scene;
@@ -146,6 +148,9 @@ export default class GlobeManager {
     // add interactions to scene
     new Interaction(renderer, scene, camera);
     scene.on('mousemove', (event: InteractionEvent) => {
+      if (this.isFocusing) {
+        return;
+      }
       if (this.activeMarker) {
         const { activeScale } = this.options.marker;
         const from = [activeScale, activeScale, activeScale] as Position;
@@ -179,6 +184,9 @@ export default class GlobeManager {
       }
     });
     scene.on('click', (event: InteractionEvent) => {
+      if (this.isFocusing) {
+        return;
+      }
       if (this.options.focus.enableDefocus && this.preFocusPosition) {
         this.callbacks.onDefocus(this.focus, event.data.originalEvent);
         this.updateFocus(undefined, this.options.focus);
@@ -188,10 +196,12 @@ export default class GlobeManager {
     // assign to class variables
     this.activeMarker = undefined;
     this.activeMarkerObject = undefined;
+    this.animationFrameId = undefined;
     this.callbacks = defaultCallbacks;
     this.camera = camera;
     this.focus = undefined;
     this.globe = globe;
+    this.isFocusing = false;
     this.markerObjects = markerObjects;
     this.options = defaultOptions;
     this.orbitControls = orbitControls;
@@ -200,6 +210,44 @@ export default class GlobeManager {
     this.scene = scene;
     this.tooltipDiv = tooltipDiv;
     this.tooltipInstance = undefined;
+  }
+
+  applyAnimations(animations: Animation[]): () => void {
+    const currentFocus = this.focus;
+    const currentFocusOptions = this.options.focus;
+
+    let wait = 0;
+    const timeouts = [];
+    animations.forEach(animation => {
+      const {
+        animationDuration,
+        coordinates,
+        distanceRadiusScale,
+        easingFunction,
+      } = animation;
+      const timeout = setTimeout(() => {
+        this.updateFocus(coordinates, {
+          animationDuration,
+          distanceRadiusScale,
+          easingFunction,
+        });
+      }, wait);
+      timeouts.push(timeout);
+      wait += animationDuration;
+    });
+
+    // return cleanup function
+    return (): void => {
+      timeouts.forEach(timeout => {
+        clearTimeout(timeout);
+      });
+      this.updateFocus(currentFocus, currentFocusOptions);
+    };
+  }
+
+  animate(): void {
+    this.render();
+    this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
   }
 
   animateClouds(): void {
@@ -216,6 +264,9 @@ export default class GlobeManager {
     if (this.tooltipInstance) {
       this.tooltipInstance.destroy();
     }
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
   }
 
   getObjectByName(name: ObjectName): Object3D {
@@ -223,7 +274,11 @@ export default class GlobeManager {
   }
 
   render(): void {
+    this.renderer.sortObjects = false;
     this.renderer.render(this.scene, this.camera);
+    this.animateClouds();
+    this.orbitControls.update();
+    TWEEN.update();
   }
 
   resize(size: Size): void {
@@ -233,7 +288,7 @@ export default class GlobeManager {
     this.camera.updateProjectionMatrix();
   }
 
-  updateCallbacks(callbacks: Optional<Callbacks>): void {
+  updateCallbacks(callbacks: Optional<Callbacks> = {}): void {
     Object.keys(defaultCallbacks).forEach(key => {
       this.callbacks[key] = callbacks[key] || defaultCallbacks[key];
     });
@@ -241,7 +296,7 @@ export default class GlobeManager {
 
   updateCamera(
     lookAt: Coordinates,
-    cameraOptions: Optional<CameraOptions>,
+    cameraOptions: Optional<CameraOptions> = {},
   ): void {
     this.options.camera = {
       ...defaultCameraOptions,
@@ -314,7 +369,6 @@ export default class GlobeManager {
         maxPolarAngle: CAMERA_MAX_POLAR_ANGLE,
         minPolarAngle: CAMERA_MIN_POLAR_ANGLE,
       });
-
       const from: Position = [
         this.camera.position.x,
         this.camera.position.y,
@@ -325,9 +379,19 @@ export default class GlobeManager {
         RADIUS * distanceRadiusScale,
       );
       this.preFocusPosition = this.preFocusPosition || ([...from] as Position);
-      tween(from, to, animationDuration, easingFunction, () => {
-        this.camera.position.set(...from);
-      });
+      tween(
+        from,
+        to,
+        animationDuration,
+        easingFunction,
+        () => {
+          this.isFocusing = true;
+          this.camera.position.set(...from);
+        },
+        () => {
+          this.isFocusing = false;
+        },
+      );
     } else {
       if (this.preFocusPosition) {
         const from: Position = [
@@ -342,6 +406,7 @@ export default class GlobeManager {
           animationDuration,
           easingFunction,
           () => {
+            this.isFocusing = true;
             this.camera.position.set(...from);
           },
           () => {
@@ -352,13 +417,14 @@ export default class GlobeManager {
               minPolarAngle,
             });
             this.preFocusPosition = undefined;
+            this.isFocusing = false;
           },
         );
       }
     }
   }
 
-  updateGlobe(globeOptions: Optional<GlobeOptions>): void {
+  updateGlobe(globeOptions: Optional<GlobeOptions> = {}): void {
     this.options.globe = {
       ...defaultGlobeOptions,
       ...globeOptions,
@@ -376,11 +442,11 @@ export default class GlobeManager {
       glowRadiusScale,
       texture,
     } = this.options.globe;
+
     const globeBackground = this.getObjectByName(
       ObjectName.GlobeBackground,
     ) as Mesh;
     const globeClouds = this.getObjectByName(ObjectName.GlobeClouds) as Mesh;
-    const globeGlow = this.getObjectByName(ObjectName.GlobeGlow);
     const globeSphere = this.getObjectByName(ObjectName.GlobeSphere) as Mesh;
 
     new TextureLoader().load(texture, map => {
@@ -393,16 +459,16 @@ export default class GlobeManager {
         map,
       });
       if (enableGlow) {
-        globeSphere.remove(globeGlow);
-        globeSphere.add(
-          createGlowMesh(globeSphere.geometry, {
-            backside: true,
-            color: glowColor,
-            coefficient: glowCoefficient,
-            power: glowPower,
-            size: RADIUS * glowRadiusScale,
-          }),
-        );
+        globeSphere.remove(this.getObjectByName(ObjectName.GlobeGlow));
+        const globeGlow = createGlowMesh(globeSphere.geometry, {
+          backside: true,
+          color: glowColor,
+          coefficient: glowCoefficient,
+          power: glowPower,
+          size: RADIUS * glowRadiusScale,
+        });
+        globeGlow.name = ObjectName.GlobeGlow;
+        globeSphere.add(globeGlow);
       }
       this.callbacks.onTextureLoaded();
     });
@@ -437,7 +503,7 @@ export default class GlobeManager {
     }
   }
 
-  updateLights(lightOptions: Optional<LightOptions>): void {
+  updateLights(lightOptions: Optional<LightOptions> = {}): void {
     this.options.light = {
       ...defaultLightOptions,
       ...lightOptions,
@@ -449,33 +515,28 @@ export default class GlobeManager {
       pointLightIntensity,
       pointLightPositionRadiusScales,
     } = this.options.light;
+
     const cameraAmbientLight = this.getObjectByName(
       ObjectName.CameraAmbientLight,
     ) as AmbientLight;
     const cameraPointLight = this.getObjectByName(
-      ObjectName.CameraAmbientLight,
+      ObjectName.CameraPointLight,
     ) as PointLight;
-
-    const [
-      pointLightRadiusScaleX,
-      pointLightRadiusScaleY,
-      pointLightRadiusScaleZ,
-    ] = pointLightPositionRadiusScales;
 
     cameraAmbientLight.color = new Color(ambientLightColor);
     cameraAmbientLight.intensity = ambientLightIntensity;
     cameraPointLight.color = new Color(pointLightColor);
     cameraPointLight.intensity = pointLightIntensity;
     cameraPointLight.position.set(
-      RADIUS * pointLightRadiusScaleX,
-      RADIUS * pointLightRadiusScaleY,
-      RADIUS * pointLightRadiusScaleZ,
+      RADIUS * pointLightPositionRadiusScales[0],
+      RADIUS * pointLightPositionRadiusScales[1],
+      RADIUS * pointLightPositionRadiusScales[2],
     );
   }
 
   updateMarkers(
     markers: Marker[],
-    markerOptions: Optional<MarkerOptions>,
+    markerOptions: Optional<MarkerOptions> = {},
   ): void {
     this.options.marker = {
       ...defaultMarkerOptions,
@@ -579,6 +640,12 @@ export default class GlobeManager {
 
       // handle events
       function handleClick(event: InteractionEvent): void {
+        if (this.isFocusing) {
+          if (this.tooltipInstance) {
+            this.tooltipInstance.hide();
+          }
+          return;
+        }
         event.stopPropagation();
         this.updateFocus(marker.coordinates);
         this.callbacks.onClickMarker(
@@ -591,6 +658,12 @@ export default class GlobeManager {
       markerObject.on('click', handleClick.bind(this));
       markerObject.on('touchstart', handleClick.bind(this));
       markerObject.on('mousemove', event => {
+        if (this.isFocusing) {
+          if (this.tooltipInstance) {
+            this.tooltipInstance.hide();
+          }
+          return;
+        }
         event.stopPropagation();
         const from = markerObject.scale.toArray() as Position;
         tween(
@@ -629,7 +702,7 @@ export default class GlobeManager {
     });
   }
 
-  updateOrbitControls(orbitControlOptions: Optional<OrbitControls>): void {
+  updateOrbitControls(orbitControlOptions: Optional<OrbitControls> = {}): void {
     Object.keys(orbitControlOptions).forEach(key => {
       this.orbitControls[key] = orbitControlOptions[key];
     });
