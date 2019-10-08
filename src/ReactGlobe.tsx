@@ -1,8 +1,5 @@
 import * as TWEEN from 'es6-tween';
-import React, { useEffect, useRef, useState } from 'react';
-import { useEventCallback } from 'react-cached-callback';
-import { Scene } from 'three';
-import { Interaction } from 'three.interaction';
+import React, { useEffect, useRef } from 'react';
 
 import {
   defaultCameraOptions,
@@ -10,21 +7,14 @@ import {
   defaultGlobeOptions,
   defaultLightOptions,
   defaultMarkerOptions,
-  MARKER_ACTIVE_ANIMATION_DURATION,
-  MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
 } from './defaults';
-import Globe from './Globe';
-import { useResize } from './hooks';
-import reducer, { ActionType } from './reducer';
-import Tooltip from './Tooltip';
+import GlobeManager from './GlobeManager';
 import {
   Animation,
-  Callbacks,
   CameraOptions,
   Coordinates,
   FocusOptions,
   GlobeOptions,
-  InteractableScene,
   LightOptions,
   Marker,
   MarkerCallback,
@@ -32,10 +22,10 @@ import {
   Optional,
   Size,
 } from './types';
-import { tween } from './utils';
+import useResize from './useResize';
 
 export interface Props {
-  /** An array of animation steps to power globe animations. */
+  /** An array of animation steps to power globeManager animations. */
   animations?: Animation[];
   /** Configure camera options (e.g. rotation, zoom, angles). */
   cameraOptions?: Optional<CameraOptions>;
@@ -43,19 +33,19 @@ export interface Props {
   focus?: Coordinates;
   /** Configure focusing options (e.g. animation duration, distance, easing function). */
   focusOptions?: Optional<FocusOptions>;
-  /** Configure globe options (e.g. textures, background, clouds, glow). */
+  /** Configure globeManager options (e.g. textures, background, clouds, glow). */
   globeOptions?: Optional<GlobeOptions>;
   /** Configure light options (e.g. ambient and point light colors + intensity). */
   lightOptions?: Optional<LightOptions>;
-  /** A set of starting [lat, lon] coordinates for the globe. */
+  /** A set of starting [lat, lon] coordinates for the globeManager. */
   lookAt?: Coordinates;
-  /** An array of data that will render interactive markers on the globe. */
+  /** An array of data that will render interactive markers on the globeManager. */
   markers?: Marker[];
   /** Configure marker options (e.g. tooltips, size, marker types, custom marker renderer). */
   markerOptions?: Optional<MarkerOptions>;
   /** Callback to handle click events of a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
   onClickMarker?: MarkerCallback;
-  /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates and pointer event. */
+  /** Callback to handle defocus events (i.e. clicking the globeManager after a focus has been applied).  Captures the previously focused coordinates and pointer event. */
   onDefocus?: (previousFocus: Coordinates, event?: PointerEvent) => void;
   /** Callback to handle mouseout events of a marker.  Captures the previously hovered marker, ThreeJS object and pointer event. */
   onMouseOutMarker?: MarkerCallback;
@@ -85,7 +75,7 @@ export default function ReactGlobe({
   size: initialSize,
 }: Props): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>();
-  const globeRef = useRef<Globe>();
+  const globeManagerRef = useRef<GlobeManager>();
   const mountRef = useRef<HTMLDivElement>();
   const mouseRef = useRef<{ x: number; y: number }>();
   const tooltipRef = useRef<HTMLDivElement>();
@@ -94,10 +84,13 @@ export default function ReactGlobe({
   // init
   useEffect(() => {
     console.log('init');
-    const globe = new Globe(canvasRef.current, tooltipRef.current);
+    const globeManager = new GlobeManager(
+      canvasRef.current,
+      tooltipRef.current,
+    );
     const mount = mountRef.current;
-    mount.appendChild(globe.renderer.domElement);
-    globeRef.current = globe;
+    mount.appendChild(globeManager.renderer.domElement);
+    globeManagerRef.current = globeManager;
 
     function onMouseUpdate(e: MouseEvent): void {
       mouseRef.current = { x: e.clientX, y: e.clientY };
@@ -105,8 +98,8 @@ export default function ReactGlobe({
     document.addEventListener('mousemove', onMouseUpdate, false);
 
     return (): void => {
-      mount.removeChild(globe.renderer.domElement);
-      globe.destroy();
+      mount.removeChild(globeManager.renderer.domElement);
+      globeManager.destroy();
       document.removeEventListener('mousemove', onMouseUpdate, false);
     };
   }, []);
@@ -114,13 +107,13 @@ export default function ReactGlobe({
   // resize
   useEffect(() => {
     console.log('resize');
-    globeRef.current.resize(size);
+    globeManagerRef.current.resize(size);
   }, [size]);
 
   // update callbacks
   useEffect(() => {
     console.log('callbacks');
-    globeRef.current.updateCallbacks({
+    globeManagerRef.current.updateCallbacks({
       onClickMarker,
       onDefocus,
       onMouseOutMarker,
@@ -138,38 +131,38 @@ export default function ReactGlobe({
   // update camera
   useEffect(() => {
     console.log('camera');
-    globeRef.current.updateCamera(lookAt, cameraOptions);
+    globeManagerRef.current.updateCamera(lookAt, cameraOptions);
   }, [cameraOptions, lookAt]);
 
   // update focus
   useEffect(() => {
     console.log('focus');
-    globeRef.current.updateFocus(focus, focusOptions);
+    globeManagerRef.current.updateFocus(focus, focusOptions);
   }, [focus, focusOptions]);
 
-  // update globe
+  // update globeManager
   useEffect(() => {
-    console.log('globe');
-    globeRef.current.updateGlobe(globeOptions);
+    console.log('globeManager');
+    globeManagerRef.current.updateGlobe(globeOptions);
   }, [globeOptions]);
 
   // update lights
   useEffect(() => {
     console.log('lights');
-    globeRef.current.updateLights(lightOptions);
+    globeManagerRef.current.updateLights(lightOptions);
   }, [lightOptions]);
 
   // update markers
   useEffect(() => {
     console.log('markers');
-    globeRef.current.updateMarkers(markers, markerOptions);
+    globeManagerRef.current.updateMarkers(markers, markerOptions);
   }, [markerOptions, markers]);
 
   // handle animations
   useEffect(() => {
-    const globe = globeRef.current;
-    const currentFocus = globe.focus;
-    const currentFocusOptions = globe.options.focus;
+    const globeManager = globeManagerRef.current;
+    const currentFocus = globeManager.focus;
+    const currentFocusOptions = globeManager.options.focus;
 
     let wait = 0;
     const timeouts = [];
@@ -181,7 +174,7 @@ export default function ReactGlobe({
         easingFunction,
       } = animation;
       const timeout = setTimeout(() => {
-        globe.updateFocus(coordinates, {
+        globeManager.updateFocus(coordinates, {
           animationDuration,
           distanceRadiusScale,
           easingFunction,
@@ -195,20 +188,20 @@ export default function ReactGlobe({
       timeouts.forEach(timeout => {
         clearTimeout(timeout);
       });
-      globe.updateFocus(currentFocus, currentFocusOptions);
+      globeManager.updateFocus(currentFocus, currentFocusOptions);
     };
   }, [animations]);
 
   // render loop
   useEffect(() => {
-    const globe = globeRef.current;
+    const globeManager = globeManagerRef.current;
 
     let animationFrameID: number;
     function animate(): void {
-      globe.renderer.sortObjects = false;
-      globe.render();
-      globe.animateClouds();
-      globe.orbitControls.update();
+      globeManager.renderer.sortObjects = false;
+      globeManager.render();
+      globeManager.animateClouds();
+      globeManager.orbitControls.update();
       TWEEN.update();
       animationFrameID = requestAnimationFrame(animate);
     }

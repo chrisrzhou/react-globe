@@ -14,16 +14,16 @@ export type Position = [number, number, number];
 export type Size = [number, number];
 
 export enum ObjectName {
-  AmbientLight = 'AMBIENT_LIGHT',
-  Background = 'BACKGROUND',
   Camera = 'CAMERA',
-  Clouds = 'CLOUDS',
+  CameraAmbientLight = 'CAMERA_AMBIENT_LIGHT',
+  CameraPointLight = 'CAMERA_POINT_LIGHT',
   Globe = 'GLOBE',
-  Glow = 'GLOW',
+  GlobeBackground = 'GLOBE_BACKGROUND',
+  GlobeClouds = 'GLOBE_CLOUDS',
+  GlobeGlow = 'GLOBE_GLOW',
+  GlobeSphere = 'GLOBE_SPHERE',
   MarkerObjects = 'MARKER_OBJECTS',
-  PointLight = 'POINT_LIGHT',
   Scene = 'SCENE',
-  Sphere = 'SPHERE',
 }
 
 export interface Marker {

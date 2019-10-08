@@ -1,4 +1,5 @@
 import {
+  Callbacks,
   CameraOptions,
   EasingFunction,
   FocusOptions,
@@ -6,6 +7,7 @@ import {
   LightOptions,
   MarkerOptions,
   MarkerType,
+  Options,
 } from './types';
 
 // hardcoded constants that can eventually be exposed via options

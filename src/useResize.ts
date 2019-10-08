@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
-import { Size } from '../types';
+import { Size } from './types';
 
-export function useResize<T>(
+export default function useResize<T>(
   mountRef: React.RefObject<HTMLDivElement>,
   initialSize?: Size,
 ): Size {
