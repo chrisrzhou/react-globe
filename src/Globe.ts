@@ -94,7 +94,9 @@ export default class Globe {
   callbacks: Callbacks;
   camera: PerspectiveCamera;
   focus?: Coordinates;
+  frozen: boolean;
   globe: Group;
+  initialCoordinates: Coordinates;
   isFocusing: boolean;
   markerObjects: Group;
   options: Options;
@@ -193,6 +195,7 @@ export default class Globe {
     this.callbacks = defaultCallbacks;
     this.camera = camera;
     this.focus = undefined;
+    this.frozen = false;
     this.globe = globe;
     this.isFocusing = false;
     this.markerObjects = markerObjects;
@@ -254,16 +257,12 @@ export default class Globe {
   }
 
   destroy(): void {
-    this.pause();
+    cancelAnimationFrame(this.animationFrameId);
     this.tooltip.destroy();
   }
 
   getObjectByName(name: ObjectName): Object3D {
     return this.scene.getObjectByName(name);
-  }
-
-  pause(): void {
-    cancelAnimationFrame(this.animationFrameId);
   }
 
   render(): void {
@@ -288,7 +287,7 @@ export default class Globe {
   }
 
   updateCamera(
-    lookAt: Coordinates,
+    initialCoordinates: Coordinates,
     cameraOptions: Optional<CameraOptions> = {},
   ): void {
     this.updateOptions(cameraOptions, 'camera');
@@ -305,15 +304,18 @@ export default class Globe {
       zoomSpeed,
     } = this.options.camera;
 
-    const [x, y, z] = coordinatesToPosition(
-      lookAt,
-      RADIUS * distanceRadiusScale,
-    );
+    if (this.initialCoordinates !== initialCoordinates) {
+      const [x, y, z] = coordinatesToPosition(
+        initialCoordinates,
+        RADIUS * distanceRadiusScale,
+      );
+      this.camera.position.set(x, y, z);
+      this.initialCoordinates = initialCoordinates;
+    }
 
     this.camera.far = CAMERA_FAR;
     this.camera.fov = CAMERA_FOV;
     this.camera.near = CAMERA_NEAR;
-    this.camera.position.set(x, y, z);
     this.updateOrbitControls({
       autoRotate: enableAutoRotate,
       autoRotateSpeed,
@@ -348,6 +350,10 @@ export default class Globe {
       maxPolarAngle,
       minPolarAngle,
     } = this.options.camera;
+
+    if (this.frozen) {
+      return;
+    }
 
     if (this.focus) {
       // disable orbit controls when focused
@@ -544,7 +550,6 @@ export default class Globe {
       ])
       .range([RADIUS * radiusScaleRange[0], RADIUS * radiusScaleRange[1]]);
 
-    this.markerObjects.children = []; // clear data before adding
     markers.forEach(marker => {
       const { coordinates, value } = marker;
       const shouldUseCustomMarker = renderer !== undefined;
@@ -667,6 +672,7 @@ export default class Globe {
       });
       this.markerObjects.add(markerObject);
     });
+    console.log(this.markerObjects.children.length);
   }
 
   updateOptions<T>(options: T, key: string): void {
@@ -683,5 +689,19 @@ export default class Globe {
     Object.keys(orbitControlOptions).forEach(key => {
       this.orbitControls[key] = orbitControlOptions[key];
     });
+  }
+
+  freeze(): void {
+    this.frozen = true;
+    this.updateOrbitControls({ enabled: false });
+    cancelAnimationFrame(this.animationFrameId);
+  }
+
+  unfreeze(): void {
+    if (this.frozen) {
+      this.frozen = false;
+      this.updateOrbitControls({ enabled: true });
+      this.animate();
+    }
   }
 }

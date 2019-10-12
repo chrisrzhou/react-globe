@@ -1,0 +1,46 @@
+---
+name: Marker Transitions
+route: /usage/marker-transitions
+---
+
+import { Playground } from "docz";
+import { useState } from "react";
+
+import defaultMarkers from "./markers";
+import ReactGlobe, { defaultBarMarkerOptions } from "./ReactGlobe";
+
+# Marker Transitions
+
+<Playground>
+  {() => {
+    const [markers, setMarkers] = useState([]);
+    function randomizeMarkers() {
+      setMarkers(defaultMarkers.filter(marker => Math.random() > 0.5));
+    }
+    return (
+      <div>
+        <button
+          disabled={markers.length === defaultMarkers.length}
+          onClick={() => {
+            setMarkers([...markers, defaultMarkers[markers.length]]);
+          }}
+        >
+          Add marker
+        </button>
+        <button
+          disabled={markers.length === 0}
+          onClick={() => {
+            setMarkers(markers.slice(1));
+          }}
+        >
+          Remove marker
+        </button>
+        <ReactGlobe
+          cameraOptions={{}}
+          markers={markers}
+          markerOptions={defaultBarMarkerOptions}
+        />
+      </div>
+    );
+  }}
+</Playground>

@@ -94,3 +94,31 @@ If the `renderer` field of the `markerOptions` is provided, `react-globe` will u
     }}
   />
 </Playground>
+
+## Marker update transitions
+
+<Playground>
+  {() => {
+    const [localMarkers, setLocalMarkers] = useState([]);
+    console.log(localMarkers);
+    return (
+      <div>
+        <button
+          disabled={localMarkers.length === markers.length}
+          onClick={() =>
+            setLocalMarkers([...localMarkers, markers[localMarkers.length]])
+          }
+        >
+          Add Marker
+        </button>
+        <button
+          disabled={localMarkers.length === 0}
+          onClick={() => setLocalMarkers(localMarkers.slice(1))}
+        >
+          Remove Marker
+        </button>
+        <ReactGlobe markers={localMarkers} />
+      </div>
+    );
+  }}
+</Playground>

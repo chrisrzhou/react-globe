@@ -7,8 +7,6 @@ Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 ## TODO
 
 - [ ] Implement updating of markers with D3 update pattern.
-- [ ] Pause/Resume
-- [ ] `useGlobeInstance` hook to get access to `globeInstance`.
 - [ ] Update docs
   - Add marker update pattern example e.g. add/remove/update)
   - Add docs for `Globe` and `Tooltip`

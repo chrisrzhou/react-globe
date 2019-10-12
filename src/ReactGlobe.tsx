@@ -37,7 +37,7 @@ export interface Props {
   /** Configure light options (e.g. ambient and point light colors + intensity). */
   lightOptions?: Optional<LightOptions>;
   /** A set of starting [lat, lon] coordinates for the globe. */
-  lookAt?: Coordinates;
+  initialCoordinates?: Coordinates;
   /** An array of data that will render interactive markers on the globe. */
   markers?: Marker[];
   /** Configure marker options (e.g. tooltips, size, marker types, custom marker renderer). */
@@ -46,6 +46,8 @@ export interface Props {
   onClickMarker?: MarkerCallback;
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates and pointer event. */
   onDefocus?: (previousFocus: Coordinates, event?: PointerEvent) => void;
+  /** Callback to capture globe instance */
+  onGetGlobeInstance?: (globe: Globe) => void;
   /** Callback to handle mouseout events of a marker.  Captures the previously hovered marker, ThreeJS object and pointer event. */
   onMouseOutMarker?: MarkerCallback;
   /** Callback to handle mouseover events of a marker.  Captures the hovered marker, ThreeJS object and pointer event. */
@@ -63,13 +65,14 @@ export default function ReactGlobe({
   focusOptions,
   globeOptions,
   lightOptions,
-  lookAt,
+  initialCoordinates,
   markers,
   markerOptions,
   onClickMarker,
   onDefocus,
   onMouseOutMarker,
   onMouseOverMarker,
+  onGetGlobeInstance,
   onTextureLoaded,
   size: initialSize,
 }: Props): JSX.Element {
@@ -86,11 +89,13 @@ export default function ReactGlobe({
     mount.appendChild(globeInstance.renderer.domElement);
     globeInstance.animate();
     globeInstanceRef.current = globeInstance;
+    onGetGlobeInstance && onGetGlobeInstance(globeInstance);
 
     return (): void => {
       mount.removeChild(globeInstance.renderer.domElement);
       globeInstance.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // update callbacks
@@ -112,8 +117,8 @@ export default function ReactGlobe({
 
   // update camera
   useEffect(() => {
-    globeInstanceRef.current.updateCamera(lookAt, cameraOptions);
-  }, [cameraOptions, lookAt]);
+    globeInstanceRef.current.updateCamera(initialCoordinates, cameraOptions);
+  }, [cameraOptions, initialCoordinates]);
 
   // update focus
   useEffect(() => {
@@ -159,7 +164,7 @@ ReactGlobe.defaultProps = {
   focusOptions: defaultFocusOptions,
   globeOptions: defaultGlobeOptions,
   lightOptions: defaultLightOptions,
-  lookAt: [1.3521, 103.8198],
+  initialCoordinates: [1.3521, 103.8198],
   markers: [],
   markerOptions: defaultMarkerOptions,
 };
