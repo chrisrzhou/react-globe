@@ -65,6 +65,10 @@ By default, tooltips are enabled for markers and the default value of the toolti
     markerOptions={{
       activeScale: 1.1,
       enableTooltip: true,
+      enterAnimationDuration: 3000,
+      enterEasingFunction: ["Bounce", "InOut"],
+      exitAnimationDuration: 3000,
+      exitEasingFunction: ["Cubic", "Out"],
       getTooltipContent: marker => `${marker.city} (Sales: ${marker.value}.0M)`,
       radiusScaleRange: [0.01, 0.05]
     }}
@@ -93,32 +97,4 @@ If the `renderer` field of the `markerOptions` is provided, `react-globe` will u
       }
     }}
   />
-</Playground>
-
-## Marker update transitions
-
-<Playground>
-  {() => {
-    const [localMarkers, setLocalMarkers] = useState([]);
-    console.log(localMarkers);
-    return (
-      <div>
-        <button
-          disabled={localMarkers.length === markers.length}
-          onClick={() =>
-            setLocalMarkers([...localMarkers, markers[localMarkers.length]])
-          }
-        >
-          Add Marker
-        </button>
-        <button
-          disabled={localMarkers.length === 0}
-          onClick={() => setLocalMarkers(localMarkers.slice(1))}
-        >
-          Remove Marker
-        </button>
-        <ReactGlobe markers={localMarkers} />
-      </div>
-    );
-  }}
 </Playground>

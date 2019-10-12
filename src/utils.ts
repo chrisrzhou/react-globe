@@ -1,6 +1,6 @@
 import * as TWEEN from 'es6-tween';
 
-import { Any, Coordinates, EasingFunction, Position } from './types';
+import { Any, Coordinates, EasingFunction, Marker, Position } from './types';
 
 export function coordinatesToPosition(
   coordinates: Coordinates,
@@ -15,6 +15,10 @@ export function coordinatesToPosition(
   const z = radius * Math.cos(phi) * Math.sin(theta);
 
   return [x, y, z];
+}
+
+export function getMarkerCoordinatesKey(marker: Marker): string {
+  return marker.coordinates.toString();
 }
 
 export function tween(

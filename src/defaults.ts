@@ -78,9 +78,12 @@ export const defaultLightOptions: LightOptions = {
 
 export const defaultDotMarkerOptions: MarkerOptions = {
   activeScale: 1.3,
-  animationDuration: 1000,
   enableGlow: true,
   enableTooltip: true,
+  enterAnimationDuration: 1000,
+  enterEasingFunction: ['Linear', 'None'],
+  exitAnimationDuration: 500,
+  exitEasingFunction: ['Cubic', 'Out'],
   getTooltipContent: marker => JSON.stringify(marker.coordinates),
   glowCoefficient: 0,
   glowPower: 3,
@@ -91,9 +94,12 @@ export const defaultDotMarkerOptions: MarkerOptions = {
 
 export const defaultBarMarkerOptions: MarkerOptions = {
   activeScale: 1.05,
-  animationDuration: 2000,
   enableGlow: false,
   enableTooltip: true,
+  enterAnimationDuration: 2000,
+  enterEasingFunction: ['Linear', 'None'],
+  exitAnimationDuration: 1000,
+  exitEasingFunction: ['Cubic', 'Out'],
   getTooltipContent: marker => JSON.stringify(marker.coordinates),
   glowCoefficient: 0,
   glowPower: 3,

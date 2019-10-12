@@ -67,7 +67,7 @@ import {
   Position,
   Size,
 } from './types';
-import { coordinatesToPosition, tween } from './utils';
+import { coordinatesToPosition, getMarkerCoordinatesKey, tween } from './utils';
 
 const emptyFunction = (): void => {};
 
@@ -97,7 +97,7 @@ export default class Globe {
   frozen: boolean;
   globe: Group;
   initialCoordinates: Coordinates;
-  isFocusing: boolean;
+  isInteractionDisabled: boolean;
   markerObjects: Group;
   options: Options;
   orbitControls: OrbitControls;
@@ -149,7 +149,7 @@ export default class Globe {
     // add interactions to scene
     new Interaction(renderer, scene, camera);
     scene.on('mousemove', (event: InteractionEvent) => {
-      if (this.isFocusing) {
+      if (this.isInteractionDisabled) {
         return;
       }
       if (this.activeMarker) {
@@ -179,7 +179,7 @@ export default class Globe {
       }
     });
     scene.on('click', (event: InteractionEvent) => {
-      if (this.isFocusing) {
+      if (this.isInteractionDisabled) {
         return;
       }
       if (this.options.focus.enableDefocus && this.preFocusPosition) {
@@ -197,7 +197,7 @@ export default class Globe {
     this.focus = undefined;
     this.frozen = false;
     this.globe = globe;
-    this.isFocusing = false;
+    this.isInteractionDisabled = false;
     this.markerObjects = markerObjects;
     this.options = defaultOptions;
     this.orbitControls = orbitControls;
@@ -379,11 +379,11 @@ export default class Globe {
         animationDuration,
         easingFunction,
         () => {
-          this.isFocusing = true;
+          this.isInteractionDisabled = true;
           this.camera.position.set(...from);
         },
         () => {
-          this.isFocusing = false;
+          this.isInteractionDisabled = false;
         },
       );
     } else {
@@ -400,7 +400,7 @@ export default class Globe {
           animationDuration,
           easingFunction,
           () => {
-            this.isFocusing = true;
+            this.isInteractionDisabled = true;
             this.camera.position.set(...from);
           },
           () => {
@@ -411,7 +411,7 @@ export default class Globe {
               minPolarAngle,
             });
             this.preFocusPosition = undefined;
-            this.isFocusing = false;
+            this.isInteractionDisabled = false;
           },
         );
       }
@@ -529,9 +529,12 @@ export default class Globe {
     this.updateOptions(markerOptions, 'marker');
     const {
       activeScale,
-      animationDuration,
       enableGlow,
       enableTooltip,
+      enterAnimationDuration,
+      enterEasingFunction,
+      exitAnimationDuration,
+      exitEasingFunction,
       getTooltipContent,
       glowCoefficient,
       glowPower,
@@ -550,81 +553,102 @@ export default class Globe {
       ])
       .range([RADIUS * radiusScaleRange[0], RADIUS * radiusScaleRange[1]]);
 
+    const markerCoordinatesKeys = new Set(markers.map(getMarkerCoordinatesKey));
+    const markerObjectNames = new Set(
+      this.markerObjects.children.map(markerObject => markerObject.name),
+    );
+
     markers.forEach(marker => {
       const { coordinates, value } = marker;
-      const shouldUseCustomMarker = renderer !== undefined;
-
-      const color = marker.color || MARKER_DEFAULT_COLOR;
+      const markerCoordinatesKey = getMarkerCoordinatesKey(marker);
       const size = sizeScale(value);
+
       let markerObject: InteractableObject3D;
-
-      if (shouldUseCustomMarker) {
-        markerObject = renderer(marker);
-      } else {
-        const from = { size: 0 };
-        const to = { size };
-        const mesh = new Mesh();
-        tween(from, to, animationDuration, ['Linear', 'None'], () => {
-          switch (type) {
-            case MarkerType.Bar:
-              mesh.geometry = new BoxGeometry(
-                unitRadius,
-                unitRadius,
-                from.size,
-              );
-              mesh.material = new MeshLambertMaterial({
-                color,
-              });
-              break;
-            case MarkerType.Dot:
-            default:
-              mesh.geometry = new SphereGeometry(
-                from.size,
-                MARKER_SEGMENTS,
-                MARKER_SEGMENTS,
-              );
-              mesh.material = new MeshBasicMaterial({ color });
-              if (enableGlow) {
-                // add glow
-                const glowMesh = createGlowMesh(
-                  mesh.geometry.clone() as THREE.Geometry,
-                  {
-                    backside: false,
-                    color,
-                    coefficient: glowCoefficient,
-                    power: glowPower,
-                    size: from.size * glowRadiusScale,
-                  },
-                );
-                mesh.children = [];
-                mesh.add(glowMesh);
-              }
-          }
-        });
-        markerObject = mesh;
-      }
-
-      // place markers
-      let heightOffset = 0;
-      if (offsetRadiusScale !== undefined) {
-        heightOffset = RADIUS * offsetRadiusScale;
-      } else {
-        if (type === MarkerType.Dot) {
-          heightOffset = (size * (1 + glowRadiusScale)) / 2;
+      // create new marker objects
+      if (!markerObjectNames.has(markerCoordinatesKey)) {
+        if (renderer !== undefined) {
+          markerObject = renderer(marker);
         } else {
-          heightOffset = 0;
+          const color = marker.color || MARKER_DEFAULT_COLOR;
+          const from = { size: 0 };
+          const to = { size };
+          const mesh = new Mesh();
+          tween(
+            from,
+            to,
+            enterAnimationDuration,
+            enterEasingFunction,
+            () => {
+              this.isInteractionDisabled = true;
+              switch (type) {
+                case MarkerType.Bar:
+                  mesh.geometry = new BoxGeometry(
+                    unitRadius,
+                    unitRadius,
+                    from.size,
+                  );
+                  mesh.material = new MeshLambertMaterial({
+                    color,
+                  });
+                  break;
+                case MarkerType.Dot:
+                default:
+                  mesh.geometry = new SphereGeometry(
+                    from.size,
+                    MARKER_SEGMENTS,
+                    MARKER_SEGMENTS,
+                  );
+                  mesh.material = new MeshBasicMaterial({ color });
+                  if (enableGlow) {
+                    // add glow
+                    const glowMesh = createGlowMesh(
+                      mesh.geometry.clone() as THREE.Geometry,
+                      {
+                        backside: false,
+                        color,
+                        coefficient: glowCoefficient,
+                        power: glowPower,
+                        size: from.size * glowRadiusScale,
+                      },
+                    );
+                    mesh.children = [];
+                    mesh.add(glowMesh);
+                  }
+              }
+            },
+            () => {
+              this.isInteractionDisabled = false;
+            },
+          );
+          markerObject = mesh;
         }
-      }
-      const position = coordinatesToPosition(
-        coordinates,
-        RADIUS + heightOffset,
-      );
-      markerObject.position.set(...position);
-      markerObject.lookAt(new Vector3(0, 0, 0));
 
-      // handle events
-      function handleClick(event: InteractionEvent): void {
-        if (this.isFocusing) {
+        // place markers
+        let heightOffset = 0;
+        if (offsetRadiusScale !== undefined) {
+          heightOffset = RADIUS * offsetRadiusScale;
+        } else {
+          if (type === MarkerType.Dot) {
+            heightOffset = (size * (1 + glowRadiusScale)) / 2;
+          } else {
+            heightOffset = 0;
+          }
+        }
+        const position = coordinatesToPosition(
+          coordinates,
+          RADIUS + heightOffset,
+        );
+        markerObject.position.set(...position);
+        markerObject.lookAt(new Vector3(0, 0, 0));
+
+        markerObject.name = markerCoordinatesKey;
+        this.markerObjects.add(markerObject);
+      }
+
+      // update existing marker objects
+      markerObject = this.markerObjects.getObjectByName(markerCoordinatesKey);
+      const handleClick = (event: InteractionEvent): void => {
+        if (this.isInteractionDisabled) {
           this.tooltip.hide();
           return;
         }
@@ -635,12 +659,12 @@ export default class Globe {
           markerObject,
           event.data.originalEvent,
         );
-      }
+      };
 
       markerObject.on('click', handleClick.bind(this));
       markerObject.on('touchstart', handleClick.bind(this));
       markerObject.on('mousemove', event => {
-        if (this.isFocusing) {
+        if (this.isInteractionDisabled) {
           this.tooltip.hide();
           return;
         }
@@ -670,9 +694,31 @@ export default class Globe {
           );
         }
       });
-      this.markerObjects.add(markerObject);
     });
-    console.log(this.markerObjects.children.length);
+
+    // remove marker objects that are stale
+    const markerObjectsToRemove = this.markerObjects.children.filter(
+      markerObject => !markerCoordinatesKeys.has(markerObject.name),
+    );
+    markerObjectsToRemove.forEach(markerObject => {
+      const from = markerObject.scale.toArray() as Position;
+      tween(
+        from,
+        [0, 0, 0],
+        exitAnimationDuration,
+        exitEasingFunction,
+        () => {
+          this.isInteractionDisabled = true;
+          if (markerObject) {
+            markerObject.scale.set(...from);
+          }
+        },
+        () => {
+          this.isInteractionDisabled = false;
+          this.markerObjects.remove(markerObject);
+        },
+      );
+    });
   }
 
   updateOptions<T>(options: T, key: string): void {

@@ -196,13 +196,19 @@ export interface LightOptions {
 export interface MarkerOptions {
   /** Scale factor of marker size when active (i.e. hovered). */
   activeScale: number;
-  /** Duration of marker animation (in milliseconds). */
-  animationDuration: number;
   /** Enable glow effect of the marker. */
   enableGlow: boolean;
   /** Enable tooltip features. */
   enableTooltip: boolean;
+  /** Duration of marker enter animation (in milliseconds). */
+  enterAnimationDuration: number;
+  /** Easing function of enter animation */
+  enterEasingFunction: EasingFunction;
   /** Callback to set the tooltip string content based on the marker data. */
+  /** Duration of marker exit animation (in milliseconds). */
+  exitAnimationDuration: number;
+  /** Easing function of exit animation */
+  exitEasingFunction: EasingFunction;
   getTooltipContent: (marker: Marker) => string;
   /** Glow coefficient (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
   glowCoefficient: number;
