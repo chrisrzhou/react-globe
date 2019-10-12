@@ -95,7 +95,6 @@ export default function ReactGlobe({
 
   // update callbacks
   useEffect(() => {
-    console.log('callbacks');
     globeInstanceRef.current.updateCallbacks({
       onClickMarker,
       onDefocus,

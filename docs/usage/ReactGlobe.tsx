@@ -9,3 +9,5 @@ export default function ReactGlobe(props: Props): JSX.Element {
     </div>
   );
 }
+
+export * from '../../src';

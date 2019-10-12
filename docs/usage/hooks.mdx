@@ -1,0 +1,25 @@
+---
+name: Hooks
+route: /hooks
+---
+
+import { useState } from "react";
+import { Playground } from "docz";
+
+import ReactGlobe from "./ReactGlobe";
+import markers from "./markers";
+
+# Hooks
+
+`ReactGlobe` provides the `useGlobe` hook that exposes the `Globe` instance. This is useful if you
+
+<Playground>
+  {() => {
+    return (
+        <ReactGlobe
+          markers={markers}
+        />
+    );
+}}
+
+</Playground>

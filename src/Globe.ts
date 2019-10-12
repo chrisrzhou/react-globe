@@ -71,20 +71,20 @@ import { coordinatesToPosition, tween } from './utils';
 
 const emptyFunction = (): void => {};
 
-const defaultOptions: Options = {
-  camera: defaultCameraOptions,
-  globe: defaultGlobeOptions,
-  focus: defaultFocusOptions,
-  marker: defaultMarkerOptions,
-  light: defaultLightOptions,
-};
-
 const defaultCallbacks = {
   onClickMarker: emptyFunction,
   onDefocus: emptyFunction,
   onMouseOutMarker: emptyFunction,
   onMouseOverMarker: emptyFunction,
   onTextureLoaded: emptyFunction,
+};
+
+const defaultOptions: Options = {
+  camera: defaultCameraOptions,
+  globe: defaultGlobeOptions,
+  focus: defaultFocusOptions,
+  marker: defaultMarkerOptions,
+  light: defaultLightOptions,
 };
 
 export default class Globe {
@@ -140,7 +140,7 @@ export default class Globe {
     globe.add(globeBackground);
     globe.add(globeClouds);
     globe.add(globeSphere);
-    globe.add(markerObjects);
+    scene.add(markerObjects);
     scene.add(camera);
     scene.add(globe);
 
@@ -186,7 +186,7 @@ export default class Globe {
       }
     });
 
-    // assign to class variables
+    // assign values to class variables
     this.activeMarker = undefined;
     this.activeMarkerObject = undefined;
     this.animationFrameId = undefined;
@@ -204,6 +204,7 @@ export default class Globe {
     this.tooltip = tooltip;
   }
 
+  // for each animation, update the focus and focusOptions provided by the animation over an array of timeouts
   applyAnimations(animations: Animation[]): () => void {
     const currentFocus = this.focus;
     const currentFocusOptions = this.options.focus;
@@ -253,14 +254,16 @@ export default class Globe {
   }
 
   destroy(): void {
+    this.pause();
     this.tooltip.destroy();
-    if (this.animationFrameId) {
-      cancelAnimationFrame(this.animationFrameId);
-    }
   }
 
   getObjectByName(name: ObjectName): Object3D {
     return this.scene.getObjectByName(name);
+  }
+
+  pause(): void {
+    cancelAnimationFrame(this.animationFrameId);
   }
 
   render(): void {
@@ -288,10 +291,7 @@ export default class Globe {
     lookAt: Coordinates,
     cameraOptions: Optional<CameraOptions> = {},
   ): void {
-    this.options.camera = {
-      ...defaultCameraOptions,
-      ...cameraOptions,
-    };
+    this.updateOptions(cameraOptions, 'camera');
     const {
       autoRotateSpeed,
       distanceRadiusScale,
@@ -335,11 +335,9 @@ export default class Globe {
     focus: Coordinates,
     focusOptions: Optional<FocusOptions> = {},
   ): void {
-    this.options.focus = {
-      ...defaultFocusOptions,
-      ...focusOptions,
-    };
+    this.updateOptions(focusOptions, 'focus');
     this.focus = focus;
+
     const {
       animationDuration,
       distanceRadiusScale,
@@ -415,10 +413,7 @@ export default class Globe {
   }
 
   updateGlobe(globeOptions: Optional<GlobeOptions> = {}): void {
-    this.options.globe = {
-      ...defaultGlobeOptions,
-      ...globeOptions,
-    };
+    this.updateOptions(globeOptions, 'globe');
     const {
       backgroundTexture,
       cloudsOpacity,
@@ -494,10 +489,7 @@ export default class Globe {
   }
 
   updateLights(lightOptions: Optional<LightOptions> = {}): void {
-    this.options.light = {
-      ...defaultLightOptions,
-      ...lightOptions,
-    };
+    this.updateOptions(lightOptions, 'light');
     const {
       ambientLightColor,
       ambientLightIntensity,
@@ -528,10 +520,7 @@ export default class Globe {
     markers: Marker[],
     markerOptions: Optional<MarkerOptions> = {},
   ): void {
-    this.options.marker = {
-      ...defaultMarkerOptions,
-      ...markerOptions,
-    };
+    this.updateOptions(markerOptions, 'marker');
     const {
       activeScale,
       animationDuration,
@@ -678,6 +667,16 @@ export default class Globe {
       });
       this.markerObjects.add(markerObject);
     });
+  }
+
+  updateOptions<T>(options: T, key: string): void {
+    this.options = {
+      ...defaultOptions,
+      [key]: {
+        ...defaultOptions[key],
+        ...options,
+      },
+    };
   }
 
   updateOrbitControls(orbitControlOptions: Optional<OrbitControls> = {}): void {
