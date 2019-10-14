@@ -27,7 +27,7 @@ export enum ObjectName {
 }
 
 export interface Marker {
-  /** Color of the marker */
+  /** Color of the marker. */
   color?: string;
   /** [lat, lon] coordinates of the marker. */
   coordinates: Coordinates;
@@ -164,7 +164,7 @@ export interface GlobeOptions {
   cloudsSpeed: number;
   /** Cloud texture.  Accepts a URL or image data. */
   cloudsTexture: string;
-  /** Enable background.  If disabled, the canvas will be transparent, allowing use of custom div backgrounds. */
+  /** Enable background.  If disabled, the canvas will be transparent, allowing use of custom styled backgrounds. */
   enableBackground: boolean;
   /** Enable clouds. */
   enableClouds: boolean;
@@ -206,11 +206,11 @@ export interface MarkerOptions {
   enableTooltip: boolean;
   /** Duration of marker enter animation (in milliseconds). */
   enterAnimationDuration: number;
-  /** Easing function of enter animation */
+  /** Easing function of enter animation. */
   enterEasingFunction: EasingFunction;
   /** Duration of marker exit animation (in milliseconds). */
   exitAnimationDuration: number;
-  /** Easing function of exit animation */
+  /** Easing function of exit animation. */
   exitEasingFunction: EasingFunction;
   /** Callback to set the tooltip string content based on the marker data. */
   getTooltipContent: (marker: Marker) => string;
@@ -224,7 +224,7 @@ export interface MarkerOptions {
   offsetRadiusScale?: number;
   /** [min, max] size of markers (measured as scale factors to the globe radius). */
   radiusScaleRange: [number, number];
-  /** Custom marker renderer returning a THREE.Object3D object. */
+  /** Provide a custom marker renderer that should return a THREE.Object3D object for the associated marker data object. */
   renderer?: (marker: Marker) => THREE.Object3D;
   /** If a valid type is passed, ReactGlobe will render the supported markers. */
   type: MarkerType;

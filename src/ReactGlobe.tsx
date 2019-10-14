@@ -24,7 +24,7 @@ import {
 import useResize from './useResize';
 
 export interface Props {
-  /** An array of animation steps to power globe animations. */
+  /** Apply an array of animation steps to sequentially animate the globe. */
   animations?: Animation[];
   /** Configure camera options (e.g. rotation, zoom, angles). */
   cameraOptions?: CameraOptionsProp;
@@ -34,9 +34,9 @@ export interface Props {
   focusOptions?: FocusOptionsProp;
   /** Configure globe options (e.g. textures, background, clouds, glow). */
   globeOptions?: GlobeOptionsProp;
-  /** Configure light options (e.g. ambient and point light colors + intensity). */
+  /** Configure light options (e.g. ambient and point light colors/intensity). */
   lightOptions?: LightOptionsProp;
-  /** A set of starting [lat, lon] coordinates for the globe. */
+  /** Initial [lat, lon] coordinates for the globe. */
   initialCoordinates?: Coordinates;
   /** An array of data that will render interactive markers on the globe. */
   markers?: Marker[];
@@ -46,13 +46,13 @@ export interface Props {
   onClickMarker?: MarkerCallback;
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates and pointer event. */
   onDefocus?: FocusCallback;
-  /** Callback to capture globe instance */
+  /** Callback to capture the Globe class instance */
   onGetGlobeInstance?: (globe: Globe) => void;
   /** Callback to handle mouseout events of a marker.  Captures the previously hovered marker, ThreeJS object and pointer event. */
   onMouseOutMarker?: MarkerCallback;
   /** Callback to handle mouseover events of a marker.  Captures the hovered marker, ThreeJS object and pointer event. */
   onMouseOverMarker?: MarkerCallback;
-  /** Callback when texture is successfully loaded */
+  /** Callback when texture is successfully loaded. */
   onTextureLoaded?: () => void;
   /** Set explicit [width, height] values for the canvas container.  This will disable responsive resizing. */
   size?: Size;

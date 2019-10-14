@@ -15,6 +15,7 @@
 
 ### Breaking Changes
 
+- `lookAt` prop is renamed to `initialCoordinates`.
 - Some exported Typescript types have changed. Address and import the relevant types accordingly. Noticeably, all `*Options` prop are now explicitly renamed to `*OptionsProp`. The former is used internally in the codebase while the `*OptionsProp` supports specifying optional option key/value pair in the component props.
 - The underlying `defaultCameraOptions` values are updated to reflect changes in dependent libraries. You might need to update these option values if custom values were previously used.
 - Tooltip behaviors have changed slightly to improve rendering performance. Tooltips are auto-disabled on non-interactable scenarios (e.g. focusing, animating).

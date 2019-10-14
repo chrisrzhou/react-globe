@@ -4,6 +4,11 @@ Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
 ![image](/public/react-globe.gif)
 
+## Todos
+
+- [ ] Write docs for `Globe` instance and `Marker Transition`.
+- [ ] Fix bug where updating `cloudsSpeed` and `markerOptions` does not update
+
 ## Features
 
 - ✨ Beautiful and complete with clouds, backgrounds and lighting.

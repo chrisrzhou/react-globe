@@ -15,7 +15,7 @@ import ReactGlobe from "./ReactGlobe";
 
 <Playground>
   {() => {
-    const lookAt = [0, 30];
+    const initialCoordinates = [0, 30];
     const [animationSequence, setAnimationSequence] = useState();
     let animations = [];
     switch (animationSequence) {
@@ -80,7 +80,10 @@ import ReactGlobe from "./ReactGlobe";
         <button onClick={() => setAnimationSequence("Travel Plans")}>
           Travel Plans
         </button>
-        <ReactGlobe animations={animations} lookAt={lookAt} />
+        <ReactGlobe
+          animations={animations}
+          initialCoordinates={initialCoordinates}
+        />
       </div>
     );
   }}
