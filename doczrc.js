@@ -1,10 +1,16 @@
+import pkg from './package.json';
+
 export default {
+  description: pkg.description,
   dest: 'dist/docs',
+  htmlContext: {
+    favicon: null,
+  },
   menu: [
     'README',
     'Props',
     {
-      name: 'Usage',
+      name: 'Examples',
       menu: [
         'Globe',
         'Textures',
@@ -12,18 +18,21 @@ export default {
         'Lights',
         'Focus',
         'Markers',
+        'Marker Transitions',
         'Callbacks',
         'Animations',
+        'Globe Instance',
       ],
     },
     {
       name: 'Gallery',
-      menu: ['Contributing', 'Google Globe Trends'],
+      menu: ['Submissions', 'Google Globe Trends'],
     },
     'CHANGELOG',
     { name: 'Github', href: 'https://github.com/chrisrzhou/react-globe' },
   ],
   public: '/public',
+  title: `🌍 ${pkg.name} (v${pkg.version})`,
   themeConfig: {
     showPlaygroundEditor: true,
   },

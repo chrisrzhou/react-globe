@@ -1,16 +1,30 @@
 # Change Log
 
-## [3.2.0](https://github.com/chrisrzhou/react-globe/compare/v3.1.1...v3.2.0) (2019-09-12)
+## [4.0.0](https://github.com/chrisrzhou/react-globe/compare/v3.1.1...v4.0.0) (2019-10-13)
 
-- [ ] Allow dynamic updates to markers without re-rendering the globe.
-- [ ] Support `onPause` and `onResume` callbacks.
-- [ ] Internal code improvements.
-- [x] Simplify types.
-- [x] Update and improve documentation for props.
+`v4.0.0` brings huge features and improvements!
 
-### Small breaking changes
+### Features and Improvements
 
-- Certain typescript type exports may have changed. Noticeably, the `*Options` props should now be referred to as `*OptionsProp`. You can still refer to the `*Options` types, but these are used internally while the `*OptionsProp` express the desired behavior of allowing optional prop fields.
+- Markers now update and apply transitions without resetting the globe or other markers. This creates a simple way to add/remove/update markers with intuitive visual feedback.
+- Globe avoids resetting and re-rendering when props change.
+- Globe animations are better optimized and less 'lag' is encountered.
+- Additional named exports (e.g. `Globe`, `Tooltip`) empower useful ways to work with `react-globe`.
+- You can now retrieve the `Globe` instance via the `onGetGlobeInstance` prop, which allows you to fully access and control the `Globe` class outside of the React lifecycle. Note that we still **strongly recommend** that you keep to React props to control behaviors of the globe.
+- Updated docs and examples.
+
+### Breaking Changes
+
+- Some exported Typescript types have changed. Address and import the relevant types accordingly. Noticeably, all `*Options` prop are now explicitly renamed to `*OptionsProp`. The former is used internally in the codebase while the `*OptionsProp` supports specifying optional option key/value pair in the component props.
+- The underlying `defaultCameraOptions` values are updated to reflect changes in dependent libraries. You might need to update these option values if custom values were previously used.
+- Tooltip behaviors have changed slightly to improve rendering performance. Tooltips are auto-disabled on non-interactable scenarios (e.g. focusing, animating).
+
+### Internal Changes
+
+- Refactor rendering logic to use `Globe.ts` class instead of custom React hooks.
+  - While React hooks organized the code better, it created unneccessary complexity when dealing with hook dependencies.
+  - This refactor decouples the React component and the ThreeJS rendering responsibilities. The React component is basically now a thin wrapper to pass props to the `Globe` instance and control how the `Globe` instance should be updated when props change.
+  - The refactor was also required to better support and control marker transitions, and optimizing globe re-rendering when props change.
 
 ## [3.1.1](https://github.com/chrisrzhou/react-globe/compare/v3.0.2...v3.1.1) (2019-06-17)
 

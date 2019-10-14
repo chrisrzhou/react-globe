@@ -1,6 +1,6 @@
 import tippy, { Instance } from 'tippy.js';
 
-import { TOOLTIP_OFFSET } from './defaults';
+const TOOLTIP_OFFSET = 10;
 
 export default class Tooltip {
   instance: Instance;

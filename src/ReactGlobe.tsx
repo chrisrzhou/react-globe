@@ -10,15 +10,15 @@ import {
 import Globe from './Globe';
 import {
   Animation,
-  CameraOptions,
+  CameraOptionsProp,
   Coordinates,
-  FocusOptions,
-  GlobeOptions,
-  LightOptions,
+  FocusCallback,
+  FocusOptionsProp,
+  GlobeOptionsProp,
+  LightOptionsProp,
   Marker,
   MarkerCallback,
-  MarkerOptions,
-  Optional,
+  MarkerOptionsProp,
   Size,
 } from './types';
 import useResize from './useResize';
@@ -27,25 +27,25 @@ export interface Props {
   /** An array of animation steps to power globe animations. */
   animations?: Animation[];
   /** Configure camera options (e.g. rotation, zoom, angles). */
-  cameraOptions?: Optional<CameraOptions>;
+  cameraOptions?: CameraOptionsProp;
   /** A set of [lat, lon] coordinates to be focused on. */
   focus?: Coordinates;
   /** Configure focusing options (e.g. animation duration, distance, easing function). */
-  focusOptions?: Optional<FocusOptions>;
+  focusOptions?: FocusOptionsProp;
   /** Configure globe options (e.g. textures, background, clouds, glow). */
-  globeOptions?: Optional<GlobeOptions>;
+  globeOptions?: GlobeOptionsProp;
   /** Configure light options (e.g. ambient and point light colors + intensity). */
-  lightOptions?: Optional<LightOptions>;
+  lightOptions?: LightOptionsProp;
   /** A set of starting [lat, lon] coordinates for the globe. */
   initialCoordinates?: Coordinates;
   /** An array of data that will render interactive markers on the globe. */
   markers?: Marker[];
   /** Configure marker options (e.g. tooltips, size, marker types, custom marker renderer). */
-  markerOptions?: Optional<MarkerOptions>;
+  markerOptions?: MarkerOptionsProp;
   /** Callback to handle click events of a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
   onClickMarker?: MarkerCallback;
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates and pointer event. */
-  onDefocus?: (previousFocus: Coordinates, event?: PointerEvent) => void;
+  onDefocus?: FocusCallback;
   /** Callback to capture globe instance */
   onGetGlobeInstance?: (globe: Globe) => void;
   /** Callback to handle mouseout events of a marker.  Captures the previously hovered marker, ThreeJS object and pointer event. */

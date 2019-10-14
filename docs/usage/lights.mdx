@@ -1,19 +1,19 @@
 ---
 name: Lights
 route: /usage/lights
-menu: Usage
+menu: Examples
 ---
 
-import { Playground } from 'docz';
+import { Playground } from "docz";
 
-import ReactGlobe from './ReactGlobe';
+import ReactGlobe from "./ReactGlobe";
 
 # Lights
 
 `react-globe` uses two light sources to illuminate the globe. The colors and intensity of the light sources can be configured using the `lightOptions` prop. You can pass any number of option fields. Default options can be imported from the module with:
 
 ```js
-import { defaultLightOptions } from 'react-globe';
+import { defaultLightOptions } from "react-globe";
 ```
 
 ## Ambient Light
@@ -23,8 +23,8 @@ The [ambient light](https://threejs.org/docs/#api/en/lights/AmbientLight) illumi
 <Playground>
   <ReactGlobe
     lightOptions={{
-      ambientLightColor: 'red',
-      ambientLightIntensity: 1,
+      ambientLightColor: "red",
+      ambientLightIntensity: 1
     }}
   />
 </Playground>
@@ -36,9 +36,9 @@ The [point light](https://threejs.org/docs/#api/en/lights/PointLight) provides a
 <Playground>
   <ReactGlobe
     lightOptions={{
-      pointLightColor: 'orange',
+      pointLightColor: "orange",
       pointLightIntensity: 4,
-      pointLightPositionRadiusScales: [2, 1, -1],
+      pointLightPositionRadiusScales: [2, 1, -1]
     }}
   />
 </Playground>

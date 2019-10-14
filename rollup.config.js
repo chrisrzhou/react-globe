@@ -25,11 +25,9 @@ export default [
       },
     ],
     external: [
-      'd3-array',
       'd3-scale',
       'es6-tween',
       'react',
-      'react-cached-callback',
       'resize-observer-polyfill',
       'three',
       'three-glow-mesh',

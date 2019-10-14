@@ -1,23 +1,15 @@
-# 🌎 React Globe
+# 🌍 react-globe
 
 Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
 ![image](/public/react-globe.gif)
 
-## TODO
-
-- [ ] Update docs
-  - Add marker update pattern example e.g. add/remove/update)
-  - Add docs for `Globe` and `Tooltip`
-  - Update props tables.
-  - Update package/changelog
-
 ## Features
 
 - ✨ Beautiful and complete with clouds, backgrounds and lighting.
 - ✌️ Incredibly simple to use and configure.
-- 🤸‍ Easy globe animations.
 - 📍 Render interactive markers on the globe with simple data.
+- 🤸‍ Easy globe animations and marker transitions.
 - ⚛️ Modern Javascript + build tools.
 
 ## Install
@@ -42,8 +34,7 @@ You can also run the examples locally:
 git clone git@github.com:chrisrzhou/react-globe
 
 cd react-globe
-yarn
-yarn dev
+yarn && yarn dev
 ```
 
 ### Basic Example (no props)
@@ -70,7 +61,11 @@ yarn dev
 
 [Link to app](https://google-globe-trends.netlify.com)
 
-## Development
+## Contributing
+
+The code is written in `typescript`, linted with `eslint` + `prettier`, and bundled with `rollup`. Examples and documentations are built with `docz`.
+
+Feel free to contribute by submitting a pull request.
 
 ### Main Dependencies
 
@@ -84,14 +79,10 @@ yarn dev
 
 ### Codebase Overview
 
-- `ReactGlobe.tsx`: Core component that combines React + ThreeJS hooks into an animated scene supporting interactions.
-- `Tooltip.tsx`: Tooltip component powered by `tippy.js`.
-- `reducer.ts`: Simple state management for tracking focused coordinates and active markers.
+- `ReactGlobe.tsx`: Core React component exposing relevant props that controls the `Globe` rendering.
+- `Globe.ts`: Primary ThreeJS rendering logic written as a `Globe` class.
+- `Tooltip.ts`: Tooltip component powered by `tippy.js`.
+- `types.ts`: Typescript types.
 - `defaults.ts`: Default options and constants.
-- `utils.ts`: Simple functions to compute derived data.
-- `/hooks`: React hooks to handle updating various ThreeJS entities (e.g. camera, globe, markers, renderer).
+- `utils.ts`: Various simple functions to compute derived data.
 - `/textures`: Default globe, clouds and background textures.
-
-The code is written in `typescript`, linted with `eslint` + `prettier`, and built with `rollup`. Examples and documentations are built with `docz`.
-
-Feel free to contribute by submitting a pull request.

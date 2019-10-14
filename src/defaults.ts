@@ -28,7 +28,6 @@ export const MARKER_ACTIVE_ANIMATION_EASING_FUNCTION: EasingFunction = [
   'Cubic',
   'In',
 ];
-export const TOOLTIP_OFFSET = 10;
 
 export const defaultCameraOptions: CameraOptions = {
   autoRotateSpeed: 0.2,

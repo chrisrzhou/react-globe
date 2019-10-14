@@ -1,12 +1,12 @@
 ---
 name: Globe
 route: /usage/globe
-menu: Usage
+menu: Examples
 ---
 
-import { Playground } from 'docz';
+import { Playground } from "docz";
 
-import ReactGlobe from './ReactGlobe';
+import ReactGlobe from "./ReactGlobe";
 
 # Globe
 
@@ -33,11 +33,12 @@ By default, `react-globe` uses the specified `backgroundTexture` to render the b
 <Playground>
   <div
     style={{
-      backgroundImage: 'linear-gradient(to right, red , yellow)',
-    }}>
+      backgroundImage: "linear-gradient(to right, red , yellow)"
+    }}
+  >
     <ReactGlobe
       globeOptions={{
-        enableBackground: false,
+        enableBackground: false
       }}
     />
   </div>
@@ -52,7 +53,7 @@ You can disable and control various cloud properties in the `globeOptions` prop.
     globeOptions={{
       cloudsSpeed: 3,
       cloudsOpacity: 0.8,
-      enableClouds: true,
+      enableClouds: true
     }}
   />
 </Playground>
@@ -65,10 +66,10 @@ You can disable and control various glow properties in the `globeOptions` prop. 
   <ReactGlobe
     globeOptions={{
       glowCoefficient: 0.1,
-      glowColor: 'gold',
+      glowColor: "gold",
       glowPower: 4,
       glowRadiusScale: 0.5,
-      enableGlow: true,
+      enableGlow: true
     }}
   />
 </Playground>

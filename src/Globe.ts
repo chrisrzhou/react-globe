@@ -1,4 +1,3 @@
-import { max, min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import * as TWEEN from 'es6-tween';
 import {
@@ -67,7 +66,13 @@ import {
   Position,
   Size,
 } from './types';
-import { coordinatesToPosition, getMarkerCoordinatesKey, tween } from './utils';
+import {
+  coordinatesToPosition,
+  getMarkerCoordinatesKey,
+  maxValue,
+  minValue,
+  tween,
+} from './utils';
 
 const emptyFunction = (): void => {};
 
@@ -548,8 +553,8 @@ export default class Globe {
     const unitRadius = RADIUS * MARKER_UNIT_RADIUS_SCALE;
     const sizeScale = scaleLinear()
       .domain([
-        min(markers, marker => marker.value),
-        max(markers, marker => marker.value),
+        minValue(markers, marker => marker.value),
+        maxValue(markers, marker => marker.value),
       ])
       .range([RADIUS * radiusScaleRange[0], RADIUS * radiusScaleRange[1]]);
 

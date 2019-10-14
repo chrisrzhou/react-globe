@@ -108,7 +108,7 @@ export interface InteractionEvent extends Event {
   };
 }
 
-export interface Interactable {
+interface Interactable {
   on?(
     type: string,
     callback: (interactionEvent: InteractionEvent) => void,
@@ -141,6 +141,7 @@ export interface CameraOptions {
   /** Speed of zoom. */
   zoomSpeed: number;
 }
+export type CameraOptionsProp = Optional<CameraOptions>;
 
 export interface FocusOptions {
   /** Duration of the focus animation. */
@@ -152,6 +153,7 @@ export interface FocusOptions {
   /** Enable the defocus feature (i.e. clicking the globe after a focus has been applied). */
   enableDefocus: boolean;
 }
+export type FocusOptionsProp = Optional<FocusOptions>;
 
 export interface GlobeOptions {
   /** Background texture.  Accepts a URL or image data. */
@@ -179,6 +181,7 @@ export interface GlobeOptions {
   /** Globe texture.  Accepts a URL or image data. */
   texture: string;
 }
+export type GlobeOptionsProp = Optional<GlobeOptions>;
 
 export interface LightOptions {
   /** Ambient light color. */
@@ -192,6 +195,7 @@ export interface LightOptions {
   /** [x, y, z] position of the point light (measured as scale factors to the globe radius). */
   pointLightPositionRadiusScales: Position;
 }
+export type LightOptionsProp = Optional<LightOptions>;
 
 export interface MarkerOptions {
   /** Scale factor of marker size when active (i.e. hovered). */
@@ -204,11 +208,11 @@ export interface MarkerOptions {
   enterAnimationDuration: number;
   /** Easing function of enter animation */
   enterEasingFunction: EasingFunction;
-  /** Callback to set the tooltip string content based on the marker data. */
   /** Duration of marker exit animation (in milliseconds). */
   exitAnimationDuration: number;
   /** Easing function of exit animation */
   exitEasingFunction: EasingFunction;
+  /** Callback to set the tooltip string content based on the marker data. */
   getTooltipContent: (marker: Marker) => string;
   /** Glow coefficient (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
   glowCoefficient: number;
@@ -225,6 +229,7 @@ export interface MarkerOptions {
   /** If a valid type is passed, ReactGlobe will render the supported markers. */
   type: MarkerType;
 }
+export type MarkerOptionsProp = Optional<MarkerOptions>;
 
 export type Options = {
   camera: CameraOptions;
@@ -243,8 +248,8 @@ export type MarkerCallback = (
 ) => void;
 
 export interface Callbacks {
-  onDefocus: FocusCallback;
   onClickMarker: MarkerCallback;
+  onDefocus: FocusCallback;
   onMouseOutMarker: MarkerCallback;
   onMouseOverMarker: MarkerCallback;
   onTextureLoaded: () => void;

@@ -1,13 +1,13 @@
 ---
 name: Focus
 route: /usage/focus
-menu: Usage
+menu: Examples
 ---
 
-import { Playground } from 'docz';
-import { useState } from 'react';
+import { Playground } from "docz";
+import { useState } from "react";
 
-import ReactGlobe from './ReactGlobe';
+import ReactGlobe from "./ReactGlobe";
 
 # Focus
 
@@ -39,7 +39,7 @@ To focus on a specific lat-long coordinate (e.g. Singapore `[1.3521, 103.8198]`)
 Use the `FocusOptions` to control how focused coordinates behave. You can pass any number of option fields. Default options can be imported from the module with:
 
 ```js
-import { defaultFocusOptions } from 'react-globe';
+import { defaultFocusOptions } from "react-globe";
 ```
 
 Use the playground code editor to explore customizing the focus animations or disabling the defocus feature.
@@ -62,8 +62,8 @@ Use the playground code editor to explore customizing the focus animations or di
           focusOptions={{
             animationDuration: 3000,
             distanceRadiusScale: 2,
-            easingFunction: ['Elastic', 'In'],
-            enableDefocus: false,
+            easingFunction: ["Elastic", "In"],
+            enableDefocus: false
           }}
         />
       </div>
