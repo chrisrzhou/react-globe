@@ -27,9 +27,7 @@ import {
   CAMERA_DAMPING_FACTOR,
   CAMERA_FAR,
   CAMERA_FOV,
-  CAMERA_MAX_POLAR_ANGLE,
   CAMERA_MIN_DISTANCE_RADIUS_SCALE,
-  CAMERA_MIN_POLAR_ANGLE,
   CAMERA_NEAR,
   CLOUDS_RADIUS_OFFSET,
   defaultCameraOptions,
@@ -99,10 +97,9 @@ export default class Globe {
   callbacks: Callbacks;
   camera: PerspectiveCamera;
   focus?: Coordinates;
-  frozen: boolean;
   globe: Group;
   initialCoordinates: Coordinates;
-  isInteractionDisabled: boolean;
+  isFrozen: boolean;
   markerObjects: Group;
   options: Options;
   orbitControls: OrbitControls;
@@ -154,7 +151,7 @@ export default class Globe {
     // add interactions to scene
     new Interaction(renderer, scene, camera);
     scene.on('mousemove', (event: InteractionEvent) => {
-      if (this.isInteractionDisabled) {
+      if (this.isFocusing()) {
         return;
       }
       if (this.activeMarker) {
@@ -184,7 +181,7 @@ export default class Globe {
       }
     });
     scene.on('click', (event: InteractionEvent) => {
-      if (this.isInteractionDisabled) {
+      if (this.isFocusing()) {
         return;
       }
       if (this.options.focus.enableDefocus && this.preFocusPosition) {
@@ -200,9 +197,9 @@ export default class Globe {
     this.callbacks = defaultCallbacks;
     this.camera = camera;
     this.focus = undefined;
-    this.frozen = false;
     this.globe = globe;
-    this.isInteractionDisabled = false;
+    this.initialCoordinates = undefined;
+    this.isFrozen = false;
     this.markerObjects = markerObjects;
     this.options = defaultOptions;
     this.orbitControls = orbitControls;
@@ -212,7 +209,20 @@ export default class Globe {
     this.tooltip = tooltip;
   }
 
-  // for each animation, update the focus and focusOptions provided by the animation over an array of timeouts
+  animate(): void {
+    this.render();
+    this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
+  }
+
+  // TODO: expose a way to customize animating clouds in every axis
+  animateClouds(): void {
+    const globeClouds = this.getObjectByName(ObjectName.GlobeClouds);
+    ['x', 'y', 'z'].forEach(axis => {
+      globeClouds.rotation[axis] += Math.random() / 10000;
+    });
+  }
+
+  // For each animation, update the focus and focusOptions provided by the animation over an array of timeouts
   applyAnimations(animations: Animation[]): () => void {
     const currentFocus = this.focus;
     const currentFocusOptions = this.options.focus;
@@ -227,11 +237,15 @@ export default class Globe {
         easingFunction,
       } = animation;
       const timeout = setTimeout(() => {
-        this.updateFocus(coordinates, {
-          animationDuration,
-          distanceRadiusScale,
-          easingFunction,
-        });
+        this.updateFocus(
+          coordinates,
+          {
+            animationDuration,
+            distanceRadiusScale,
+            easingFunction,
+          },
+          true,
+        );
       }, wait);
       timeouts.push(timeout);
       wait += animationDuration;
@@ -246,28 +260,28 @@ export default class Globe {
     };
   }
 
-  animate(): void {
-    this.render();
-    this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
-  }
-
-  animateClouds(): void {
-    const SECONDS_TO_MILLISECONDS = 1000;
-    const globeClouds = this.getObjectByName(ObjectName.GlobeClouds);
-    ['x', 'y', 'z'].forEach(axis => {
-      globeClouds.rotation[axis] +=
-        (Math.random() * this.options.globe.cloudsSpeed) /
-        SECONDS_TO_MILLISECONDS;
-    });
-  }
-
   destroy(): void {
     cancelAnimationFrame(this.animationFrameId);
     this.tooltip.destroy();
   }
 
+  enableOrbitControls(enabled: boolean, autoRotate = enabled): void {
+    this.orbitControls.enabled = enabled;
+    this.orbitControls.autoRotate = autoRotate;
+  }
+
+  freeze(): void {
+    this.isFrozen = true;
+    this.enableOrbitControls(false);
+    cancelAnimationFrame(this.animationFrameId);
+  }
+
   getObjectByName(name: ObjectName): Object3D {
     return this.scene.getObjectByName(name);
+  }
+
+  isFocusing(): boolean {
+    return !this.orbitControls.enabled;
   }
 
   render(): void {
@@ -321,26 +335,25 @@ export default class Globe {
     this.camera.far = CAMERA_FAR;
     this.camera.fov = CAMERA_FOV;
     this.camera.near = CAMERA_NEAR;
-    this.updateOrbitControls({
-      autoRotate: enableAutoRotate,
-      autoRotateSpeed,
-      dampingFactor: CAMERA_DAMPING_FACTOR,
-      enableDamping: true,
-      enablePan: false,
-      enableRotate,
-      enableZoom,
-      maxDistance: RADIUS * maxDistanceRadiusScale,
-      maxPolarAngle,
-      minDistance: RADIUS * CAMERA_MIN_DISTANCE_RADIUS_SCALE,
-      minPolarAngle,
-      rotateSpeed,
-      zoomSpeed,
-    });
+    this.orbitControls.autoRotate = enableAutoRotate;
+    this.orbitControls.autoRotateSpeed = autoRotateSpeed;
+    this.orbitControls.dampingFactor = CAMERA_DAMPING_FACTOR;
+    this.orbitControls.enableDamping = true;
+    this.orbitControls.enablePan = false;
+    this.orbitControls.enableRotate = enableRotate;
+    this.orbitControls.enableZoom = enableZoom;
+    this.orbitControls.maxDistance = RADIUS * maxDistanceRadiusScale;
+    this.orbitControls.maxPolarAngle = maxPolarAngle;
+    this.orbitControls.minDistance = RADIUS * CAMERA_MIN_DISTANCE_RADIUS_SCALE;
+    this.orbitControls.minPolarAngle = minPolarAngle;
+    this.orbitControls.rotateSpeed = rotateSpeed;
+    this.orbitControls.zoomSpeed = zoomSpeed;
   }
 
   updateFocus(
     focus: Coordinates,
     focusOptions: Optional<FocusOptions> = {},
+    autoDefocus = false,
   ): void {
     this.updateOptions(focusOptions, 'focus');
     this.focus = focus;
@@ -350,24 +363,13 @@ export default class Globe {
       distanceRadiusScale,
       easingFunction,
     } = this.options.focus;
-    const {
-      enableAutoRotate,
-      maxPolarAngle,
-      minPolarAngle,
-    } = this.options.camera;
 
-    if (this.frozen) {
+    if (this.isFrozen) {
       return;
     }
 
     if (this.focus) {
       // disable orbit controls when focused
-      this.updateOrbitControls({
-        autoRotate: false,
-        enabled: false,
-        maxPolarAngle: CAMERA_MAX_POLAR_ANGLE,
-        minPolarAngle: CAMERA_MIN_POLAR_ANGLE,
-      });
       const from: Position = [
         this.camera.position.x,
         this.camera.position.y,
@@ -384,11 +386,15 @@ export default class Globe {
         animationDuration,
         easingFunction,
         () => {
-          this.isInteractionDisabled = true;
+          this.enableOrbitControls(false);
           this.camera.position.set(...from);
         },
         () => {
-          this.isInteractionDisabled = false;
+          if (autoDefocus) {
+            this.focus = undefined;
+            this.preFocusPosition = undefined;
+          }
+          this.enableOrbitControls(true, autoDefocus);
         },
       );
     } else {
@@ -405,18 +411,12 @@ export default class Globe {
           animationDuration,
           easingFunction,
           () => {
-            this.isInteractionDisabled = true;
+            this.enableOrbitControls(false);
             this.camera.position.set(...from);
           },
           () => {
-            this.updateOrbitControls({
-              autoRotate: enableAutoRotate,
-              enabled: true,
-              maxPolarAngle,
-              minPolarAngle,
-            });
             this.preFocusPosition = undefined;
-            this.isInteractionDisabled = false;
+            this.enableOrbitControls(true);
           },
         );
       }
@@ -578,53 +578,43 @@ export default class Globe {
           const from = { size: 0 };
           const to = { size };
           const mesh = new Mesh();
-          tween(
-            from,
-            to,
-            enterAnimationDuration,
-            enterEasingFunction,
-            () => {
-              this.isInteractionDisabled = true;
-              switch (type) {
-                case MarkerType.Bar:
-                  mesh.geometry = new BoxGeometry(
-                    unitRadius,
-                    unitRadius,
-                    from.size,
+          tween(from, to, enterAnimationDuration, enterEasingFunction, () => {
+            switch (type) {
+              case MarkerType.Bar:
+                mesh.geometry = new BoxGeometry(
+                  unitRadius,
+                  unitRadius,
+                  from.size,
+                );
+                mesh.material = new MeshLambertMaterial({
+                  color,
+                });
+                break;
+              case MarkerType.Dot:
+              default:
+                mesh.geometry = new SphereGeometry(
+                  from.size,
+                  MARKER_SEGMENTS,
+                  MARKER_SEGMENTS,
+                );
+                mesh.material = new MeshBasicMaterial({ color });
+                if (enableGlow) {
+                  // add glow
+                  const glowMesh = createGlowMesh(
+                    mesh.geometry.clone() as THREE.Geometry,
+                    {
+                      backside: false,
+                      color,
+                      coefficient: glowCoefficient,
+                      power: glowPower,
+                      size: from.size * glowRadiusScale,
+                    },
                   );
-                  mesh.material = new MeshLambertMaterial({
-                    color,
-                  });
-                  break;
-                case MarkerType.Dot:
-                default:
-                  mesh.geometry = new SphereGeometry(
-                    from.size,
-                    MARKER_SEGMENTS,
-                    MARKER_SEGMENTS,
-                  );
-                  mesh.material = new MeshBasicMaterial({ color });
-                  if (enableGlow) {
-                    // add glow
-                    const glowMesh = createGlowMesh(
-                      mesh.geometry.clone() as THREE.Geometry,
-                      {
-                        backside: false,
-                        color,
-                        coefficient: glowCoefficient,
-                        power: glowPower,
-                        size: from.size * glowRadiusScale,
-                      },
-                    );
-                    mesh.children = [];
-                    mesh.add(glowMesh);
-                  }
-              }
-            },
-            () => {
-              this.isInteractionDisabled = false;
-            },
-          );
+                  mesh.children = [];
+                  mesh.add(glowMesh);
+                }
+            }
+          });
           markerObject = mesh;
         }
 
@@ -653,10 +643,6 @@ export default class Globe {
       // update existing marker objects
       markerObject = this.markerObjects.getObjectByName(markerCoordinatesKey);
       const handleClick = (event: InteractionEvent): void => {
-        if (this.isInteractionDisabled) {
-          this.tooltip.hide();
-          return;
-        }
         event.stopPropagation();
         this.updateFocus(marker.coordinates);
         this.callbacks.onClickMarker(
@@ -669,7 +655,7 @@ export default class Globe {
       markerObject.on('click', handleClick.bind(this));
       markerObject.on('touchstart', handleClick.bind(this));
       markerObject.on('mousemove', event => {
-        if (this.isInteractionDisabled) {
+        if (this.isFocusing()) {
           this.tooltip.hide();
           return;
         }
@@ -713,13 +699,11 @@ export default class Globe {
         exitAnimationDuration,
         exitEasingFunction,
         () => {
-          this.isInteractionDisabled = true;
           if (markerObject) {
             markerObject.scale.set(...from);
           }
         },
         () => {
-          this.isInteractionDisabled = false;
           this.markerObjects.remove(markerObject);
         },
       );
@@ -736,22 +720,10 @@ export default class Globe {
     };
   }
 
-  updateOrbitControls(orbitControlOptions: Optional<OrbitControls> = {}): void {
-    Object.keys(orbitControlOptions).forEach(key => {
-      this.orbitControls[key] = orbitControlOptions[key];
-    });
-  }
-
-  freeze(): void {
-    this.frozen = true;
-    this.updateOrbitControls({ enabled: false });
-    cancelAnimationFrame(this.animationFrameId);
-  }
-
   unfreeze(): void {
-    if (this.frozen) {
-      this.frozen = false;
-      this.updateOrbitControls({ enabled: true });
+    if (this.isFrozen) {
+      this.isFrozen = false;
+      this.enableOrbitControls(true);
       this.animate();
     }
   }

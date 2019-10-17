@@ -1,7 +1,7 @@
 import {
   defaultLightOptions,
   LightOptionsProp as Props,
-} from '../usage/ReactGlobe';
+} from '../examples/ReactGlobe';
 
 export default function LightOptionsProp(_props: Props): JSX.Element {
   return null;

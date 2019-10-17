@@ -5,7 +5,7 @@ route: /props
 
 import { Props } from "docz";
 
-import ReactGlobe from "../usage/ReactGlobe";
+import ReactGlobe from "../examples/ReactGlobe";
 import AnimationProp from "./AnimationProp";
 import CameraOptionsProp from "./CameraOptionsProp";
 import FocusOptionsProp from "./FocusOptionsProp";
@@ -19,13 +19,13 @@ import MarkerOptionsProp from "./MarkerOptionsProp";
 
 This section outlines the common props and types that should be used when working with the component.
 
-## Component
+## Component Props
 
 <Props of={ReactGlobe} />
 
-## `CameraOptionsProp`
+## `cameraOptions` Prop
 
-Use the `cameraOptionsProp` to control the globe camera (i.e. how the globe is viewed). You can pass any number of option fields. Default options can be imported with:
+Use the `cameraOptions` prop to control the globe camera (i.e. how the globe is viewed). You can pass any number of option fields. Default options can be imported with:
 
 ```js
 import { defaultCameraOptions } from "react-globe";
@@ -33,9 +33,9 @@ import { defaultCameraOptions } from "react-globe";
 
 <Props of={CameraOptionsProp} />
 
-## `FocusOptionsProp`
+## `focusOptions` Prop
 
-Use the `focusOptionsProp` to control how focused coordinates behave. You can pass any number of option fields. Default options can be imported with:
+Use the `focusOptions` prop to control how focused coordinates behave. You can pass any number of option fields. Default options can be imported with:
 
 ```js
 import { defaultFocusOptions } from "react-globe";
@@ -43,9 +43,9 @@ import { defaultFocusOptions } from "react-globe";
 
 <Props of={FocusOptionsProp} />
 
-## `GlobeOptionsProp`
+## `globeOptions` Prop
 
-Use the `globeOptionsProp` to control the looks and behaviors of the globe. You can pass any number of option fields. Default options can be imported with:
+Use the `globeOptions` prop to control the looks and behaviors of the globe. You can pass any number of option fields. Default options can be imported with:
 
 ```js
 import { defaultGlobeOptions } from "react-globe";
@@ -53,9 +53,9 @@ import { defaultGlobeOptions } from "react-globe";
 
 <Props of={GlobeOptionsProp} />
 
-## `LightOptionsProp`
+## `lightOptions` Prop
 
-Use the `lightOptionsProp` to control the color and intensity values of ambient and point lights. The ambient light illuminates all objects in the scene equally while the point light provides a source of light emitting from a single point. You can pass any number of option fields. Default options can be imported with:
+Use the `lightOptions` prop to control the color and intensity values of ambient and point lights. The ambient light illuminates all objects in the scene equally while the point light provides a source of light emitting from a single point. You can pass any number of option fields. Default options can be imported with:
 
 ```js
 import { defaultLightOptions } from "react-globe";
@@ -63,9 +63,9 @@ import { defaultLightOptions } from "react-globe";
 
 <Props of={LightOptionsProp} />
 
-## `MarkerOptionsProp`
+## `markerOptions` Prop
 
-Use the `markerOptionsProp` to control the looks and behavior of markers. If you provide a valid marker `type` (e.g. `bar`, `dot`), `react-globe` will render the corresponding supported marker. You can pass any number of option fields. Default options can be imported with:
+Use the `markerOptions` prop to control the looks and behavior of markers. If you provide a valid marker `type` (e.g. `bar`, `dot`), `react-globe` will render the corresponding supported marker. You can pass any number of option fields. Default options can be imported with:
 
 ```js
 import {
@@ -145,6 +145,8 @@ Easing functions are specified using two array parameters and define animations 
 
 `react-globe` provides the ability to work with the underlying `Globe` class instance (via the `Globe` named export or the `onGetGlobeInstance` prop).
 
-Shown below is a summary of class variables and methods exposed on the `Globe` class. Note that these class interfaces and APIs are **less stable** than the component APIs. Therefore, it is **strongly recommended** that people still use the component props to control globe behaviors. That being said, the `Globe` class provides a powerful escape hatch to control globe behaviors outside of React lifecycles if you need the flexibility.
+Shown below is a summary of class variables and methods exposed on the `Globe` class.
 
 <Props of={GlobeProp} />
+
+> Note that the `Globe` instance APIs are **less stable** than the `ReactGlobe` component APIs. Therefore, it is **strongly recommended** that you still use the component props to control globe behaviors.

@@ -34,10 +34,10 @@ export interface Props {
   focusOptions?: FocusOptionsProp;
   /** Configure globe options (e.g. textures, background, clouds, glow). */
   globeOptions?: GlobeOptionsProp;
-  /** Configure light options (e.g. ambient and point light colors/intensity). */
-  lightOptions?: LightOptionsProp;
   /** Initial [lat, lon] coordinates for the globe. */
   initialCoordinates?: Coordinates;
+  /** Configure light options (e.g. ambient and point light colors/intensity). */
+  lightOptions?: LightOptionsProp;
   /** An array of data that will render interactive markers on the globe. */
   markers?: Marker[];
   /** Configure marker options (e.g. tooltips, size, marker types, custom marker renderer). */
@@ -46,7 +46,7 @@ export interface Props {
   onClickMarker?: MarkerCallback;
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates and pointer event. */
   onDefocus?: FocusCallback;
-  /** Callback to capture the Globe class instance */
+  /** Callback to capture the Globe class instance. */
   onGetGlobeInstance?: (globe: Globe) => void;
   /** Callback to handle mouseout events of a marker.  Captures the previously hovered marker, ThreeJS object and pointer event. */
   onMouseOutMarker?: MarkerCallback;
@@ -164,7 +164,7 @@ ReactGlobe.defaultProps = {
   focusOptions: defaultFocusOptions,
   globeOptions: defaultGlobeOptions,
   lightOptions: defaultLightOptions,
-  initialCoordinates: [1.3521, 103.8198],
+  initialCoordinates: [37.773972, -122.431297],
   markers: [],
   markerOptions: defaultMarkerOptions,
 };

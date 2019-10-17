@@ -2,7 +2,7 @@
 
 ## [4.0.0](https://github.com/chrisrzhou/react-globe/compare/v3.1.1...v4.0.0) (2019-10-13)
 
-`v4.0.0` brings huge features and improvements!
+`v4.0.0` brings huge improvements to marker transition behaviors and other features!
 
 ### Features and Improvements
 
@@ -10,7 +10,9 @@
 - Globe avoids resetting and re-rendering when props change.
 - Globe animations are better optimized and less 'lag' is encountered.
 - Additional named exports (e.g. `Globe`, `Tooltip`) empower useful ways to work with `react-globe`.
-- You can now retrieve the `Globe` instance via the `onGetGlobeInstance` prop, which allows you to fully access and control the `Globe` class outside of the React lifecycle. Note that we still **strongly recommend** that you keep to React props to control behaviors of the globe.
+- You can now retrieve the `Globe` instance via the `onGetGlobeInstance` prop, which allows you to fully access and control the `Globe` class outside of the React lifecycle.
+  - This also opens up powerful new ways to work with the globe (e.g. `freeze` and `unfreeze` methods).
+  - Note that we still **strongly recommend** that you keep to React props to control behaviors of the globe.
 - Updated docs and examples.
 
 ### Breaking Changes
@@ -19,6 +21,7 @@
 - Some exported Typescript types have changed. Address and import the relevant types accordingly. Noticeably, all `*Options` prop are now explicitly renamed to `*OptionsProp`. The former is used internally in the codebase while the `*OptionsProp` supports specifying optional option key/value pair in the component props.
 - The underlying `defaultCameraOptions` values are updated to reflect changes in dependent libraries. You might need to update these option values if custom values were previously used.
 - Tooltip behaviors have changed slightly to improve rendering performance. Tooltips are auto-disabled on non-interactable scenarios (e.g. focusing, animating).
+- `globeOptions.cloudsSpeed` option is removed because it was not very useful, and was overcomplicating the animation cycle. We should explore a better way to implement/customize cloud speeds in every rotation axis in the future.
 
 ### Internal Changes
 

@@ -30,7 +30,7 @@ export const MARKER_ACTIVE_ANIMATION_EASING_FUNCTION: EasingFunction = [
 ];
 
 export const defaultCameraOptions: CameraOptions = {
-  autoRotateSpeed: 0.2,
+  autoRotateSpeed: 0.1,
   distanceRadiusScale: 3,
   enableAutoRotate: true,
   enableRotate: true,
@@ -52,7 +52,6 @@ export const defaultFocusOptions: FocusOptions = {
 export const defaultGlobeOptions: GlobeOptions = {
   backgroundTexture:
     'https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/background.png',
-  cloudsSpeed: 0.5,
   cloudsOpacity: 0.3,
   cloudsTexture:
     'https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/clouds.png',
@@ -92,7 +91,7 @@ export const defaultDotMarkerOptions: MarkerOptions = {
 };
 
 export const defaultBarMarkerOptions: MarkerOptions = {
-  activeScale: 1.05,
+  activeScale: 1.02,
   enableGlow: false,
   enableTooltip: true,
   enterAnimationDuration: 2000,

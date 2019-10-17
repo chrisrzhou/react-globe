@@ -32,7 +32,7 @@ export default {
     { name: 'Github', href: 'https://github.com/chrisrzhou/react-globe' },
   ],
   public: '/public',
-  title: `🌍 ${pkg.name} (v${pkg.version})`,
+  title: `🌎 ${pkg.name} (v${pkg.version})`,
   themeConfig: {
     showPlaygroundEditor: true,
   },

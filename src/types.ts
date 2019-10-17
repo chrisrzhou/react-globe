@@ -160,8 +160,6 @@ export interface GlobeOptions {
   backgroundTexture: string;
   /** Opacity of clouds with values from 0 to 1. */
   cloudsOpacity: number;
-  /** Speed of clouds. */
-  cloudsSpeed: number;
   /** Cloud texture.  Accepts a URL or image data. */
   cloudsTexture: string;
   /** Enable background.  If disabled, the canvas will be transparent, allowing use of custom styled backgrounds. */

@@ -1,6 +1,6 @@
 ---
 name: Markers
-route: /usage/markers
+route: /examples/markers
 menu: Examples
 ---
 
@@ -36,21 +36,16 @@ We will be using the following `markers` dataset for the examples:
 import { defaultBarMarkerOptions, defaultDotMarkerOptions } from "react-globe";
 ```
 
+### Dot Markers
+
 <Playground>
-  {() => {
-    const [markerType, setMarkerType] = useState("point");
-    const markerOptions =
-      markerType === "point"
-        ? defaultDotMarkerOptions
-        : defaultBarMarkerOptions;
-    return (
-      <div>
-        <button onClick={() => setMarkerType("point")}>Point Marker</button>
-        <button onClick={() => setMarkerType("bar")}>Bar Marker</button>
-        <ReactGlobe markers={markers} markerOptions={markerOptions} />
-      </div>
-    );
-  }}
+  <ReactGlobe markers={markers} markerOptions={defaultDotMarkerOptions} />
+</Playground>
+
+### Bar Markers
+
+<Playground>
+  <ReactGlobe markers={markers} markerOptions={defaultBarMarkerOptions} />
 </Playground>
 
 ## Marker Options and Tooltips
@@ -78,6 +73,10 @@ By default, tooltips are enabled for markers and the default value of the toolti
 ## Custom Renderer
 
 If the `renderer` field of the `markerOptions` is provided, `react-globe` will use this callback to render the markers. The return type of `renderer` has to be an instance of `THREE.Object3D`. `react-globe` will still handle placing the markers and supporting focus/defocus and pointer events. This is an extremely powerful data-driven way to render custom objects on the globe. Go crazy!
+
+![image](../../public/react-globe-custom-marker-renderer.gif)
+
+[![Edit react-globe-interactive](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/knhlr)
 
 <Playground>
   <ReactGlobe

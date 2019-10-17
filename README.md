@@ -1,20 +1,15 @@
-# 🌍 react-globe
+# 🌎 react-globe
 
 Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
 ![image](/public/react-globe.gif)
 
-## Todos
-
-- [ ] Write docs for `Globe` instance and `Marker Transition`.
-- [ ] Fix bug where updating `cloudsSpeed` and `markerOptions` does not update
-
 ## Features
 
 - ✨ Beautiful and complete with clouds, backgrounds and lighting.
 - ✌️ Incredibly simple to use and configure.
-- 📍 Render interactive markers on the globe with simple data.
-- 🤸‍ Easy globe animations and marker transitions.
+- 📍 Render interactive markers on the globe using simple data.
+- 🎞 Easy globe animations and marker transitions.
 - ⚛️ Modern Javascript + build tools.
 
 ## Install
@@ -84,7 +79,7 @@ Feel free to contribute by submitting a pull request.
 
 ### Codebase Overview
 
-- `ReactGlobe.tsx`: Core React component exposing relevant props that controls the `Globe` rendering.
+- `ReactGlobe.tsx`: Core React component exposing relevant props controlling the `Globe` instance.
 - `Globe.ts`: Primary ThreeJS rendering logic written as a `Globe` class.
 - `Tooltip.ts`: Tooltip component powered by `tippy.js`.
 - `types.ts`: Typescript types.

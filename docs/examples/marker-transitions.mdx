@@ -1,0 +1,64 @@
+---
+name: Marker Transitions
+route: /examples/marker-transitions
+menu: Examples
+---
+
+import { Playground } from "docz";
+import { useState } from "react";
+
+import defaultMarkers from "./markers";
+import ReactGlobe from "./ReactGlobe";
+
+# Marker Transitions
+
+`react-globe` provides an intuitive way to transition markers when the underlying data changes. The transition pattern is inspired by [Mike Bostock's general update pattern](https://observablehq.com/@d3/selection-join) and uses the underlying string representation of the marker's coordinates as a data key to detect if markers should be added, updated, or removed.
+
+The example below demonstrates creating randomized markers:
+
+- Click on the `Randomize markers` button to render an initial set of markers to the globe.
+- Hover over the markers and keep a mental note of the random numbers assigned.
+- Click the `Randomize markers` again. You will notice that there are no visual changes. This is because the markers, identified uniquely by their coordinates, already exist on the globe.
+- Hover over the markers and note that the random numbers have changed. This confirms that the markers are capturing the updated data changes.
+- Click on the `Remove marker` or `Clear markers` button to observe how exit transitions are managed.
+- And finally, you can observe how individual markers are animated one by one using the `Add marker` button.
+
+<Playground>
+  {() => {
+    const randomMarkers = defaultMarkers.map(marker => ({
+      ...marker,
+      tooltip: `Random number: ${Math.random().toFixed(3)}`
+    }));
+    const [markers, setMarkers] = useState([]);
+    return (
+      <div>
+        <button onClick={() => setMarkers(randomMarkers)}>
+          Randomize markers
+        </button>
+        <button onClick={() => setMarkers([])}>Clear markers</button>
+        <button
+          disabled={markers.length === randomMarkers.length}
+          onClick={() =>
+            setMarkers([...markers, randomMarkers[markers.length]])
+          }
+        >
+          Add marker
+        </button>
+        <button
+          disabled={markers.length === 0}
+          onClick={() => setMarkers(markers.slice(0, markers.length - 1))}
+        >
+          Remove marker
+        </button>
+        <ReactGlobe
+          markers={markers}
+          markerOptions={{
+            enableGlow: false,
+            getTooltipContent: marker => marker.tooltip,
+            radiusScaleRange: [0.02, 0.05]
+          }}
+        />
+      </div>
+    );
+  }}
+</Playground>

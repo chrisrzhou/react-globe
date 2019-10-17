@@ -1,6 +1,6 @@
 ---
 name: Animations
-route: /usage/animations
+route: /examples/animations
 menu: Examples
 ---
 
@@ -19,7 +19,7 @@ import ReactGlobe from "./ReactGlobe";
     const [animationSequence, setAnimationSequence] = useState();
     let animations = [];
     switch (animationSequence) {
-      case "Universal Studios":
+      case "singapore":
         animations = [
           {
             animationDuration: 5000,
@@ -29,7 +29,7 @@ import ReactGlobe from "./ReactGlobe";
           }
         ];
         break;
-      case "Travel Plans":
+      case "world":
         animations = [
           {
             animationDuration: 5000,
@@ -74,11 +74,11 @@ import ReactGlobe from "./ReactGlobe";
     }
     return (
       <div>
-        <button onClick={() => setAnimationSequence("Universal Studios")}>
-          Universal Studios
+        <button onClick={() => setAnimationSequence("singapore")}>
+          Go to Singapore
         </button>
-        <button onClick={() => setAnimationSequence("Travel Plans")}>
-          Travel Plans
+        <button onClick={() => setAnimationSequence("world")}>
+          Travel the world
         </button>
         <ReactGlobe
           animations={animations}
