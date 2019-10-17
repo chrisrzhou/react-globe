@@ -36,6 +36,7 @@ import {
   defaultLightOptions,
   defaultMarkerOptions,
   GLOBE_SEGMENTS,
+  INITIAL_COORDINATES,
   MARKER_ACTIVE_ANIMATION_DURATION,
   MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
   MARKER_DEFAULT_COLOR,
@@ -198,7 +199,6 @@ export default class Globe {
     this.camera = camera;
     this.focus = undefined;
     this.globe = globe;
-    this.initialCoordinates = undefined;
     this.isFrozen = false;
     this.markerObjects = markerObjects;
     this.options = defaultOptions;
@@ -207,6 +207,18 @@ export default class Globe {
     this.renderer = renderer;
     this.scene = scene;
     this.tooltip = tooltip;
+
+    // update objects
+    this.updateCallbacks();
+    this.updateCamera();
+    this.updateFocus();
+    this.updateGlobe({
+      enableBackground: false,
+      enableClouds: false,
+    });
+    this.updateLights();
+    this.updateMarkers();
+    this.updateSize();
   }
 
   animate(): void {
@@ -292,13 +304,6 @@ export default class Globe {
     TWEEN.update();
   }
 
-  resize(size: Size): void {
-    const [width, height] = size;
-    this.renderer.setSize(width, height);
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
-  }
-
   updateCallbacks(callbacks: Optional<Callbacks> = {}): void {
     Object.keys(defaultCallbacks).forEach(key => {
       this.callbacks[key] = callbacks[key] || defaultCallbacks[key];
@@ -306,7 +311,7 @@ export default class Globe {
   }
 
   updateCamera(
-    initialCoordinates: Coordinates,
+    initialCoordinates: Coordinates = INITIAL_COORDINATES,
     cameraOptions: Optional<CameraOptions> = {},
   ): void {
     this.updateOptions(cameraOptions, 'camera');
@@ -351,7 +356,7 @@ export default class Globe {
   }
 
   updateFocus(
-    focus: Coordinates,
+    focus?: Coordinates,
     focusOptions: Optional<FocusOptions> = {},
     autoDefocus = false,
   ): void {
@@ -528,7 +533,7 @@ export default class Globe {
   }
 
   updateMarkers(
-    markers: Marker[],
+    markers: Marker[] = [],
     markerOptions: Optional<MarkerOptions> = {},
   ): void {
     this.updateOptions(markerOptions, 'marker');
@@ -718,6 +723,15 @@ export default class Globe {
         ...options,
       },
     };
+  }
+
+  updateSize(size?: Size): void {
+    if (size) {
+      const [width, height] = size;
+      this.renderer.setSize(width, height);
+      this.camera.aspect = width / height;
+    }
+    this.camera.updateProjectionMatrix();
   }
 
   unfreeze(): void {

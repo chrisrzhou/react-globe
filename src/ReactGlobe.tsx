@@ -6,6 +6,7 @@ import {
   defaultGlobeOptions,
   defaultLightOptions,
   defaultMarkerOptions,
+  INITIAL_COORDINATES,
 } from './defaults';
 import Globe from './Globe';
 import {
@@ -147,7 +148,7 @@ export default function ReactGlobe({
 
   // resize
   useEffect(() => {
-    globeInstanceRef.current.resize(size);
+    globeInstanceRef.current.updateSize(size);
   }, [size]);
 
   return (
@@ -164,7 +165,7 @@ ReactGlobe.defaultProps = {
   focusOptions: defaultFocusOptions,
   globeOptions: defaultGlobeOptions,
   lightOptions: defaultLightOptions,
-  initialCoordinates: [37.773972, -122.431297],
+  initialCoordinates: INITIAL_COORDINATES,
   markers: [],
   markerOptions: defaultMarkerOptions,
 };

@@ -116,8 +116,9 @@ The `Globe` named export allows you to create globe visualizations with vanilla 
       // create and initialize globe instance
       const globeInstance = new Globe(canvas, tooltipDiv);
       mount.appendChild(globeInstance.renderer.domElement);
-      globeInstance.updateCamera([[37.773972, -122.431297]]);
-      globeInstance.resize([800, 400]);
+      // call any update method
+      globeInstance.updateSize([800, 400]);
+      globeInstance.updateLights({ ambientLightColor: "red" });
       globeInstance.animate();
     });
     return <div id="react-globe-instance" />;

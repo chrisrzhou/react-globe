@@ -1,6 +1,6 @@
 # Change Log
 
-## [4.0.0](https://github.com/chrisrzhou/react-globe/compare/v3.1.1...v4.0.0) (2019-10-13)
+## [4.0.0](https://github.com/chrisrzhou/react-globe/compare/v3.1.1...v4.0.0) (2019-10-17)
 
 `v4.0.0` brings huge improvements to marker transition behaviors and other features!
 

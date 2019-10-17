@@ -1,5 +1,6 @@
 import {
   CameraOptions,
+  Coordinates,
   EasingFunction,
   FocusOptions,
   GlobeOptions,
@@ -20,6 +21,7 @@ export const CAMERA_MIN_POLAR_ANGLE = 0;
 export const CAMERA_MIN_DISTANCE_RADIUS_SCALE = 1.1;
 export const CLOUDS_RADIUS_OFFSET = 1;
 export const GLOBE_SEGMENTS = 50;
+export const INITIAL_COORDINATES: Coordinates = [37.773972, -122.431297];
 export const MARKER_DEFAULT_COLOR = 'gold';
 export const MARKER_SEGMENTS = 10;
 export const MARKER_UNIT_RADIUS_SCALE = 0.01;
