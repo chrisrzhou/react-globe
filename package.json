@@ -40,6 +40,8 @@
     "@types/d3-scale": "^2.1.1",
     "d3-scale": "^3.0.0",
     "es6-tween": "^5.5.10",
+    "expo-graphics": "^1.1.0",
+    "expo-three": "^5.2.0",
     "resize-observer-polyfill": "^1.5.1",
     "three-glow-mesh": "^0.1.1",
     "three-orbitcontrols": "^2.108.1",

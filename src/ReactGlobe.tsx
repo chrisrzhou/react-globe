@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from 'react';
+import { View as GraphicsView } from 'expo-graphics';
+import ExpoTHREE, { THREE } from 'expo-three';
 
 import {
   defaultCameraOptions,
@@ -77,10 +79,10 @@ export default function ReactGlobe({
   onTextureLoaded,
   size: initialSize,
 }: Props): JSX.Element {
-  const canvasRef = useRef<HTMLCanvasElement>();
-  const globeInstanceRef = useRef<Globe>();
-  const mountRef = useRef<HTMLDivElement>();
-  const tooltipRef = useRef<HTMLDivElement>();
+  const canvasRef= useRef();
+  const globeInstanceRef = useRef();
+  const mountRef = useRef();
+  const tooltipRef = useRef();
   const size = useResize(mountRef, initialSize);
 
   // init
