@@ -155,7 +155,9 @@ export default function ReactGlobe({
 
   return (
     <div ref={mountRef} style={{ height: '100%', width: '100%' }}>
-      <canvas ref={canvasRef} style={{ display: 'block' }} />
+      <GraphicsView
+        onRender={this.canvasRef}
+      />
       <div ref={tooltipRef} />
     </div>
   );
