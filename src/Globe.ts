@@ -450,29 +450,28 @@ export default class Globe {
     const globeClouds = this.getObjectByName(ObjectName.GlobeClouds) as Mesh;
     const globeSphere = this.getObjectByName(ObjectName.GlobeSphere) as Mesh;
 
-    new TextureLoader().load(texture, map => {
-      globeSphere.geometry = new SphereGeometry(
-        RADIUS,
-        GLOBE_SEGMENTS,
-        GLOBE_SEGMENTS,
-      );
-      globeSphere.material = new MeshLambertMaterial({
-        map,
-      });
-      if (enableGlow) {
-        globeSphere.remove(this.getObjectByName(ObjectName.GlobeGlow));
-        const globeGlow = createGlowMesh(globeSphere.geometry, {
-          backside: true,
-          color: glowColor,
-          coefficient: glowCoefficient,
-          power: glowPower,
-          size: RADIUS * glowRadiusScale,
-        });
-        globeGlow.name = ObjectName.GlobeGlow;
-        globeSphere.add(globeGlow);
-      }
-      this.callbacks.onTextureLoaded();
+    let map = new TextureLoader().load(texture);
+    globeSphere.geometry = new SphereGeometry(
+      RADIUS,
+      GLOBE_SEGMENTS,
+      GLOBE_SEGMENTS,
+    );
+    globeSphere.material = new MeshLambertMaterial({
+      map,
     });
+    if (enableGlow) {
+      globeSphere.remove(this.getObjectByName(ObjectName.GlobeGlow));
+      const globeGlow = createGlowMesh(globeSphere.geometry, {
+        backside: true,
+        color: glowColor,
+        coefficient: glowCoefficient,
+        power: glowPower,
+        size: RADIUS * glowRadiusScale,
+      });
+      globeGlow.name = ObjectName.GlobeGlow;
+      globeSphere.add(globeGlow);
+    }
+    this.callbacks.onTextureLoaded();
 
     if (enableBackground) {
       new TextureLoader().load(backgroundTexture, map => {
@@ -730,6 +729,7 @@ export default class Globe {
       const [width, height] = size;
       this.renderer.setSize(width, height);
       this.camera.aspect = width / height;
+      this.camera.fov = (height > width) ? (height / width) * CAMERA_FOV : CAMERA_FOV;
     }
     this.camera.updateProjectionMatrix();
   }
