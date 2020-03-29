@@ -13,7 +13,7 @@ import {
 export const RADIUS = 300;
 export const BACKGROUND_RADIUS_SCALE = 10;
 export const CAMERA_FAR = RADIUS * 100;
-export const CAMERA_FOV = 45;
+export const CAMERA_FOV = 66;
 export const CAMERA_NEAR = 1;
 export const CAMERA_DAMPING_FACTOR = 0.1;
 export const CAMERA_MAX_POLAR_ANGLE = Math.PI;
