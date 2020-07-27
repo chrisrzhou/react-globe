@@ -3,11 +3,12 @@ import pkg from './package.json';
 export default {
   description: pkg.description,
   dest: 'dist/docs',
+  editBranch: 'main',
   htmlContext: {
     favicon: null,
   },
   menu: [
-    'README',
+    'readme',
     'Props',
     {
       name: 'Examples',
@@ -28,13 +29,12 @@ export default {
       name: 'Gallery',
       menu: ['Submissions', 'Google Globe Trends'],
     },
-    'CHANGELOG',
-    { name: 'Github', href: 'https://github.com/chrisrzhou/react-globe' },
+    'changelog',
   ],
-  public: '/public',
-  title: `🌎 ${pkg.name} (v${pkg.version})`,
+  public: 'public',
   themeConfig: {
     showPlaygroundEditor: true,
   },
+  title: `🌎 ${pkg.name} (v${pkg.version})`,
   typescript: true,
 };

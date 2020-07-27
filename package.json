@@ -27,14 +27,12 @@
   "homepage": "https://react-globe.netlify.com/",
   "scripts": {
     "build": "rollup -c",
-    "build:docs": "yarn docz build",
-    "clean": "rm -rf dist .docz",
-    "dev": "yarn docz dev",
-    "lint": "yarn tsc && eslint --ext .js,.jsx,.ts,.tsx src docs",
-    "lint:fix": "yarn lint --fix",
-    "prepare": "yarn clean && yarn build",
-    "size": "bundlesize",
-    "unused": "yarn no-unused-export src/*.ts* --exclude src/*.d.ts"
+    "build:docs": "docz build",
+    "clean": "rm -rf dist",
+    "clean:docs": "rm -rf .docz",
+    "docs": "docz dev",
+    "lint": "eslint --ext  --fix .js,.jsx,.ts,.tsx src docs; tsc",
+    "prepare": "npm run clean; npm run build"
   },
   "dependencies": {
     "@types/d3-scale": "^2.1.1",
@@ -55,7 +53,6 @@
     "@types/react": "^16.9.5",
     "@typescript-eslint/eslint-plugin": "^2.3.3",
     "@typescript-eslint/parser": "^2.3.3",
-    "bundlesize": "^0.18.0",
     "docz": "^1.2.0",
     "docz-theme-default": "^1.2.0",
     "eslint": "^6.5.1",
@@ -63,7 +60,6 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.1.2",
-    "no-unused-export": "^1.10.0",
     "prettier": "^1.18.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
