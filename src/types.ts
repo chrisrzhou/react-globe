@@ -1,6 +1,5 @@
 import { Object3D, Scene } from 'three';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Any = any;
 
 export type Optional<T> = {
@@ -27,14 +26,14 @@ export enum ObjectName {
 }
 
 export interface Marker {
+  /** Any other custom fields */
+  [customField: string]: Any;
   /** Color of the marker. */
   color?: string;
   /** [lat, lon] coordinates of the marker. */
   coordinates: Coordinates;
   /** Numeric value used to determine the size of the marker. */
   value: number;
-  /** Any other custom fields */
-  [customField: string]: Any;
 }
 
 export enum MarkerType {

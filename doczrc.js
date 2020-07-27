@@ -8,10 +8,10 @@ export default {
     favicon: null,
   },
   menu: [
-    'README',
+    'Readme',
     'Props',
     {
-      name: 'Examples',
+      name: 'Usage',
       menu: [
         'Globe',
         'Textures',
@@ -29,7 +29,7 @@ export default {
       name: 'Gallery',
       menu: ['Submissions', 'Google Globe Trends'],
     },
-    'CHANGELOG',
+    'Changelog',
   ],
   modifyBundlerConfig: bundlerConfig => {
     const rules = [

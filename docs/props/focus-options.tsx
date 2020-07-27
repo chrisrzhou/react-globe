@@ -1,7 +1,7 @@
 import {
-  defaultFocusOptions,
   FocusOptionsProp as Props,
-} from '../examples/ReactGlobe';
+  defaultFocusOptions,
+} from '../usage/react-globe';
 
 export default function FocusOptionsProp(_props: Props): JSX.Element {
   return null;

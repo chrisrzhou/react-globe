@@ -40,14 +40,21 @@ export function minValue<T>(array: T[], callback: (item: T) => number): number {
   return minValue;
 }
 
-export function tween(
-  from: Any,
-  to: Any,
-  animationDuration: number,
-  easingFunction: EasingFunction,
-  onUpdate: () => void,
-  onEnd?: () => void,
-): void {
+export function tween({
+  from,
+  to,
+  animationDuration,
+  easingFunction,
+  onUpdate,
+  onEnd,
+}: {
+  from: Any;
+  to: Any;
+  animationDuration: number;
+  easingFunction: EasingFunction;
+  onUpdate: () => void;
+  onEnd?: () => void;
+}): void {
   new TWEEN.Tween(from)
     .to(to, animationDuration)
     .easing(TWEEN.Easing[easingFunction[0]][easingFunction[1]])

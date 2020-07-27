@@ -1,12 +1,11 @@
 ---
 name: Markers
-route: /examples/markers
-menu: Examples
+menu: Usage
+route: /usage/markers
 ---
 
 import { Playground } from "docz";
 import { useState } from "react";
-
 import {
   BoxGeometry,
   Color,
@@ -14,9 +13,9 @@ import {
   MeshLambertMaterial,
   SphereGeometry
 } from "three";
+
 import markers from "./markers";
-import ReactGlobe from "./ReactGlobe";
-import { defaultBarMarkerOptions, defaultDotMarkerOptions } from "../../src";
+import ReactGlobe, { defaultBarMarkerOptions, defaultDotMarkerOptions } from "./react-globe";
 
 # Markers
 

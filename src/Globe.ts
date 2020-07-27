@@ -44,7 +44,7 @@ import {
   MARKER_UNIT_RADIUS_SCALE,
   RADIUS,
 } from './defaults';
-import Tooltip from './Tooltip';
+import Tooltip from './tooltip';
 import {
   Animation,
   Callbacks,
@@ -73,7 +73,7 @@ import {
   tween,
 } from './utils';
 
-const emptyFunction = (): void => {};
+const emptyFunction = (): void => null;
 
 const defaultCallbacks = {
   onClickMarker: emptyFunction,
@@ -150,6 +150,7 @@ export default class Globe {
     scene.add(globe);
 
     // Add interactions to scene
+    // eslint-disable-next-line no-new
     new Interaction(renderer, scene, camera);
     scene.on('mousemove', (event: InteractionEvent) => {
       if (this.isFocusing()) {
@@ -159,21 +160,21 @@ export default class Globe {
       if (this.activeMarker) {
         const { activeScale } = this.options.marker;
         const from = [activeScale, activeScale, activeScale] as Position;
-        tween(
+        tween({
           from,
-          [1, 1, 1],
-          MARKER_ACTIVE_ANIMATION_DURATION,
-          MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
-          () => {
+          to: [1, 1, 1],
+          animationDuration: MARKER_ACTIVE_ANIMATION_DURATION,
+          easingFunction: MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
+          onUpdate: () => {
             if (this.activeMarkerObject) {
               this.activeMarkerObject.scale.set(...from);
             }
           },
-          () => {
+          onEnd: () => {
             this.activeMarker = undefined;
             this.activeMarkerObject = undefined;
           },
-        );
+        });
         this.callbacks.onMouseOutMarker(
           this.activeMarker,
           this.activeMarkerObject,
@@ -228,7 +229,6 @@ export default class Globe {
     this.animationFrameId = requestAnimationFrame(this.animate.bind(this));
   }
 
-  // TODO: expose a way to customize animating clouds in every axis
   animateClouds(): void {
     const globeClouds = this.getObjectByName(ObjectName.GlobeClouds);
     ['x', 'y', 'z'].forEach(axis => {
@@ -387,16 +387,16 @@ export default class Globe {
         RADIUS * distanceRadiusScale,
       );
       this.preFocusPosition = this.preFocusPosition || ([...from] as Position);
-      tween(
+      tween({
         from,
         to,
         animationDuration,
         easingFunction,
-        () => {
+        onUpdate: () => {
           this.enableOrbitControls(false);
           this.camera.position.set(...from);
         },
-        () => {
+        onEnd: () => {
           if (autoDefocus) {
             this.focus = undefined;
             this.preFocusPosition = undefined;
@@ -404,7 +404,7 @@ export default class Globe {
 
           this.enableOrbitControls(true, autoDefocus);
         },
-      );
+      });
     } else if (this.preFocusPosition) {
       const from: Position = [
         this.camera.position.x,
@@ -412,20 +412,20 @@ export default class Globe {
         this.camera.position.z,
       ];
       const to: Position = this.preFocusPosition;
-      tween(
+      tween({
         from,
         to,
         animationDuration,
         easingFunction,
-        () => {
+        onUpdate: () => {
           this.enableOrbitControls(false);
           this.camera.position.set(...from);
         },
-        () => {
+        onEnd: () => {
           this.preFocusPosition = undefined;
           this.enableOrbitControls(true);
         },
-      );
+      });
     }
   }
 
@@ -578,48 +578,54 @@ export default class Globe {
       let markerObject: InteractableObject3D;
       // Create new marker objects
       if (!markerObjectNames.has(markerCoordinatesKey)) {
-        if (renderer !== undefined) {
-          markerObject = renderer(marker);
-        } else {
+        if (renderer === undefined) {
           const color = marker.color || MARKER_DEFAULT_COLOR;
           const from = { size: 0 };
           const to = { size };
           const mesh = new Mesh();
-          tween(from, to, enterAnimationDuration, enterEasingFunction, () => {
-            switch (type) {
-              case MarkerType.Bar:
-                mesh.geometry = new BoxGeometry(
-                  unitRadius,
-                  unitRadius,
-                  from.size,
-                );
-                mesh.material = new MeshLambertMaterial({
-                  color,
-                });
-                break;
-              case MarkerType.Dot:
-              default:
-                mesh.geometry = new SphereGeometry(
-                  from.size,
-                  MARKER_SEGMENTS,
-                  MARKER_SEGMENTS,
-                );
-                mesh.material = new MeshBasicMaterial({ color });
-                if (enableGlow) {
-                  // Add glow
-                  const glowMesh = createGlowMesh(mesh.geometry.clone(), {
-                    backside: false,
+          tween({
+            from,
+            to,
+            animationDuration: enterAnimationDuration,
+            easingFunction: enterEasingFunction,
+            onUpdate: () => {
+              switch (type) {
+                case MarkerType.Bar:
+                  mesh.geometry = new BoxGeometry(
+                    unitRadius,
+                    unitRadius,
+                    from.size,
+                  );
+                  mesh.material = new MeshLambertMaterial({
                     color,
-                    coefficient: glowCoefficient,
-                    power: glowPower,
-                    size: from.size * glowRadiusScale,
                   });
-                  mesh.children = [];
-                  mesh.add(glowMesh);
-                }
-            }
+                  break;
+                case MarkerType.Dot:
+                default:
+                  mesh.geometry = new SphereGeometry(
+                    from.size,
+                    MARKER_SEGMENTS,
+                    MARKER_SEGMENTS,
+                  );
+                  mesh.material = new MeshBasicMaterial({ color });
+                  if (enableGlow) {
+                    // Add glow
+                    const glowMesh = createGlowMesh(mesh.geometry.clone(), {
+                      backside: false,
+                      color,
+                      coefficient: glowCoefficient,
+                      power: glowPower,
+                      size: from.size * glowRadiusScale,
+                    });
+                    mesh.children = [];
+                    mesh.add(glowMesh);
+                  }
+              }
+            },
           });
           markerObject = mesh;
+        } else {
+          markerObject = renderer(marker);
         }
 
         // Place markers
@@ -665,17 +671,17 @@ export default class Globe {
 
         event.stopPropagation();
         const from = markerObject.scale.toArray() as Position;
-        tween(
+        tween({
           from,
-          [activeScale, activeScale, activeScale],
-          MARKER_ACTIVE_ANIMATION_DURATION,
-          MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
-          () => {
+          to: [activeScale, activeScale, activeScale],
+          animationDuration: MARKER_ACTIVE_ANIMATION_DURATION,
+          easingFunction: MARKER_ACTIVE_ANIMATION_EASING_FUNCTION,
+          onUpdate: () => {
             if (markerObject) {
               markerObject.scale.set(...from);
             }
           },
-        );
+        });
         const { originalEvent } = event.data;
         this.activeMarker = marker;
         this.activeMarkerObject = markerObject;
@@ -697,20 +703,20 @@ export default class Globe {
     );
     markerObjectsToRemove.forEach(markerObject => {
       const from = markerObject.scale.toArray() as Position;
-      tween(
+      tween({
         from,
-        [0, 0, 0],
-        exitAnimationDuration,
-        exitEasingFunction,
-        () => {
+        to: [0, 0, 0],
+        animationDuration: exitAnimationDuration,
+        easingFunction: exitEasingFunction,
+        onUpdate: () => {
           if (markerObject) {
             markerObject.scale.set(...from);
           }
         },
-        () => {
+        onEnd: () => {
           this.markerObjects.remove(markerObject);
         },
-      );
+      });
     });
   }
 

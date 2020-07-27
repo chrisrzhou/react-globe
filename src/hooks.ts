@@ -3,7 +3,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 
 import { Size } from './types';
 
-export default function useResize<T>(
+export function useResize<T>(
   mountRef: React.RefObject<HTMLDivElement>,
   initialSize?: Size,
 ): Size {
@@ -27,7 +27,7 @@ export default function useResize<T>(
 
     // Update resize using a resize observer
     const resizeObserver = new ResizeObserver((entries): void => {
-      if (!entries || !entries.length) {
+      if (!entries || entries.length === 0) {
         return;
       }
 

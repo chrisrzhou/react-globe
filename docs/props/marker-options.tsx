@@ -1,7 +1,7 @@
 import {
-  defaultMarkerOptions,
   MarkerOptionsProp as Props,
-} from '../examples/ReactGlobe';
+  defaultMarkerOptions,
+} from '../usage/react-globe';
 
 export default function MarkerOptionsProp(_props: Props): JSX.Element {
   return null;

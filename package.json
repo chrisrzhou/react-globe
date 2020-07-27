@@ -28,7 +28,7 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.module.js",
-  "source": "index.ts",
+  "source": "index.js",
   "typings": "src/index.d.ts",
   "dependencies": {
     "d3-scale": "^3.0.0",
@@ -74,6 +74,9 @@
   },
   "xo": {
     "prettier": true,
+    "env": [
+      "browser"
+    ],
     "extends": [
       "xo-react"
     ],

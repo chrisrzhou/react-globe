@@ -1,9 +1,9 @@
-export { default } from './ReactGlobe';
+export { default } from './component';
 
-export { default as Globe } from './Globe';
-export { default as Tooltip } from './Tooltip';
+export { default as Globe } from './globe';
+export { default as Tooltip } from './tooltip';
 
-export * from './ReactGlobe';
+export * from './component';
 export * from './defaults';
 export * from './types';
 export * from './utils';

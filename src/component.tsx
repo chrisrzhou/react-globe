@@ -8,7 +8,7 @@ import {
   defaultMarkerOptions,
   INITIAL_COORDINATES,
 } from './defaults';
-import Globe from './Globe';
+import Globe from './globe';
 import {
   Animation,
   CameraOptionsProp,
@@ -22,7 +22,7 @@ import {
   MarkerOptionsProp,
   Size,
 } from './types';
-import useResize from './useResize';
+import { useResize } from './hooks';
 
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
@@ -93,7 +93,9 @@ export default function ReactGlobe({
     mount.append(globeInstance.renderer.domElement);
     globeInstance.animate();
     globeInstanceRef.current = globeInstance;
-    onGetGlobeInstance && onGetGlobeInstance(globeInstance);
+    if (onGetGlobeInstance) {
+      onGetGlobeInstance(globeInstance);
+    }
 
     return (): void => {
       globeInstance.renderer.domElement.remove();

@@ -1,7 +1,7 @@
 import {
-  defaultGlobeOptions,
   GlobeOptionsProp as Props,
-} from '../examples/ReactGlobe';
+  defaultGlobeOptions,
+} from '../usage/react-globe';
 
 export default function GlobeOptionsProp(_props: Props): JSX.Element {
   return null;
