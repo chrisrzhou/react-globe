@@ -1,19 +1,12 @@
 import { Object3D, Scene } from 'three';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Any = any;
-
-export type Optional<T> = {
+export declare type Any = any;
+export declare type Optional<T> = {
   [P in keyof T]?: T[P];
 };
-
-export type Coordinates = [number, number];
-
-export type Position = [number, number, number];
-
-export type Size = [number, number];
-
-export enum ObjectName {
+export declare type Coordinates = [number, number];
+export declare type Position = [number, number, number];
+export declare type Size = [number, number];
+export declare enum ObjectName {
   Camera = 'CAMERA',
   CameraAmbientLight = 'CAMERA_AMBIENT_LIGHT',
   CameraPointLight = 'CAMERA_POINT_LIGHT',
@@ -25,7 +18,6 @@ export enum ObjectName {
   MarkerObjects = 'MARKER_OBJECTS',
   Scene = 'SCENE',
 }
-
 export interface Marker {
   /** Color of the marker. */
   color?: string;
@@ -36,13 +28,11 @@ export interface Marker {
   /** Any other custom fields */
   [customField: string]: Any;
 }
-
-export enum MarkerType {
+export declare enum MarkerType {
   Bar = 'bar',
   Dot = 'dot',
 }
-
-export type EasingFunction =
+export declare type EasingFunction =
   | ['Back', 'In']
   | ['Back', 'Out']
   | ['Back', 'InOut']
@@ -90,7 +80,6 @@ export type EasingFunction =
   | ['Quadratic', 'In']
   | ['Quadratic', 'Out']
   | ['Quadratic', 'InOut'];
-
 export interface Animation {
   /** Duration of the animation. */
   animationDuration: number;
@@ -101,24 +90,19 @@ export interface Animation {
   /** Easing function applied for the animation. */
   easingFunction: EasingFunction;
 }
-
 export interface InteractionEvent extends Event {
   data: {
     originalEvent: PointerEvent;
   };
 }
-
 interface Interactable {
   on?: (
     type: string,
     callback: (interactionEvent: InteractionEvent) => void,
   ) => void;
 }
-
 export interface InteractableObject3D extends Interactable, Object3D {}
-
 export interface InteractableScene extends Interactable, Scene {}
-
 export interface CameraOptions {
   /** Speed of auto-rotation. */
   autoRotateSpeed: number;
@@ -141,8 +125,7 @@ export interface CameraOptions {
   /** Speed of zoom. */
   zoomSpeed: number;
 }
-export type CameraOptionsProp = Optional<CameraOptions>;
-
+export declare type CameraOptionsProp = Optional<CameraOptions>;
 export interface FocusOptions {
   /** Duration of the focus animation. */
   animationDuration: number;
@@ -153,8 +136,7 @@ export interface FocusOptions {
   /** Enable the defocus feature (i.e. clicking the globe after a focus has been applied). */
   enableDefocus: boolean;
 }
-export type FocusOptionsProp = Optional<FocusOptions>;
-
+export declare type FocusOptionsProp = Optional<FocusOptions>;
 export interface GlobeOptions {
   /** Background texture.  Accepts a URL or image data. */
   backgroundTexture: string;
@@ -179,8 +161,7 @@ export interface GlobeOptions {
   /** Globe texture.  Accepts a URL or image data. */
   texture: string;
 }
-export type GlobeOptionsProp = Optional<GlobeOptions>;
-
+export declare type GlobeOptionsProp = Optional<GlobeOptions>;
 export interface LightOptions {
   /** Ambient light color. */
   ambientLightColor: string;
@@ -193,8 +174,7 @@ export interface LightOptions {
   /** [x, y, z] position of the point light (measured as scale factors to the globe radius). */
   pointLightPositionRadiusScales: Position;
 }
-export type LightOptionsProp = Optional<LightOptions>;
-
+export declare type LightOptionsProp = Optional<LightOptions>;
 export interface MarkerOptions {
   /** Scale factor of marker size when active (i.e. hovered). */
   activeScale: number;
@@ -227,24 +207,23 @@ export interface MarkerOptions {
   /** If a valid type is passed, ReactGlobe will render the supported markers. */
   type: MarkerType;
 }
-export type MarkerOptionsProp = Optional<MarkerOptions>;
-
-export type Options = {
+export declare type MarkerOptionsProp = Optional<MarkerOptions>;
+export declare type Options = {
   camera: CameraOptions;
   focus: FocusOptions;
   globe: GlobeOptions;
   light: LightOptions;
   marker: MarkerOptions;
 };
-
-export type FocusCallback = (focus: Coordinates, event?: PointerEvent) => void;
-
-export type MarkerCallback = (
+export declare type FocusCallback = (
+  focus: Coordinates,
+  event?: PointerEvent,
+) => void;
+export declare type MarkerCallback = (
   marker: Marker,
   markerObject?: THREE.Object3D,
   event?: PointerEvent,
 ) => void;
-
 export interface Callbacks {
   onClickMarker: MarkerCallback;
   onDefocus: FocusCallback;
@@ -252,3 +231,4 @@ export interface Callbacks {
   onMouseOverMarker: MarkerCallback;
   onTextureLoaded: () => void;
 }
+export {};

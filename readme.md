@@ -14,8 +14,8 @@ Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 
 ## Install
 
-```bash
-yarn add react-globe
+```sh
+npm install react-globe
 ```
 
 Note that `react-globe` requires `react >= 16.8.0` and `three >= 0.102.0` as peer dependencies.
@@ -34,7 +34,7 @@ You can also run the examples locally:
 git clone git@github.com:chrisrzhou/react-globe
 
 cd react-globe
-yarn && yarn dev
+npm install && npm run docs
 ```
 
 ### Basic Example (no props)
@@ -63,7 +63,7 @@ yarn && yarn dev
 
 ## Contributing
 
-The code is written in `typescript`, linted with `eslint` + `prettier`, and bundled with `rollup`. Examples and documentations are built with `docz`.
+The code is written in `typescript`, linted with `xo`, and built with `microbundle`. Examples and documentations are built with `docz`.
 
 Feel free to contribute by submitting a pull request.
 
@@ -72,7 +72,6 @@ Feel free to contribute by submitting a pull request.
 - `react`
 - `three`
 - `three-glow-mesh`
-- `three-orbitcontrols`
 - `three.interaction`
 - `es6-tween`
 - `tippy.js`

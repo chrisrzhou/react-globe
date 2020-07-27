@@ -1,10 +1,12 @@
 {
   "name": "react-globe",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Create beautiful and interactive React + ThreeJS globe visualizations with ease.",
-  "main": "dist/index.js",
-  "module": "dist/index.module.js",
-  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "homepage": "https://react-globe.netlify.com/",
+  "repository": "chrisrzhou/react-globe",
+  "bugs": "https://github.com/chrisrzhou/react-globe/issues",
+  "author": "Chris Zhou <chrisrzhou@pm.me> (https://chrisrzhou.io)",
   "keywords": [
     "react",
     "globe",
@@ -15,69 +17,73 @@
     "interactive",
     "earth"
   ],
-  "author": "Chris Zhou <chrisrzhou@pm.me>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/chrisrzhou/react-globe.git"
-  },
-  "bugs": {
-    "url": "https://github.com/chrisrzhou/react-globe/issues"
-  },
-  "homepage": "https://react-globe.netlify.com/",
   "scripts": {
-    "build": "rollup -c",
+    "build": "microbundle --jsx React.createElement",
     "build:docs": "docz build",
     "clean": "rm -rf dist",
     "clean:docs": "rm -rf .docz",
     "docs": "docz dev",
-    "lint": "eslint --ext  --fix .js,.jsx,.ts,.tsx src docs; tsc",
+    "lint": "xo --fix; tsc",
     "prepare": "npm run clean; npm run build"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "source": "index.ts",
+  "typings": "src/index.d.ts",
   "dependencies": {
-    "@types/d3-scale": "^2.1.1",
     "d3-scale": "^3.0.0",
     "es6-tween": "^5.5.10",
     "resize-observer-polyfill": "^1.5.1",
     "three-glow-mesh": "^0.1.1",
-    "three-orbitcontrols": "^2.108.1",
-    "three.interaction": "^0.2.2",
-    "tippy.js": "^4.3.5"
+    "three.interaction": "^0.2.3",
+    "tippy.js": "^6.2.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/preset-react": "^7.6.3",
-    "@babel/preset-typescript": "^7.1.0",
-    "@emotion/core": "^10.0.21",
-    "@types/react": "^16.9.5",
-    "@typescript-eslint/eslint-plugin": "^2.3.3",
-    "@typescript-eslint/parser": "^2.3.3",
+    "@types/d3-scale": "^2.1.1",
+    "@types/react": "^16.9.43",
+    "css-loader": "^4.0.0",
     "docz": "^1.2.0",
     "docz-theme-default": "^1.2.0",
-    "eslint": "^6.5.1",
-    "eslint-config-prettier": "^6.4.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-react": "^7.16.0",
-    "eslint-plugin-react-hooks": "^2.1.2",
-    "prettier": "^1.18.2",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "rollup": "^1.23.1",
-    "rollup-plugin-babel": "^4.1.0",
-    "rollup-plugin-typescript2": "^0.24.3",
-    "three": "^0.109.0",
-    "tslib": "1.10.0",
-    "typescript": "^3.6.4"
+    "eslint-config-xo-react": "^0.23.0",
+    "eslint-config-xo-typescript": "^0.31.0",
+    "eslint-plugin-react": "^7.20.4",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "husky": "^4.2.5",
+    "microbundle": "^0.12.3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "style-loader": "^1.2.1",
+    "three": "^0.118.3",
+    "typescript": "^3.8.3",
+    "xo": "^0.32.1"
   },
-  "bundlesize": [
-    {
-      "path": "./dist/*.js",
-      "maxSize": "1 MB"
-    }
-  ],
   "peerDependencies": {
     "react": ">= 16.8.0",
     "three": ">= 0.102.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run prepare && npm run lint"
+    }
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "jsxBracketSameLine": true,
+    "trailingComma": "all",
+    "useTabs": false
+  },
+  "xo": {
+    "prettier": true,
+    "extends": [
+      "xo-react"
+    ],
+    "rules": {
+      "@typescript-eslint/prefer-readonly-parameter-types": "off",
+      "import/no-anonymous-default-export": "off",
+      "import/no-unassigned-import": "off",
+      "react/function-component-definition": "off",
+      "react/prop-types": "off",
+      "unicorn/no-fn-reference-in-iterator": "off"
+    }
   }
 }

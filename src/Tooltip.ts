@@ -10,7 +10,8 @@ export default class Tooltip {
     this.div = div;
     this.instance = tippy(this.div, {
       animation: 'scale',
-    }) as Instance;
+      arrow: false,
+    });
   }
 
   destroy(): void {

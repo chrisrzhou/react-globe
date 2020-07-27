@@ -20,10 +20,7 @@ export function getMarkerCoordinatesKey(marker: Marker): string {
   return marker.coordinates.toString();
 }
 
-export function maxValue<T>(
-  array: Array<T>,
-  callback: (item: T) => number,
-): number {
+export function maxValue<T>(array: T[], callback: (item: T) => number): number {
   let maxValue = 0;
   array.forEach(item => {
     if (callback(item) > maxValue) {
@@ -33,10 +30,7 @@ export function maxValue<T>(
   return maxValue;
 }
 
-export function minValue<T>(
-  array: Array<T>,
-  callback: (item: T) => number,
-): number {
+export function minValue<T>(array: T[], callback: (item: T) => number): number {
   let minValue = Infinity;
   array.forEach(item => {
     if (callback(item) < minValue) {

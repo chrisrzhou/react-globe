@@ -1,5 +1,8 @@
 # Change Log
 
+## [5.0.0](https://github.com/chrisrzhou/react-globe/compare/v5.0.0...v4.0.0) (2020-07-27)
+- Remove default textures and require explicit texture assets.
+
 ## [4.0.0](https://github.com/chrisrzhou/react-globe/compare/v3.1.1...v4.0.0) (2019-10-17)
 
 `v4.0.0` brings huge improvements to marker transition behaviors and other features!

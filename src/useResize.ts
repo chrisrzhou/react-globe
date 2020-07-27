@@ -11,7 +11,7 @@ export default function useResize<T>(
 
   useEffect(() => {
     const mount = mountRef.current;
-    // update initial size
+    // Update initial size
     let width = 0;
     let height = 0;
     if (initialSize) {
@@ -22,13 +22,15 @@ export default function useResize<T>(
       width = mount.offsetWidth;
       height = mount.offsetHeight;
     }
+
     setSize([width, height]);
 
-    // update resize using a resize observer
+    // Update resize using a resize observer
     const resizeObserver = new ResizeObserver((entries): void => {
       if (!entries || !entries.length) {
         return;
       }
+
       if (initialSize === undefined) {
         const { width, height } = entries[0].contentRect;
         setSize([width, height]);

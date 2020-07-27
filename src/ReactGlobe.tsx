@@ -24,6 +24,9 @@ import {
 } from './types';
 import useResize from './useResize';
 
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/animations/scale.css';
+
 export interface Props {
   /** Apply an array of animation steps to sequentially animate the globe. */
   animations?: Animation[];
@@ -83,23 +86,23 @@ export default function ReactGlobe({
   const tooltipRef = useRef<HTMLDivElement>();
   const size = useResize(mountRef, initialSize);
 
-  // init
+  // Init
   useEffect(() => {
     const mount = mountRef.current;
     const globeInstance = new Globe(canvasRef.current, tooltipRef.current);
-    mount.appendChild(globeInstance.renderer.domElement);
+    mount.append(globeInstance.renderer.domElement);
     globeInstance.animate();
     globeInstanceRef.current = globeInstance;
     onGetGlobeInstance && onGetGlobeInstance(globeInstance);
 
     return (): void => {
-      mount.removeChild(globeInstance.renderer.domElement);
+      globeInstance.renderer.domElement.remove();
       globeInstance.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // update callbacks
+  // Update callbacks
   useEffect(() => {
     globeInstanceRef.current.updateCallbacks({
       onClickMarker,
@@ -116,37 +119,37 @@ export default function ReactGlobe({
     onTextureLoaded,
   ]);
 
-  // update camera
+  // Update camera
   useEffect(() => {
     globeInstanceRef.current.updateCamera(initialCoordinates, cameraOptions);
   }, [cameraOptions, initialCoordinates]);
 
-  // update focus
+  // Update focus
   useEffect(() => {
     globeInstanceRef.current.updateFocus(focus, focusOptions);
   }, [focus, focusOptions]);
 
-  // update globe
+  // Update globe
   useEffect(() => {
     globeInstanceRef.current.updateGlobe(globeOptions);
   }, [globeOptions]);
 
-  // update lights
+  // Update lights
   useEffect(() => {
     globeInstanceRef.current.updateLights(lightOptions);
   }, [lightOptions]);
 
-  // update markers
+  // Update markers
   useEffect(() => {
     globeInstanceRef.current.updateMarkers(markers, markerOptions);
   }, [markerOptions, markers]);
 
-  // apply animations
+  // Apply animations
   useEffect(() => {
     return globeInstanceRef.current.applyAnimations(animations);
   }, [animations]);
 
-  // resize
+  // Resize
   useEffect(() => {
     globeInstanceRef.current.updateSize(size);
   }, [size]);

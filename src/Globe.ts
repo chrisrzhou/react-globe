@@ -18,8 +18,8 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createGlowMesh } from 'three-glow-mesh';
-import OrbitControls from 'three-orbitcontrols';
 import { Interaction } from 'three.interaction';
 
 import {
@@ -110,7 +110,7 @@ export default class Globe {
   tooltip: Tooltip;
 
   constructor(canvas: HTMLCanvasElement, tooltipDiv: HTMLDivElement) {
-    // create objects
+    // Create objects
     const renderer = new WebGLRenderer({
       alpha: true,
       antialias: true,
@@ -128,7 +128,7 @@ export default class Globe {
     const scene = new Scene() as InteractableScene;
     const tooltip = new Tooltip(tooltipDiv);
 
-    // name objects
+    // Name objects
     camera.name = ObjectName.Camera;
     cameraAmbientLight.name = ObjectName.CameraAmbientLight;
     cameraPointLight.name = ObjectName.CameraPointLight;
@@ -139,7 +139,7 @@ export default class Globe {
     markerObjects.name = ObjectName.MarkerObjects;
     scene.name = ObjectName.Scene;
 
-    // add objects to scene
+    // Add objects to scene
     camera.add(cameraAmbientLight);
     camera.add(cameraPointLight);
     globe.add(globeBackground);
@@ -149,12 +149,13 @@ export default class Globe {
     scene.add(camera);
     scene.add(globe);
 
-    // add interactions to scene
+    // Add interactions to scene
     new Interaction(renderer, scene, camera);
     scene.on('mousemove', (event: InteractionEvent) => {
       if (this.isFocusing()) {
         return;
       }
+
       if (this.activeMarker) {
         const { activeScale } = this.options.marker;
         const from = [activeScale, activeScale, activeScale] as Position;
@@ -185,13 +186,14 @@ export default class Globe {
       if (this.isFocusing()) {
         return;
       }
+
       if (this.options.focus.enableDefocus && this.preFocusPosition) {
         this.callbacks.onDefocus(this.focus, event.data.originalEvent);
         this.updateFocus(undefined, this.options.focus);
       }
     });
 
-    // assign values to class variables
+    // Assign values to class variables
     this.activeMarker = undefined;
     this.activeMarkerObject = undefined;
     this.animationFrameId = undefined;
@@ -208,7 +210,7 @@ export default class Globe {
     this.scene = scene;
     this.tooltip = tooltip;
 
-    // update objects
+    // Update objects
     this.updateCallbacks();
     this.updateCamera();
     this.updateFocus();
@@ -263,7 +265,7 @@ export default class Globe {
       wait += animationDuration;
     });
 
-    // return cleanup function
+    // Return cleanup function
     return (): void => {
       timeouts.forEach(timeout => {
         clearTimeout(timeout);
@@ -374,7 +376,7 @@ export default class Globe {
     }
 
     if (this.focus) {
-      // disable orbit controls when focused
+      // Disable orbit controls when focused
       const from: Position = [
         this.camera.position.x,
         this.camera.position.y,
@@ -399,32 +401,31 @@ export default class Globe {
             this.focus = undefined;
             this.preFocusPosition = undefined;
           }
+
           this.enableOrbitControls(true, autoDefocus);
         },
       );
-    } else {
-      if (this.preFocusPosition) {
-        const from: Position = [
-          this.camera.position.x,
-          this.camera.position.y,
-          this.camera.position.z,
-        ];
-        const to: Position = this.preFocusPosition;
-        tween(
-          from,
-          to,
-          animationDuration,
-          easingFunction,
-          () => {
-            this.enableOrbitControls(false);
-            this.camera.position.set(...from);
-          },
-          () => {
-            this.preFocusPosition = undefined;
-            this.enableOrbitControls(true);
-          },
-        );
-      }
+    } else if (this.preFocusPosition) {
+      const from: Position = [
+        this.camera.position.x,
+        this.camera.position.y,
+        this.camera.position.z,
+      ];
+      const to: Position = this.preFocusPosition;
+      tween(
+        from,
+        to,
+        animationDuration,
+        easingFunction,
+        () => {
+          this.enableOrbitControls(false);
+          this.camera.position.set(...from);
+        },
+        () => {
+          this.preFocusPosition = undefined;
+          this.enableOrbitControls(true);
+        },
+      );
     }
   }
 
@@ -471,6 +472,7 @@ export default class Globe {
         globeGlow.name = ObjectName.GlobeGlow;
         globeSphere.add(globeGlow);
       }
+
       this.callbacks.onTextureLoaded();
     });
 
@@ -574,7 +576,7 @@ export default class Globe {
       const size = sizeScale(value);
 
       let markerObject: InteractableObject3D;
-      // create new marker objects
+      // Create new marker objects
       if (!markerObjectNames.has(markerCoordinatesKey)) {
         if (renderer !== undefined) {
           markerObject = renderer(marker);
@@ -604,17 +606,14 @@ export default class Globe {
                 );
                 mesh.material = new MeshBasicMaterial({ color });
                 if (enableGlow) {
-                  // add glow
-                  const glowMesh = createGlowMesh(
-                    mesh.geometry.clone() as THREE.Geometry,
-                    {
-                      backside: false,
-                      color,
-                      coefficient: glowCoefficient,
-                      power: glowPower,
-                      size: from.size * glowRadiusScale,
-                    },
-                  );
+                  // Add glow
+                  const glowMesh = createGlowMesh(mesh.geometry.clone(), {
+                    backside: false,
+                    color,
+                    coefficient: glowCoefficient,
+                    power: glowPower,
+                    size: from.size * glowRadiusScale,
+                  });
                   mesh.children = [];
                   mesh.add(glowMesh);
                 }
@@ -623,17 +622,16 @@ export default class Globe {
           markerObject = mesh;
         }
 
-        // place markers
+        // Place markers
         let heightOffset = 0;
         if (offsetRadiusScale !== undefined) {
           heightOffset = RADIUS * offsetRadiusScale;
+        } else if (type === MarkerType.Dot) {
+          heightOffset = (size * (1 + glowRadiusScale)) / 2;
         } else {
-          if (type === MarkerType.Dot) {
-            heightOffset = (size * (1 + glowRadiusScale)) / 2;
-          } else {
-            heightOffset = 0;
-          }
+          heightOffset = 0;
         }
+
         const position = coordinatesToPosition(
           coordinates,
           RADIUS + heightOffset,
@@ -645,7 +643,7 @@ export default class Globe {
         this.markerObjects.add(markerObject);
       }
 
-      // update existing marker objects
+      // Update existing marker objects
       markerObject = this.markerObjects.getObjectByName(markerCoordinatesKey);
       const handleClick = (event: InteractionEvent): void => {
         event.stopPropagation();
@@ -664,6 +662,7 @@ export default class Globe {
           this.tooltip.hide();
           return;
         }
+
         event.stopPropagation();
         const from = markerObject.scale.toArray() as Position;
         tween(
@@ -692,7 +691,7 @@ export default class Globe {
       });
     });
 
-    // remove marker objects that are stale
+    // Remove marker objects that are stale
     const markerObjectsToRemove = this.markerObjects.children.filter(
       markerObject => !markerCoordinatesKeys.has(markerObject.name),
     );
@@ -731,6 +730,7 @@ export default class Globe {
       this.renderer.setSize(width, height);
       this.camera.aspect = width / height;
     }
+
     this.camera.updateProjectionMatrix();
   }
 

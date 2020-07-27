@@ -8,7 +8,7 @@ export default {
     favicon: null,
   },
   menu: [
-    'readme',
+    'README',
     'Props',
     {
       name: 'Examples',
@@ -29,8 +29,18 @@ export default {
       name: 'Gallery',
       menu: ['Submissions', 'Google Globe Trends'],
     },
-    'changelog',
+    'CHANGELOG',
   ],
+  modifyBundlerConfig: bundlerConfig => {
+    const rules = [
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+    ];
+    bundlerConfig.module.rules.push(...rules);
+    return bundlerConfig;
+  },
   public: 'public',
   themeConfig: {
     showPlaygroundEditor: true,

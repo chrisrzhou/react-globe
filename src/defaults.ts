@@ -9,7 +9,7 @@ import {
   MarkerType,
 } from './types';
 
-// hardcoded constants that can eventually be exposed via options
+// Hardcoded constants that can eventually be exposed via options
 export const RADIUS = 300;
 export const BACKGROUND_RADIUS_SCALE = 10;
 export const CAMERA_FAR = RADIUS * 100;

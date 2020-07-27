@@ -1,18 +1,6 @@
 {
   "presets": [
-    [
-      "@babel/env",
-      {
-        "loose": true
-      }
-    ],
-    "@babel/react",
-    [
-      "@babel/preset-typescript",
-      {
-        "isTSX": true,
-        "allExtensions": true
-      }
-    ]
+    "@babel/env",
+    "@babel/react"
   ]
 }
