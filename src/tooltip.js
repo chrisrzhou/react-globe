@@ -1,24 +1,21 @@
-import tippy, { Instance } from 'tippy.js';
+import tippy from 'tippy.js';
 
 const TOOLTIP_OFFSET = 10;
 
 export default class Tooltip {
-  instance: Instance;
-  div: HTMLDivElement;
-
-  constructor(div: HTMLDivElement) {
+  constructor(div) {
     this.div = div;
-    this.instance = tippy(this.div, {
+    this.instance = tippy([this.div], {
       animation: 'scale',
       arrow: false,
-    });
+    })[0];
   }
 
-  destroy(): void {
+  destroy() {
     this.instance.destroy();
   }
 
-  hide(): void {
+  hide() {
     document.body.style.cursor = 'inherit';
     this.div.style.position = 'fixed';
     this.div.style.left = '0';
@@ -26,7 +23,7 @@ export default class Tooltip {
     this.instance.hide();
   }
 
-  show(clientX: number, clientY: number, content: string): void {
+  show(clientX, clientY, content) {
     document.body.style.cursor = 'pointer';
     this.div.style.position = 'fixed';
     this.div.style.left = `${clientX + TOOLTIP_OFFSET}px`;

@@ -1,14 +1,3 @@
-import {
-  CameraOptions,
-  Coordinates,
-  EasingFunction,
-  FocusOptions,
-  GlobeOptions,
-  LightOptions,
-  MarkerOptions,
-  MarkerType,
-} from './types';
-
 // Hardcoded constants that can eventually be exposed via options
 export const RADIUS = 300;
 export const BACKGROUND_RADIUS_SCALE = 10;
@@ -21,17 +10,14 @@ export const CAMERA_MIN_POLAR_ANGLE = 0;
 export const CAMERA_MIN_DISTANCE_RADIUS_SCALE = 1.1;
 export const CLOUDS_RADIUS_OFFSET = 1;
 export const GLOBE_SEGMENTS = 50;
-export const INITIAL_COORDINATES: Coordinates = [37.773972, -122.431297];
+export const INITIAL_COORDINATES = [37.773972, -122.431297];
 export const MARKER_DEFAULT_COLOR = 'gold';
 export const MARKER_SEGMENTS = 10;
 export const MARKER_UNIT_RADIUS_SCALE = 0.01;
 export const MARKER_ACTIVE_ANIMATION_DURATION = 100;
-export const MARKER_ACTIVE_ANIMATION_EASING_FUNCTION: EasingFunction = [
-  'Cubic',
-  'In',
-];
+export const MARKER_ACTIVE_ANIMATION_EASING_FUNCTION = ['Cubic', 'In'];
 
-export const defaultCameraOptions: CameraOptions = {
+export const defaultCameraOptions = {
   autoRotateSpeed: 0.1,
   distanceRadiusScale: 3,
   enableAutoRotate: true,
@@ -44,14 +30,14 @@ export const defaultCameraOptions: CameraOptions = {
   zoomSpeed: 1,
 };
 
-export const defaultFocusOptions: FocusOptions = {
+export const defaultFocusOptions = {
   animationDuration: 1000,
   distanceRadiusScale: 1.5,
   easingFunction: ['Cubic', 'Out'],
   enableDefocus: true,
 };
 
-export const defaultGlobeOptions: GlobeOptions = {
+export const defaultGlobeOptions = {
   backgroundTexture:
     'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/background.png',
   cloudsOpacity: 0.3,
@@ -68,7 +54,7 @@ export const defaultGlobeOptions: GlobeOptions = {
     'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe.jpg',
 };
 
-export const defaultLightOptions: LightOptions = {
+export const defaultLightOptions = {
   ambientLightColor: 'white',
   ambientLightIntensity: 0.8,
   pointLightColor: 'white',
@@ -76,7 +62,7 @@ export const defaultLightOptions: LightOptions = {
   pointLightPositionRadiusScales: [-2, 1, -1],
 };
 
-export const defaultDotMarkerOptions: MarkerOptions = {
+export const defaultDotMarkerOptions = {
   activeScale: 1.3,
   enableGlow: true,
   enableTooltip: true,
@@ -89,10 +75,10 @@ export const defaultDotMarkerOptions: MarkerOptions = {
   glowPower: 3,
   glowRadiusScale: 2,
   radiusScaleRange: [0.005, 0.02],
-  type: MarkerType.Dot,
+  type: 'dot',
 };
 
-export const defaultBarMarkerOptions: MarkerOptions = {
+export const defaultBarMarkerOptions = {
   activeScale: 1.02,
   enableGlow: false,
   enableTooltip: true,
@@ -106,7 +92,7 @@ export const defaultBarMarkerOptions: MarkerOptions = {
   glowRadiusScale: 2,
   offsetRadiusScale: 0,
   radiusScaleRange: [0.2, defaultFocusOptions.distanceRadiusScale - 1],
-  type: MarkerType.Bar,
+  type: 'bar',
 };
 
-export const defaultMarkerOptions: MarkerOptions = defaultDotMarkerOptions;
+export const defaultMarkerOptions = defaultDotMarkerOptions;

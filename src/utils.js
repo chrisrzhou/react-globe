@@ -1,11 +1,6 @@
 import * as TWEEN from 'es6-tween';
 
-import { Any, Coordinates, EasingFunction, Marker, Position } from './types';
-
-export function coordinatesToPosition(
-  coordinates: Coordinates,
-  radius: number,
-): Position {
+export function coordinatesToPosition(coordinates, radius) {
   const [lat, long] = coordinates;
   const phi = (lat * Math.PI) / 180;
   const theta = ((long - 180) * Math.PI) / 180;
@@ -16,11 +11,11 @@ export function coordinatesToPosition(
   return [x, y, z];
 }
 
-export function getMarkerCoordinatesKey(marker: Marker): string {
+export function getMarkerCoordinatesKey(marker) {
   return marker.coordinates.toString();
 }
 
-export function maxValue<T>(array: T[], callback: (item: T) => number): number {
+export function maxValue(array, callback) {
   let maxValue = 0;
   array.forEach(item => {
     if (callback(item) > maxValue) {
@@ -30,7 +25,7 @@ export function maxValue<T>(array: T[], callback: (item: T) => number): number {
   return maxValue;
 }
 
-export function minValue<T>(array: T[], callback: (item: T) => number): number {
+export function minValue(array, callback) {
   let minValue = Infinity;
   array.forEach(item => {
     if (callback(item) < minValue) {
@@ -47,14 +42,7 @@ export function tween({
   easingFunction,
   onUpdate,
   onEnd,
-}: {
-  from: Any;
-  to: Any;
-  animationDuration: number;
-  easingFunction: EasingFunction;
-  onUpdate: () => void;
-  onEnd?: () => void;
-}): void {
+}) {
   new TWEEN.Tween(from)
     .to(to, animationDuration)
     .easing(TWEEN.Easing[easingFunction[0]][easingFunction[1]])

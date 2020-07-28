@@ -1,13 +1,8 @@
 import { useEffect, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
-import { Size } from './types';
-
-export function useResize<T>(
-  mountRef: React.RefObject<HTMLDivElement>,
-  initialSize?: Size,
-): Size {
-  const [size, setSize] = useState<Size>([0, 0]);
+export function useResize(mountRef, initialSize) {
+  const [size, setSize] = useState([0, 0]);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -26,7 +21,7 @@ export function useResize<T>(
     setSize([width, height]);
 
     // Update resize using a resize observer
-    const resizeObserver = new ResizeObserver((entries): void => {
+    const resizeObserver = new ResizeObserver(entries => {
       if (!entries || entries.length === 0) {
         return;
       }
@@ -38,7 +33,7 @@ export function useResize<T>(
     });
     resizeObserver.observe(mount);
 
-    return (): void => {
+    return () => {
       resizeObserver.unobserve(mount);
     };
   }, [initialSize, mountRef]);
