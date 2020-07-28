@@ -53,10 +53,10 @@ export const defaultFocusOptions: FocusOptions = {
 
 export const defaultGlobeOptions: GlobeOptions = {
   backgroundTexture:
-    'https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/background.png',
+    'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/background.png',
   cloudsOpacity: 0.3,
   cloudsTexture:
-    'https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/clouds.png',
+    'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/clouds.png',
   enableBackground: true,
   enableClouds: true,
   enableGlow: true,
@@ -65,7 +65,7 @@ export const defaultGlobeOptions: GlobeOptions = {
   glowPower: 3,
   glowRadiusScale: 0.2,
   texture:
-    'https://raw.githubusercontent.com/chrisrzhou/react-globe/master/textures/globe.jpg',
+    'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe.jpg',
 };
 
 export const defaultLightOptions: LightOptions = {
