@@ -58,8 +58,8 @@
     "xo": "^0.32.1"
   },
   "peerDependencies": {
-    "react": ">= 16.8.0",
-    "three": ">= 0.102.0"
+    "react": ">= 16.13.1",
+    "three": ">= 0.118.3"
   },
   "husky": {
     "hooks": {
@@ -84,6 +84,7 @@
       "@typescript-eslint/prefer-readonly-parameter-types": "off",
       "import/no-anonymous-default-export": "off",
       "import/no-unassigned-import": "off",
+      "padding-line-between-statements": "off",
       "react/function-component-definition": "off",
       "react/prop-types": "off",
       "unicorn/no-fn-reference-in-iterator": "off"

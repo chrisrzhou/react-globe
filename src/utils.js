@@ -41,7 +41,7 @@ export function tween({
   animationDuration,
   easingFunction,
   onUpdate,
-  onEnd,
+  onEnd = null,
 }) {
   new TWEEN.Tween(from)
     .to(to, animationDuration)

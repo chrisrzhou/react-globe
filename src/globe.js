@@ -53,16 +53,6 @@ import {
   tween,
 } from './utils';
 
-const emptyFunction = () => {};
-
-const defaultCallbacks = {
-  onClickMarker: emptyFunction,
-  onDefocus: emptyFunction,
-  onMouseOutMarker: emptyFunction,
-  onMouseOverMarker: emptyFunction,
-  onTextureLoaded: emptyFunction,
-};
-
 const defaultOptions = {
   camera: defaultCameraOptions,
   globe: defaultGlobeOptions,
@@ -80,12 +70,12 @@ export default class Globe {
       canvas,
     });
     const camera = new PerspectiveCamera();
-    const cameraAmbientLight = new AmbientLight('white');
-    const cameraPointLight = new PointLight('white');
+    this.cameraAmbientLight = new AmbientLight('white');
+    this.cameraPointLight = new PointLight('white');
     const globe = new Group();
-    const globeBackground = new Mesh();
-    const globeClouds = new Mesh();
-    const globeSphere = new Mesh();
+    this.globeBackground = new Mesh();
+    this.globeClouds = new Mesh();
+    this.globeSphere = new Mesh();
     const markerObjects = new Group();
     const orbitControls = new OrbitControls(camera, renderer.domElement);
     const scene = new Scene();
@@ -93,21 +83,16 @@ export default class Globe {
 
     // Name objects
     camera.name = ObjectTypes.Camera;
-    cameraAmbientLight.name = ObjectTypes.CameraAmbientLight;
-    cameraPointLight.name = ObjectTypes.CameraPointLight;
     globe.name = ObjectTypes.Globe;
-    globeBackground.name = ObjectTypes.GlobeBackground;
-    globeClouds.name = ObjectTypes.GlobeClouds;
-    globeSphere.name = ObjectTypes.GlobeSphere;
     markerObjects.name = ObjectTypes.MarkerObjects;
     scene.name = ObjectTypes.Scene;
 
     // Add objects to scene
-    camera.add(cameraAmbientLight);
-    camera.add(cameraPointLight);
-    globe.add(globeBackground);
-    globe.add(globeClouds);
-    globe.add(globeSphere);
+    camera.add(this.cameraAmbientLight);
+    camera.add(this.cameraPointLight);
+    globe.add(this.globeBackground);
+    globe.add(this.globeClouds);
+    globe.add(this.globeSphere);
     scene.add(markerObjects);
     scene.add(camera);
     scene.add(globe);
@@ -115,6 +100,7 @@ export default class Globe {
     // Add interactions to scene
     // eslint-disable-next-line no-new
     new Interaction(renderer, scene, camera);
+    // @ts-ignore
     scene.on('mousemove', event => {
       if (this.isFocusing()) {
         return;
@@ -138,21 +124,26 @@ export default class Globe {
             this.activeMarkerObject = undefined;
           },
         });
-        this.callbacks.onMouseOutMarker(
-          this.activeMarker,
-          this.activeMarkerObject,
-          event.data.originalEvent,
-        );
+        if (this.callbacks.onMouseOutMarker) {
+          this.callbacks.onMouseOutMarker(
+            this.activeMarker,
+            this.activeMarkerObject,
+            event.data.originalEvent,
+          );
+        }
         this.tooltip.hide();
       }
     });
+    // @ts-ignore
     scene.on('click', event => {
       if (this.isFocusing()) {
         return;
       }
 
       if (this.options.focus.enableDefocus && this.preFocusPosition) {
-        this.callbacks.onDefocus(this.focus, event.data.originalEvent);
+        if (this.callbacks.onDefocus) {
+          this.callbacks.onDefocus(this.focus, event.data.originalEvent);
+        }
         this.updateFocus(undefined, this.options.focus);
       }
     });
@@ -161,7 +152,7 @@ export default class Globe {
     this.activeMarker = undefined;
     this.activeMarkerObject = undefined;
     this.animationFrameId = undefined;
-    this.callbacks = defaultCallbacks;
+    this.callbacks = {};
     this.camera = camera;
     this.focus = undefined;
     this.globe = globe;
@@ -193,9 +184,8 @@ export default class Globe {
   }
 
   animateClouds() {
-    const globeClouds = this.getObjectByName(ObjectTypes.GlobeClouds);
     ['x', 'y', 'z'].forEach(axis => {
-      globeClouds.rotation[axis] += Math.random() / 10000;
+      this.globeClouds.rotation[axis] += Math.random() / 10000;
     });
   }
 
@@ -270,9 +260,7 @@ export default class Globe {
   }
 
   updateCallbacks(callbacks = {}) {
-    Object.keys(defaultCallbacks).forEach(key => {
-      this.callbacks[key] = callbacks[key] || defaultCallbacks[key];
-    });
+    this.callbacks = callbacks;
   }
 
   updateCamera(initialCoordinates = INITIAL_COORDINATES, cameraOptions = {}) {
@@ -350,7 +338,7 @@ export default class Globe {
         easingFunction,
         onUpdate: () => {
           this.enableOrbitControls(false);
-          this.camera.position.set(...from);
+          this.camera.position.set(from[0], from[1], from[2]);
         },
         onEnd: () => {
           if (autoDefocus) {
@@ -375,7 +363,7 @@ export default class Globe {
         easingFunction,
         onUpdate: () => {
           this.enableOrbitControls(false);
-          this.camera.position.set(...from);
+          this.camera.position.set(from[0], from[1], from[2]);
         },
         onEnd: () => {
           this.preFocusPosition = undefined;
@@ -401,9 +389,7 @@ export default class Globe {
       texture,
     } = this.options.globe;
 
-    const globeBackground = this.getObjectByName(ObjectTypes.GlobeBackground);
-    const globeClouds = this.getObjectByName(ObjectTypes.GlobeClouds);
-    const globeSphere = this.getObjectByName(ObjectTypes.GlobeSphere);
+    const { globeBackground, globeClouds, globeSphere } = this;
 
     new TextureLoader().load(texture, map => {
       globeSphere.geometry = new SphereGeometry(
@@ -427,7 +413,9 @@ export default class Globe {
         globeSphere.add(globeGlow);
       }
 
-      this.callbacks.onTextureLoaded();
+      if (this.callbacks.onTextureLoaded) {
+        this.callbacks.onTextureLoaded();
+      }
     });
 
     if (enableBackground) {
@@ -470,10 +458,7 @@ export default class Globe {
       pointLightPositionRadiusScales,
     } = this.options.light;
 
-    const cameraAmbientLight = this.getObjectByName(
-      ObjectTypes.CameraAmbientLight,
-    );
-    const cameraPointLight = this.getObjectByName(ObjectTypes.CameraPointLight);
+    const { cameraAmbientLight, cameraPointLight } = this;
 
     cameraAmbientLight.color = new Color(ambientLightColor);
     cameraAmbientLight.intensity = ambientLightIntensity;
@@ -603,15 +588,20 @@ export default class Globe {
       const handleClick = event => {
         event.stopPropagation();
         this.updateFocus(marker.coordinates);
-        this.callbacks.onClickMarker(
-          marker,
-          markerObject,
-          event.data.originalEvent,
-        );
+        if (this.callbacks.onClickMarker) {
+          this.callbacks.onClickMarker(
+            marker,
+            markerObject,
+            event.data.originalEvent,
+          );
+        }
       };
 
+      // @ts-ignore
       markerObject.on('click', handleClick.bind(this));
+      // @ts-ignore
       markerObject.on('touchstart', handleClick.bind(this));
+      // @ts-ignore
       markerObject.on('mousemove', event => {
         if (this.isFocusing()) {
           this.tooltip.hide();
@@ -634,7 +624,9 @@ export default class Globe {
         const { originalEvent } = event.data;
         this.activeMarker = marker;
         this.activeMarkerObject = markerObject;
-        this.callbacks.onMouseOverMarker(marker, markerObject, originalEvent);
+        if (this.callbacks.onMouseOverMarker) {
+          this.callbacks.onMouseOverMarker(marker, markerObject, originalEvent);
+        }
 
         if (enableTooltip) {
           this.tooltip.show(
@@ -659,7 +651,7 @@ export default class Globe {
         easingFunction: exitEasingFunction,
         onUpdate: () => {
           if (markerObject) {
-            markerObject.scale.set(...from);
+            markerObject.scale.set(from[0], from[1], from[2]);
           }
         },
         onEnd: () => {
