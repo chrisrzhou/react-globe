@@ -9,8 +9,7 @@ import {
   INITIAL_COORDINATES,
 } from './defaults';
 import Globe from './globe';
-
-import { useResize } from './hooks';
+import { resize } from './utils';
 
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
@@ -31,13 +30,12 @@ export default function ReactGlobe({
   onMouseOverMarker,
   onGetGlobeInstance,
   onTextureLoaded,
-  size: initialSize,
+  size,
 }) {
   const canvasRef = useRef(null);
   const globeInstanceRef = useRef(null);
   const mountRef = useRef(null);
   const tooltipRef = useRef(null);
-  const size = useResize(mountRef, initialSize);
 
   // Init
   useEffect(() => {
@@ -106,7 +104,7 @@ export default function ReactGlobe({
 
   // Resize
   useEffect(() => {
-    globeInstanceRef.current.updateSize(size);
+    return resize(mountRef.current, globeInstanceRef.current.updateSize);
   }, [size]);
 
   return (

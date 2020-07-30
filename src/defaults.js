@@ -1,3 +1,5 @@
+import { MarkerTypes } from './enums';
+
 // Hardcoded constants that can eventually be exposed via options
 export const RADIUS = 300;
 export const BACKGROUND_RADIUS_SCALE = 10;
@@ -75,7 +77,7 @@ export const defaultDotMarkerOptions = {
   glowPower: 3,
   glowRadiusScale: 2,
   radiusScaleRange: [0.005, 0.02],
-  type: 'dot',
+  type: MarkerTypes.DOT,
 };
 
 export const defaultBarMarkerOptions = {
@@ -92,7 +94,7 @@ export const defaultBarMarkerOptions = {
   glowRadiusScale: 2,
   offsetRadiusScale: 0,
   radiusScaleRange: [0.2, defaultFocusOptions.distanceRadiusScale - 1],
-  type: 'bar',
+  type: MarkerTypes.BAR,
 };
 
 export const defaultMarkerOptions = defaultDotMarkerOptions;

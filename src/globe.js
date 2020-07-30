@@ -43,13 +43,10 @@ import {
   MARKER_UNIT_RADIUS_SCALE,
   RADIUS,
 } from './defaults';
-import { MarkerTypes, ObjectTypes } from './enums';
-import Tooltip from './tooltip';
+import { MarkerTypes } from './enums';
 import {
   coordinatesToPosition,
-  getMarkerCoordinatesKey,
-  maxValue,
-  minValue,
+  createTooltip,
   tween,
 } from './utils';
 
@@ -79,13 +76,7 @@ export default class Globe {
     const markerObjects = new Group();
     const orbitControls = new OrbitControls(camera, renderer.domElement);
     const scene = new Scene();
-    const tooltip = new Tooltip(tooltipDiv);
-
-    // Name objects
-    camera.name = ObjectTypes.Camera;
-    globe.name = ObjectTypes.Globe;
-    markerObjects.name = ObjectTypes.MarkerObjects;
-    scene.name = ObjectTypes.Scene;
+    const tooltip = createTooltip(tooltipDiv);
 
     // Add objects to scene
     camera.add(this.cameraAmbientLight);
@@ -401,7 +392,6 @@ export default class Globe {
         map,
       });
       if (enableGlow) {
-        globeSphere.remove(this.getObjectByName(ObjectTypes.GlobeGlow));
         const globeGlow = createGlowMesh(globeSphere.geometry, {
           backside: true,
           color: glowColor,
@@ -409,7 +399,6 @@ export default class Globe {
           power: glowPower,
           size: RADIUS * glowRadiusScale,
         });
-        globeGlow.name = ObjectTypes.GlobeGlow;
         globeSphere.add(globeGlow);
       }
 
@@ -492,26 +481,26 @@ export default class Globe {
     } = this.options.marker;
 
     const unitRadius = RADIUS * MARKER_UNIT_RADIUS_SCALE;
+    const markerValues = markers.map(marker => marker.value);
+    const markerIdSet = new Set(markers.map(marker => marker.id));
     const sizeScale = scaleLinear()
       .domain([
-        minValue(markers, marker => marker.value),
-        maxValue(markers, marker => marker.value),
+        Math.min.apply(null, markerValues),
+        Math.max.apply(null, markerValues),
       ])
       .range([RADIUS * radiusScaleRange[0], RADIUS * radiusScaleRange[1]]);
 
-    const markerCoordinatesKeys = new Set(markers.map(getMarkerCoordinatesKey));
     const markerObjectNames = new Set(
       this.markerObjects.children.map(markerObject => markerObject.name),
     );
 
     markers.forEach(marker => {
-      const { coordinates, value } = marker;
-      const markerCoordinatesKey = getMarkerCoordinatesKey(marker);
+      const { coordinates, id, value } = marker;
       const size = sizeScale(value);
 
       let markerObject;
       // Create new marker objects
-      if (!markerObjectNames.has(markerCoordinatesKey)) {
+      if (!markerObjectNames.has(id)) {
         if (renderer === undefined) {
           const color = marker.color || MARKER_DEFAULT_COLOR;
           const from = { size: 0 };
@@ -524,7 +513,7 @@ export default class Globe {
             easingFunction: enterEasingFunction,
             onUpdate: () => {
               switch (type) {
-                case MarkerTypes.Bar:
+                case MarkerTypes.BAR:
                   mesh.geometry = new BoxGeometry(
                     unitRadius,
                     unitRadius,
@@ -534,7 +523,7 @@ export default class Globe {
                     color,
                   });
                   break;
-                case MarkerTypes.Dot:
+                case MarkerTypes.DOT:
                 default:
                   mesh.geometry = new SphereGeometry(
                     from.size,
@@ -566,7 +555,7 @@ export default class Globe {
         let heightOffset = 0;
         if (offsetRadiusScale !== undefined) {
           heightOffset = RADIUS * offsetRadiusScale;
-        } else if (type === MarkerTypes.Dot) {
+        } else if (type === MarkerTypes.DOT) {
           heightOffset = (size * (1 + glowRadiusScale)) / 2;
         } else {
           heightOffset = 0;
@@ -579,12 +568,12 @@ export default class Globe {
         markerObject.position.set(...position);
         markerObject.lookAt(new Vector3(0, 0, 0));
 
-        markerObject.name = markerCoordinatesKey;
+        markerObject.name = id;
         this.markerObjects.add(markerObject);
       }
 
       // Update existing marker objects
-      markerObject = this.markerObjects.getObjectByName(markerCoordinatesKey);
+      markerObject = this.markerObjects.getObjectByName(id);
       const handleClick = event => {
         event.stopPropagation();
         this.updateFocus(marker.coordinates);
@@ -640,7 +629,7 @@ export default class Globe {
 
     // Remove marker objects that are stale
     const markerObjectsToRemove = this.markerObjects.children.filter(
-      markerObject => !markerCoordinatesKeys.has(markerObject.name),
+      markerObject => !markerIdSet.has(markerObject.name),
     );
     markerObjectsToRemove.forEach(markerObject => {
       const from = markerObject.scale.toArray();
@@ -671,14 +660,13 @@ export default class Globe {
     };
   }
 
-  updateSize(size) {
+  updateSize = (size) => {
     if (size) {
-      const [width, height] = size;
+      const { height, width } = size;
       this.renderer.setSize(width, height);
       this.camera.aspect = width / height;
+      this.camera.updateProjectionMatrix();
     }
-
-    this.camera.updateProjectionMatrix();
   }
 
   unfreeze() {

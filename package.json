@@ -82,6 +82,7 @@
     ],
     "rules": {
       "@typescript-eslint/prefer-readonly-parameter-types": "off",
+      "capitalized-comments": "off",
       "import/no-anonymous-default-export": "off",
       "import/no-unassigned-import": "off",
       "padding-line-between-statements": "off",
