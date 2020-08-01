@@ -1,0 +1,42 @@
+---
+name: Test
+menu: Usage
+route: /usage/test
+---
+
+import { Playground } from "docz";
+import { useState } from 'react';
+
+import ReactGlobe from "../../lib";
+
+<Playground>
+  {() => {
+    const [options, setOptions] = useState();
+    const customOptions = {
+      enableOrbitControlsRotate: false,
+      enableOrbitControlsZoom: false,
+      enableGlobeBackground: false,
+      lightAmbientColor: 'red',
+      lightPointColor: 'gold',
+      lightPointIntensity: 4,
+      globeGlowRadiusScale: 1,
+      globeTexture: 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg',
+      orbitControlsAutoRotateSpeed: 10,
+    };
+    return (
+      <div>
+        <button onClick={() => setOptions(undefined)}>
+          default options
+        </button>
+        <button onClick={() => setOptions(customOptions)}>
+          custom options
+        </button>
+        <ReactGlobe
+          height="400px"
+          width="100%"
+          options={options}
+        />
+      </div>
+    );
+  }}
+</Playground>

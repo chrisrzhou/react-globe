@@ -81,14 +81,12 @@
       "xo-react"
     ],
     "rules": {
-      "@typescript-eslint/prefer-readonly-parameter-types": "off",
       "capitalized-comments": "off",
       "import/no-anonymous-default-export": "off",
-      "import/no-unassigned-import": "off",
+      "no-warning-comments": "off",
       "padding-line-between-statements": "off",
       "react/function-component-definition": "off",
-      "react/prop-types": "off",
-      "unicorn/no-fn-reference-in-iterator": "off"
+      "react/prop-types": "off"
     }
   }
 }
