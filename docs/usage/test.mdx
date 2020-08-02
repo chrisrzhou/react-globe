@@ -21,22 +21,26 @@ import defaultMarkers from './markers';
         tooltip: `Random number: ${Math.random().toFixed(3)}`
       }));
     }
-    const [markers, setMarkers] = useState([])
+    const [focus, setFocus] = useState(null);
+    const [markers, setMarkers] = useState([]);
     const [options, setOptions] = useState();
     const customOptions = {
-      enableOrbitControlsRotate: false,
-      enableOrbitControlsZoom: false,
-      enableGlobeBackground: false,
-      lightAmbientColor: 'red',
-      lightPointColor: 'gold',
-      lightPointIntensity: 4,
+      ambientLightColor: 'red',
+      cameraAutoRotateSpeed: 0,
+      enableCameraRotate: false,
+      enableCameraZoom: false,
+      enableDefocus: false,
+      enableGlobeClouds: false,
+      focusAnimationDuration: 2000,
+      focusDistanceRadiusScale: 2,
       globeGlowRadiusScale: 1,
       globeTexture: 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg',
       markerEnterAnimationDuration: 500,
       markerGlowPower: 10,
       markerTooltipRenderer: marker => marker.tooltip,
       markerType: 'dot',
-      orbitControlsAutoRotateSpeed: 0,
+      pointLightColor: 'gold',
+      pointLightIntensity: 4,
     };
     return (
       <div>
@@ -46,6 +50,15 @@ import defaultMarkers from './markers';
         <button onClick={() => setOptions(customOptions)}>
           custom options
         </button>
+        <hr />
+          <button onClick={() => setFocus([1.3521, 103.8198])}>Singapore</button>
+          <button onClick={() => setFocus([40.73061, -73.935242])}>
+            New York
+          </button>
+          <button onClick={() => setFocus([37.773972, -122.431297])}>
+            San Fransisco
+          </button>
+          <button onClick={() => setFocus(null)}>None</button>
         <hr />
         <button onClick={() => setMarkers(getRandomMarkers())}>
           Randomize markers
@@ -66,6 +79,7 @@ import defaultMarkers from './markers';
           Remove marker
         </button>
         <ReactGlobe
+          focus={focus}
           height="400px"
           markers={markers}
           width="100%"
