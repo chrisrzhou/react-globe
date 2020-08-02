@@ -83,6 +83,7 @@
     "rules": {
       "capitalized-comments": "off",
       "import/no-anonymous-default-export": "off",
+      "no-new": "off",
       "no-warning-comments": "off",
       "padding-line-between-statements": "off",
       "react/function-component-definition": "off",

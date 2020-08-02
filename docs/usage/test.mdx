@@ -7,10 +7,21 @@ route: /usage/test
 import { Playground } from "docz";
 import { useState } from 'react';
 
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/animations/scale.css';
+
 import ReactGlobe from "../../lib";
+import defaultMarkers from './markers';
 
 <Playground>
   {() => {
+    function getRandomMarkers() {
+      return defaultMarkers.map(marker => ({
+        ...marker,
+        tooltip: `Random number: ${Math.random().toFixed(3)}`
+      }));
+    }
+    const [markers, setMarkers] = useState([])
     const [options, setOptions] = useState();
     const customOptions = {
       enableOrbitControlsRotate: false,
@@ -21,7 +32,11 @@ import ReactGlobe from "../../lib";
       lightPointIntensity: 4,
       globeGlowRadiusScale: 1,
       globeTexture: 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg',
-      orbitControlsAutoRotateSpeed: 10,
+      markerEnterAnimationDuration: 500,
+      markerGlowPower: 10,
+      markerTooltipRenderer: marker => marker.tooltip,
+      markerType: 'dot',
+      orbitControlsAutoRotateSpeed: 0,
     };
     return (
       <div>
@@ -31,9 +46,32 @@ import ReactGlobe from "../../lib";
         <button onClick={() => setOptions(customOptions)}>
           custom options
         </button>
+        <hr />
+        <button onClick={() => setMarkers(getRandomMarkers())}>
+          Randomize markers
+        </button>
+        <button onClick={() => setMarkers([])}>Clear markers</button>
+        <button
+          disabled={markers.length === defaultMarkers.length}
+          onClick={() =>
+            setMarkers([...markers, getRandomMarkers()[markers.length]])
+          }
+        >
+          Add marker
+        </button>
+        <button
+          disabled={markers.length === 0}
+          onClick={() => setMarkers(markers.slice(0, markers.length - 1))}
+        >
+          Remove marker
+        </button>
         <ReactGlobe
           height="400px"
+          markers={markers}
           width="100%"
+          onClickMarker={(marker, markerObject, event) => console.log('clicked', marker.id, markerObject.id)}
+          onMouseOutMarker={(marker, markerObject, event) => console.log('mouse out', marker.id, markerObject.id)}
+          onMouseOverMarker={(marker, markerObject, event) => console.log('mouseover', marker.id, markerObject.id)}
           options={options}
         />
       </div>
