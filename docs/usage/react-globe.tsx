@@ -1,8 +1,6 @@
 import React from 'react';
 
-import ReactGlobeSrc, { Props } from '../../src';
-
-export * from '../../src';
+import ReactGlobeSrc, { Props } from '../../lib';
 
 export default function ReactGlobe(props: Props): JSX.Element {
   return (

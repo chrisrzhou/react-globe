@@ -1,3 +1,3 @@
-export { default } from './src';
+export { default } from './lib';
 
-export * from './src';
+export * from './lib';

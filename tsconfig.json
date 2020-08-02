@@ -1,15 +1,10 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
     "checkJs": true,
     "esModuleInterop": true,
     "jsx": "react",
     "noEmit": true,
-    "paths": {
-      "~/*": ["./*"]
-    },
     "resolveJsonModule": true
   },
   "exclude": ["**/dist", "**/node_modules"]

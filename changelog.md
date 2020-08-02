@@ -1,7 +1,111 @@
 # Change Log
 
-## [5.0.0](https://github.com/chrisrzhou/react-globe/compare/v5.0.0...v4.0.0) (2020-07-27)
-- Remove default textures and require explicit texture assets.
+## [5.0.0](https://github.com/chrisrzhou/react-globe/compare/v5.0.0...v4.0.0) (2020-08-02)
+
+### Changes
+- Added `height` and `width` prop.
+- Flattened `options` prop (improves and simplifies component rendering lifecycle with hooks).
+- Improved `Globe` instance support.
+- Bugfixes and performance improvements.
+  - Fixed various GH issues.
+  - Memory leaks with marker callbacks.
+- Simplified and decoupled internal implementation.
+- Detypescripify source code to improve future OSS development.
+- Updated dev tools and build pipeline (`microbundle`, `xo`).
+- Updated docs and examples.
+
+### Breaking Changes
+
+#### Named Exports
+Only the `Globe` class, `ReactGlobe` component, `defaultCallbacks`, `defaultInitialCoordinates`, `defaultOptions`, and `tween` util are now exported to limit the exposed public API.
+
+#### Types
+Various exported types have changed.  The new types form a smaller and simplified set.
+
+#### Props
+
+Various props are replaced, updated (interface updates), removed, or unchanged.  The following table tracks the status of old vs new props.
+
+| Status | Old | New |
+| --- | --- | --- |
+| Updated | `animations` | `animations` |
+| Replaced | ~~`cameraOptions`~~ | `options` |
+| Replaced | ~~`focusOptions`~~ | `options` |
+| Replaced | ~~`globeOptions`~~ | `options` |
+| Replaced | ~~`lightOptions`~~ | `options` |
+| Replaced | ~~`markerOptions`~~ | `options` |
+| Replaced | ~~`size`~~ | `height`, `width` |
+| Removed | `onGetGlobeInstance` | |
+| Unchanged | `focus` | `focus` |
+| Unchanged | `initialCoordinates` | `initialCoordinates` |
+| Unchanged | `markers` | `markers` |
+| Unchanged | `onClickMarker` | `onClickMarker` |
+| Unchanged | `onDefocus` | `onDefocus` |
+| Unchanged | `onMouseOutMarker` | `onMouseOutMarker` |
+| Unchanged | `onMouseOverMarker` | `onMouseOverMarker` |
+| Unchanged | `onTextureLoaded` | `onTextureLoaded` |
+
+#### Options 
+
+`react-globe` provides useful and convenient configurations to customize the globe.  These configurations still exist, but are managed in a flat `options` object.  This allows easier code/documentation management of globe configuration.
+
+Most options are renamed in an organized way that allows easy refactoring.
+
+| Status | Old | New |
+| --- | --- | --- |
+| Renamed | `cameraOptions.autoRotateSpeed` | `options.cameraAutoRotateSpeed` |
+| Renamed | `cameraOptions.distanceRadiusScale` | `options.cameraDistanceRadiusScale` |
+| Renamed | `cameraOptions.enableAutoRotate` | `options.enableCameraAutoRotate` |
+| Renamed | `cameraOptions.enableRotate` | `options.enableCameraRotate` |
+| Renamed | `cameraOptions.enableZoom` | `options.enableCameraZoom` |
+| Renamed | `cameraOptions.maxDistanceRadiusScale` | `options.cameraMaxDistanceRadiusScale` |
+| Renamed | `cameraOptions.maxPolarAngle` | `options.cameraMaxPolarAngle` |
+| Renamed | `cameraOptions.minPolarAngle` | `options.cameraMinPolarAngle` |
+| Renamed | `cameraOptions.rotateSpeed` | `options.cameraRotateSpeed` |
+| Renamed | `cameraOptions.zoomSpeed` | `options.cameraZoomSpeed` |
+| Renamed | `focusOptions.animationDuration` | `options.focusAnimationDuration` |
+| Renamed | `focusOptions.distanceRadiusScale` | `options.focusDistanceRadiusScale` |
+| Renamed | `focusOptions.easingFunction` | `options.focusEasingFunction` |
+| Renamed | `focusOptions.enableDefocus` | `options.enableDefocus` |
+| Renamed | `globeOptions.backgroundTexture` | `options.globeBackgroundTexture` |
+| Renamed | `globeOptions.cloudsOpacity` | `options.globeCloudsOpacity` |
+| Renamed | `globeOptions.cloudsTexture` | `options.globeCloudsTexture` |
+| Renamed | `globeOptions.enableBackground` | `options.enableGlobeBackground` |
+| Renamed | `globeOptions.enableClouds` | `options.enableGlobeClouds` |
+| Renamed | `globeOptions.enableGlow` | `options.enableGlobeGlow` |
+| Renamed | `globeOptions.glowCoefficient` | `options.globeGlowCoefficient` |
+| Renamed | `globeOptions.glowColor` | `options.globeGlowColor` |
+| Renamed | `globeOptions.glowPower` | `options.globeGlowPower` |
+| Renamed | `globeOptions.glowRadiusScale` | `options.globeGlowRadiusScale` |
+| Renamed | `globeOptions.texture` | `options.globeTexture` |
+| Renamed | `lightOptions.ambientLightColor` | `options.ambientLightColor` |
+| Renamed | `lightOptions.ambientLightIntensity` | `options.ambientLightIntensity` |
+| Renamed | `lightOptions.pointLightColor` | `options.pointLightColor` |
+| Renamed | `lightOptions.pointLightIntensity` | `options.pointLightIntensity` |
+| Renamed | `lightOptions.pointLightPositionRadiusScales` | `options.pointLightPositionRadiusScales` |
+| Removed | `markerOptions.activeScale` |  |
+| Renamed | `markerOptions.enableGlow` | `options.enableMarkerGlow` |
+| Renamed | `markerOptions.enableTooltip` | `options.enableMarkerTooltip` |
+| Renamed | `markerOptions.enterAnimationDuration` | `options.markerEnterAnimationDuration` |
+| Renamed | `markerOptions.enterEasingFunction` | `options.markerEnterEasingFunction` |
+| Renamed | `markerOptions.exitAnimationDuration` | `options.markerExitAnimationDuration` |
+| Renamed | `markerOptions.exitEasingFunction` | `options.markerExitEasingFunction` |
+| Renamed | `markerOptions.getTooltipContent` | `options.markerTooltipRenderer` |
+| Renamed | `markerOptions.glowCoefficient` | `options.markerGlowCoefficient` |
+| Renamed | `markerOptions.glowPower` | `options.markerGlowPower` |
+| Renamed | `markerOptions.glowRadiusScale` | `options.markerGlowRadiusScale` |
+| Renamed | `markerOptions.offsetRadiusScale` | `options.markerOffsetRadiusScale` |
+| Renamed | `markerOptions.radiusScaleRange` | `options.markerRadiusScaleRange` |
+| Renamed | `markerOptions.renderer` | `options.markerRenderer` |
+| Renamed | `markerOptions.type` | `options.markerType` |
+
+#### `Globe` instance
+
+As mentioned in the `v4.0.0` docs, the `Globe` instance APIs are unstable and not formally maintained.  The `Globe` class instance is now managed through a new set of class methods, and the old methods are no longer compatible.
+
+`v5.0.0` introduces more formal support for the `Globe` instance.
+
+
 
 ## [4.0.0](https://github.com/chrisrzhou/react-globe/compare/v3.1.1...v4.0.0) (2019-10-17)
 

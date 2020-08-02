@@ -12,7 +12,7 @@ import ReactGlobe from "./react-globe";
 
 ## Simple
 
-Render a simple globe with one line of code and no props! Feel free to rotate and zoom on the globe!
+Render a simple interactive globe with a single line of code!
 
 <Playground>
   <ReactGlobe />
@@ -20,15 +20,15 @@ Render a simple globe with one line of code and no props! Feel free to rotate an
 
 ## Size
 
-By default, `react-globe` is responsively sized to the parent container's size. You can pass an explicit `size` prop to disable responsive sizing.
+By default, `react-globe` is responsively sized to the parent container. You can provide explicit `height` and `width` prop to control the globe size.  Note that the globe's aspect ratio is always computed with respect to its height.  Try resizing the window's height or play with other values in the Playground.
 
 <Playground>
-  <ReactGlobe size={[300, 300]} />
+  <ReactGlobe height="30vh" width={400} />
 </Playground>
 
 ## Background
 
-By default, `react-globe` uses the specified `backgroundTexture` to render the background in the canvas. You can also disable texture backgrounds by setting the `enableBackground` value of `globeOptions` to `false`. This will allow you to use the parent container's background instead:
+By default, `react-globe` uses the provided background texture specified in `options.globeBackgroundTexture`.  You can disable texture backgrounds by setting `options.enableGlobeBackground` to `false`.  This will allow you to use the parent container's background instead:
 
 <Playground>
   <div
@@ -37,8 +37,8 @@ By default, `react-globe` uses the specified `backgroundTexture` to render the b
     }}
   >
     <ReactGlobe
-      globeOptions={{
-        enableBackground: false
+      options={{
+        enableGlobeBackground: false
       }}
     />
   </div>
@@ -46,29 +46,29 @@ By default, `react-globe` uses the specified `backgroundTexture` to render the b
 
 ## Clouds
 
-You can disable and control various cloud properties in the `globeOptions` prop. Use the playground code editor to play around with the respective cloud options.
+You can disable and control various cloud properties in the `globeOptions` prop. Use the Playground to play around with the respective cloud options.
 
 <Playground>
   <ReactGlobe
-    globeOptions={{
-      cloudsOpacity: 0.8,
-      enableClouds: true
+    options={{
+      enableGlobeClouds: true,
+      globeCloudsOpacity: 0.8,
     }}
   />
 </Playground>
 
 ## Glow
 
-You can disable and control various glow properties in the `globeOptions` prop. Use the playground code editor to play around with the respective glow options.
+You can disable and control various glow properties in the `globeOptions` prop.  Use the Playground to play around with the respective glow options.
 
 <Playground>
   <ReactGlobe
-    globeOptions={{
-      glowCoefficient: 0.1,
-      glowColor: "gold",
-      glowPower: 4,
-      glowRadiusScale: 0.5,
-      enableGlow: true
+    options={{
+      enableGlobeGlow: true,
+      globeGlowCoefficient: 0.1,
+      globeGlowColor: "gold",
+      globeGlowPower: 4,
+      globeGlowRadiusScale: 0.5,
     }}
   />
 </Playground>
