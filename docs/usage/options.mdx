@@ -1,0 +1,69 @@
+---
+name: Options
+menu: Usage
+route: /usage/options
+---
+
+import { Playground } from 'docz';
+
+import ReactGlobe from './react-globe';
+import markers from './markers';
+
+# Options
+
+`react-globe` supports many ways to configure the globe using the `options` prop.  The Playground below is initialized with `defaultOptions` but you can experiment with various configurations.  For a detailed overview of the `options` prop, please refer to the [props documentation](../props#options).
+
+<Playground>
+  {() => {
+    const options = {
+      ambientLightColor: 'white',
+      ambientLightIntensity: 0.8,
+      cameraAutoRotateSpeed: 0.1,
+      cameraDistanceRadiusScale: 3,
+      cameraMaxDistanceRadiusScale: 4,
+      cameraMaxPolarAngle: Math.PI,
+      cameraMinPolarAngle: 0,
+      cameraRotateSpeed: 0.2,
+      cameraZoomSpeed: 1,
+      enableCameraAutoRotate: true,
+      enableCameraRotate: true,
+      enableCameraZoom: true,
+      enableDefocus: true,
+      enableGlobeBackground: true,
+      enableGlobeClouds: true,
+      enableGlobeGlow: true,
+      enableMarkerGlow: true,
+      enableMarkerTooltip: true,
+      focusAnimationDuration: 1000,
+      focusDistanceRadiusScale: 1.5,
+      focusEasingFunction: ['Cubic', 'Out'],
+      globeBackgroundTexture:
+        'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/background.png',
+      globeCloudsOpacity: 0.3,
+      globeCloudsTexture:
+        'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/clouds.png',
+      globeGlowCoefficient: 0.1,
+      globeGlowColor: '#d1d1d1',
+      globeGlowPower: 3,
+      globeGlowRadiusScale: 0.2,
+      globeTexture:
+        'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe.jpg',
+      markerEnterAnimationDuration: 1000,
+      markerEnterEasingFunction: ['Linear', 'None'],
+      markerGlowCoefficient: 0,
+      markerGlowPower: 3,
+      markerGlowRadiusScale: 2,
+      markerExitAnimationDuration: 500,
+      markerExitEasingFunction: ['Cubic', 'Out'],
+      markerOffsetRadiusScale: 0,
+      markerRadiusScaleRange: [0.005, 0.02],
+      markerRenderer: null,
+      markerTooltipRenderer: marker => JSON.stringify(marker.coordinates),
+      markerType: 'dot',
+      pointLightColor: 'white',
+      pointLightIntensity: 1,
+      pointLightPositionRadiusScales: [-2, 1, -1],
+    };
+    return <ReactGlobe markers={markers} options={options} />;
+  }}
+</Playground>

@@ -4,17 +4,13 @@ menu: Usage
 route: /usage/camera
 ---
 
-import { Playground } from "docz";
+import { Playground } from 'docz';
 
-import ReactGlobe from "./react-globe";
+import ReactGlobe from './react-globe';
 
 # Camera
 
-The camera controls how we observe and interact with the globe. You can control these behaviors using the `cameraOptions` prop. You can pass any number of option fields. Default options can be imported with:
-
-```js
-import { defaultCameraOptions } from "react-globe";
-```
+The camera controls how we observe and interact with the globe. You can control these behaviors using various camera options as detailed in the examples below:
 
 ## Zoom
 
@@ -22,11 +18,11 @@ Use the playground code editor to play around with the respective camera options
 
 <Playground>
   <ReactGlobe
-    cameraOptions={{
-      enableZoom: true,
-      distanceRadiusScale: 5,
-      maxDistanceRadiusScale: 15,
-      zoomSpeed: 2
+    options={{
+      cameraDistanceRadiusScale: 5,
+      cameraMaxDistanceRadiusScale: 15,
+      cameraZoomSpeed: 2,
+      enableCameraZoom: true,
     }}
   />
 </Playground>
@@ -37,13 +33,13 @@ Use the playground code editor to play around with the respective camera options
 
 <Playground>
   <ReactGlobe
-    cameraOptions={{
-      autoRotateSpeed: 1,
-      enableAutoRotate: true,
-      enableRotate: true,
-      maxPolarAngle: (Math.PI * 9) / 16,
-      minPolarAngle: (Math.PI * 7) / 16,
-      rotateSpeed: 0.5
+    options={{
+      cameraAutoRotateSpeed: 1,
+      cameraMaxPolarAngle: (Math.PI * 9) / 16,
+      cameraMinPolarAngle: (Math.PI * 7) / 16,
+      cameraRotateSpeed: 0.5,
+      enableCameraAutoRotate: true,
+      enableCameraRotate: true,
     }}
   />
 </Playground>

@@ -4,14 +4,14 @@ menu: Usage
 route: /usage/textures
 ---
 
-import { Playground } from "docz";
-import { useState } from "react";
+import { Playground } from 'docz';
+import { useState } from 'react';
 
-import ReactGlobe from "./react-globe";
+import ReactGlobe from './react-globe';
 
 # Textures
 
-Provide a valid image URL or relative image path to the `globeOptions` prop to set the textures for the globe, background and clouds. You can use the `onTextureLoaded` prop to capture whether the globe texture has successfully loaded.
+Provide valid image URLs for the `globeTexture`, `globeBackgroundTexture` and `globeCloudsTexture` options to configure custom textures for the globe, background, and clouds respectively.  You can use the `onGlobeTextureLoaded`, `onGlobeBackgroundTextureLoaded` and `onGlobeCloudsTextureLoaded` callback to capture the event after the texture has successfully been applied.
 
 <Playground>
   {() => {
@@ -21,13 +21,13 @@ Provide a valid image URL or relative image path to the `globeOptions` prop to s
     const clouds2 = 'clouds2.png';
     const globe1 = 'globe.jpg';
     const globe2 = 'globe_dark.jpg';
-
-    const [loaded, setLoaded] = useState(false);
-    const [background, setBackground] = useState(background1);
-    const [globe, setGlobe] = useState(globe1);
-    const [clouds, setClouds] = useState(clouds1);
-
-    const loader = (
+    const [isLoadingGlobeBackgroundTexture, setIsLoadingGlobeBackgroundTexture] = useState(false);
+    const [isLoadingGlobeCloudsTexture, setIsLoadingGlobeCloudsTexture] = useState(false);
+    const [isLoadingGlobeTexture, setIsLoadingGlobeTexture] = useState(false);
+    const [globeBackgroundTexture, setGlobeBackgroundTexture] = useState(background1);
+    const [globeCloudsTexture, setGlobeCloudsTexture] = useState(clouds1);
+    const [globeTexture, setGlobeTexture] = useState(globe1);
+    const loader = (isLoadingGlobeBackgroundTexture || isLoadingGlobeCloudsTexture || isLoadingGlobeTexture) && (
       <div
         style={{
           alignItems: 'center',
@@ -41,50 +41,71 @@ Provide a valid image URL or relative image path to the `globeOptions` prop to s
           right: 0,
           top: 0,
         }}>
-        Loading "{globe}"...
+        {isLoadingGlobeBackgroundTexture && `Loading '${globeBackgroundTexture}'...`}
+        {isLoadingGlobeCloudsTexture && `Loading '${globeCloudsTexture}'...`}
+        {isLoadingGlobeTexture && `Loading '${globeTexture}'...`}
       </div>
     );
-
     return (
       <div>
         <button
           onClick={() => {
-            setLoaded(false);
-            setGlobe(globe1);
+            setIsLoadingGlobeTexture(true);
+            setGlobeTexture(globe1);
           }}>
           Globe (default)
         </button>
         <button
           onClick={() => {
-            setLoaded(false);
-            setGlobe(globe2);
+            setIsLoadingGlobeTexture(true);
+            setGlobeTexture(globe2);
           }}>
           Globe (dark)
         </button>
         <br />
-        <button onClick={() => setBackground(background1)}>
+        <button
+          onClick={() => {
+            setIsLoadingGlobeBackgroundTexture(true);
+            setGlobeBackgroundTexture(background1);
+          }}>
           Background (default)
         </button>
-        <button onClick={() => setBackground(background2)}>
+        <button
+          onClick={() => {
+            setIsLoadingGlobeBackgroundTexture(true);
+            setGlobeBackgroundTexture(background2);
+          }}>
           Background (Milky Way)
         </button>
         <br />
-        <button onClick={() => setClouds(clouds1)}>Clouds (default)</button>
-        <button onClick={() => setClouds(clouds2)}>Clouds (dense)</button>
+        <button
+          onClick={() => {
+            setIsLoadingGlobeCloudsTexture(true);
+            setGlobeCloudsTexture(clouds1);
+          }}>
+          Clouds (default)
+        </button>
+        <button
+          onClick={() => {
+            setIsLoadingGlobeCloudsTexture(true);
+            setGlobeCloudsTexture(clouds2);
+          }}>
+          Clouds (dense)
+        </button>
         <>
-          {!loaded && loader}
+          {loader}
           <ReactGlobe
-            globeOptions={{
-              backgroundTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/${background}`,
-              cloudsTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/${clouds}`,
-              texture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/${globe}`,
+            options={{
+              globeBackgroundTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/${globeBackgroundTexture}`,
+              globeCloudsTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/${globeCloudsTexture}`,
+              globeTexture: `https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/${globeTexture}`,
             }}
-            onTextureLoaded={() => setLoaded(true)}
+            onGlobeBackgroundTextureLoaded={() => setIsLoadingGlobeBackgroundTexture(false)}
+            onGlobeCloudsTextureLoaded={() => setIsLoadingGlobeCloudsTexture(false)}
+            onGlobeTextureLoaded={() => setIsLoadingGlobeTexture(false)}
           />
         </>
       </div>
     );
-
-}}
-
+  }}
 </Playground>

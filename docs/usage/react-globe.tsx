@@ -1,5 +1,8 @@
 import React from 'react';
 
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/animations/scale.css';
+
 import ReactGlobeSrc, { Props } from '../../lib';
 
 export default function ReactGlobe(props: Props): JSX.Element {

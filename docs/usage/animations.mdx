@@ -4,68 +4,71 @@ menu: Usage
 route: /usage/animations
 ---
 
-import { Playground } from "docz";
-import { useState } from "react";
+import { Playground } from 'docz';
+import { useState } from 'react';
 
-import ReactGlobe from "./react-globe";
+import ReactGlobe from './react-globe';
 
 # Animations
 
-`react-globe` provides a simple way to execute globe animations through a series of steps. Simply pass an array of animation steps to the `animations` prop and `react-globe` will sequentially execute the animations. Each animation requires specifying the `animationDuration`, `coordinates`, `distanceRadiusScale` and `easingFunction`.
+`react-globe` provides a simple way to execute globe animations through a series of steps. Simply pass an array of animation steps to the `animations` prop and `react-globe` will sequentially execute the animations.
+
+Animations are executed using the focus mechanism and therefore each animation requires specifying the `coordinates`, `focusAnimationDuration`, `focusDistanceRadiusScale` and `focusEasingFunction`.
+
+When the globe is animating, it is locked and all interactions are disabled until the animation sequence is completed.
 
 <Playground>
   {() => {
-    const initialCoordinates = [0, 30];
     const [animationSequence, setAnimationSequence] = useState();
     let animations = [];
     switch (animationSequence) {
       case "singapore":
         animations = [
           {
-            animationDuration: 5000,
             coordinates: [1.3521, 103.8198],
-            distanceRadiusScale: 2,
-            easingFunction: ["Linear", "None"]
+            focusAnimationDuration: 3000,
+            focusDistanceRadiusScale: 2,
+            focusEasingFunction: ["Linear", "None"]
           }
         ];
         break;
       case "world":
         animations = [
           {
-            animationDuration: 5000,
             coordinates: [1.3521, 103.8198],
-            distanceRadiusScale: 2,
-            easingFunction: ["Linear", "None"]
+            focusAnimationDuration: 3000,
+            focusDistanceRadiusScale: 2,
+            focusEasingFunction: ["Linear", "None"]
           },
           {
-            animationDuration: 3000,
             coordinates: [39.9042, 116.4074],
-            distanceRadiusScale: 2,
-            easingFunction: ["Cubic", "InOut"]
+            focusAnimationDuration: 3000,
+            focusDistanceRadiusScale: 2,
+            focusEasingFunction: ["Cubic", "InOut"]
           },
           {
-            animationDuration: 3000,
             coordinates: [37.773972, -122.431297],
-            distanceRadiusScale: 2,
-            easingFunction: ["Back", "InOut"]
+            focusAnimationDuration: 3000,
+            focusDistanceRadiusScale: 2,
+            focusEasingFunction: ["Back", "InOut"]
           },
           {
-            animationDuration: 3000,
             coordinates: [40.73061, -73.935242],
-            distanceRadiusScale: 2,
-            easingFunction: ["Circular", "InOut"]
+            focusAnimationDuration: 3000,
+            focusDistanceRadiusScale: 2,
+            focusEasingFunction: ["Circular", "InOut"]
           },
           {
-            animationDuration: 3000,
             coordinates: [51.5074, 0.1278],
-            distanceRadiusScale: 2,
-            easingFunction: ["Quadratic", "InOut"]
+            focusAnimationDuration: 3000,
+            focusDistanceRadiusScale: 2,
+            focusEasingFunction: ["Quadratic", "InOut"]
           },
           {
-            animationDuration: 5000,
             coordinates: [1.3521, 103.8198],
-            distanceRadiusScale: 4,
-            easingFunction: ["Linear", "None"]
+            focusAnimationDuration: 5000,
+            focusDistanceRadiusScale: 4,
+            focusEasingFunction: ["Linear", "None"]
           }
         ];
         break;
@@ -74,16 +77,13 @@ import ReactGlobe from "./react-globe";
     }
     return (
       <div>
-        <button onClick={() => setAnimationSequence("singapore")}>
+        <button onClick={() => setAnimationSequence('singapore')}>
           Go to Singapore
         </button>
-        <button onClick={() => setAnimationSequence("world")}>
+        <button onClick={() => setAnimationSequence('world')}>
           Travel the world
         </button>
-        <ReactGlobe
-          animations={animations}
-          initialCoordinates={initialCoordinates}
-        />
+        <ReactGlobe animations={animations} />
       </div>
     );
   }}

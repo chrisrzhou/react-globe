@@ -4,20 +4,20 @@ menu: Usage
 route: /usage/focus
 ---
 
-import { Playground } from "docz";
-import { useState } from "react";
+import { Playground } from 'docz';
+import { useState } from 'react';
 
-import ReactGlobe from "./react-globe";
+import ReactGlobe from './react-globe';
 
 # Focus
 
 ## Behavior
 
-To focus on a specific lat-long coordinate (e.g. Singapore `[1.3521, 103.8198]`), pass an array of coordinates to the component. Clicking on the globe or resetting the `focus` prop to `undefined` unfocuses the globe.
+To focus on a specific latitude/longitude  coordinate (e.g. Singapore `[1.3521, 103.8198]`), pass an array of coordinates to the component. Clicking on the globe or resetting the `focus` prop to `null` unfocuses the globe.
 
 <Playground>
   {() => {
-    const [focus, setFocus] = useState(undefined);
+    const [focus, setFocus] = useState(null);
     return (
       <div>
         <button onClick={() => setFocus([1.3521, 103.8198])}>Singapore</button>
@@ -27,26 +27,18 @@ To focus on a specific lat-long coordinate (e.g. Singapore `[1.3521, 103.8198]`)
         <button onClick={() => setFocus([37.773972, -122.431297])}>
           San Fransisco
         </button>
-        <button onClick={() => setFocus(undefined)}>None</button>
+        <button onClick={() => setFocus(null)}>None</button>
         <ReactGlobe focus={focus} />
       </div>
     );
   }}
 </Playground>
 
-## `FocusOptions`
-
-Use the `FocusOptions` to control how focused coordinates behave. You can pass any number of option fields. Default options can be imported with:
-
-```js
-import { defaultFocusOptions } from "react-globe";
-```
-
-Use the playground code editor to explore customizing the focus animations or disabling the defocus feature.
+Use the focus options to control how focused coordinates behave.  Use the playground code editor to explore customizing the focus animations or disabling the defocus feature.
 
 <Playground>
   {() => {
-    const [focus, setFocus] = useState(undefined);
+    const [focus, setFocus] = useState(null);
     return (
       <div>
         <button onClick={() => setFocus([1.3521, 103.8198])}>Singapore</button>
@@ -56,13 +48,13 @@ Use the playground code editor to explore customizing the focus animations or di
         <button onClick={() => setFocus([37.773972, -122.431297])}>
           San Fransisco
         </button>
-        <button onClick={() => setFocus(undefined)}>None</button>
+        <button onClick={() => setFocus(null)}>None</button>
         <ReactGlobe
           focus={focus}
-          focusOptions={{
-            animationDuration: 3000,
-            distanceRadiusScale: 2,
-            easingFunction: ["Elastic", "In"],
+          options={{
+            focusAnimationDuration: 3000,
+            focusDistanceRadiusScale: 2,
+            focusEasingFunction: ['Elastic', 'In'],
             enableDefocus: false
           }}
         />

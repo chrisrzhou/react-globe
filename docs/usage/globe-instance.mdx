@@ -4,11 +4,11 @@ menu: Usage
 route: /usage/globe-instance
 ---
 
-import { Playground } from "docz";
-import { useState, useEffect } from "react";
+import { Playground } from 'docz';
+import { useState, useEffect } from 'react';
 
-import markers from "./markers";
-import ReactGlobe, { Globe } from "./react-globe";
+import markers from './markers';
+import ReactGlobe, { Globe } from './react-globe';
 
 # Globe Instance
 
@@ -54,7 +54,7 @@ import ReactGlobe, { Globe } from "./react-globe";
           </button>
           <button
             onClick={() =>
-              globeInstance.updateLights({ ambientLightColor: "red" })
+              globeInstance.updateLights({ ambientLightColor: 'red' })
             }
           >
             Change lights
@@ -69,7 +69,7 @@ import ReactGlobe, { Globe } from "./react-globe";
           </button>
           <button onClick={() => setFocus(undefined)}>Defocus</button>
           <button
-            onClick={() => setLightOptions({ ambientLightColor: "blue" })}
+            onClick={() => setLightOptions({ ambientLightColor: 'blue' })}
           >
             Change lights
           </button>
@@ -96,7 +96,7 @@ The example also demonstrates that configuring `Globe` instance works interchang
 You can also directly work with the `Globe` class by using the provided named export:
 
 ```js
-import { Globe } from "react-globe";
+import { Globe } from 'react-globe';
 ```
 
 The `Globe` named export allows you to create globe visualizations with vanilla Javascript without the need for React. In the following example, we demonstrate how we can create the globe with basic Javascript when given a mounting ref.
@@ -107,10 +107,10 @@ The `Globe` named export allows you to create globe visualizations with vanilla 
   {() => {
     useEffect(() => {
       // create initial DOM hierarchy
-      const mount = document.getElementById("react-globe-instance");
-      const canvas = document.createElement("canvas");
-      canvas.style.display = "block";
-      const tooltipDiv = document.createElement("div");
+      const mount = document.getElementById('react-globe-instance');
+      const canvas = document.createElement('canvas');
+      canvas.style.display = 'block';
+      const tooltipDiv = document.createElement('div');
       mount.appendChild(canvas);
       mount.appendChild(tooltipDiv);
       // create and initialize globe instance
@@ -118,9 +118,9 @@ The `Globe` named export allows you to create globe visualizations with vanilla 
       mount.appendChild(globeInstance.renderer.domElement);
       // call any update method
       globeInstance.updateSize([800, 400]);
-      globeInstance.updateLights({ ambientLightColor: "red" });
+      globeInstance.updateLights({ ambientLightColor: 'red' });
       globeInstance.animate();
     });
-    return <div id="react-globe-instance" />;
+    return <div id='react-globe-instance' />;
   }}
 </Playground>

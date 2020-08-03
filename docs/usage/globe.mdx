@@ -4,9 +4,9 @@ menu: Usage
 route: /usage/globe
 ---
 
-import { Playground } from "docz";
+import { Playground } from 'docz';
 
-import ReactGlobe from "./react-globe";
+import ReactGlobe from './react-globe';
 
 # Globe
 
@@ -23,7 +23,7 @@ Render a simple interactive globe with a single line of code!
 By default, `react-globe` is responsively sized to the parent container. You can provide explicit `height` and `width` prop to control the globe size.  Note that the globe's aspect ratio is always computed with respect to its height.  Try resizing the window's height or play with other values in the Playground.
 
 <Playground>
-  <ReactGlobe height="30vh" width={400} />
+  <ReactGlobe height='30vh' width={400} />
 </Playground>
 
 ## Background
@@ -33,12 +33,12 @@ By default, `react-globe` uses the provided background texture specified in `opt
 <Playground>
   <div
     style={{
-      backgroundImage: "linear-gradient(to right, red , yellow)"
+      backgroundImage: 'linear-gradient(to right, red , yellow)',
     }}
   >
     <ReactGlobe
       options={{
-        enableGlobeBackground: false
+        enableGlobeBackground: false,
       }}
     />
   </div>
@@ -66,7 +66,7 @@ You can disable and control various glow properties in the `globeOptions` prop. 
     options={{
       enableGlobeGlow: true,
       globeGlowCoefficient: 0.1,
-      globeGlowColor: "gold",
+      globeGlowColor: 'gold',
       globeGlowPower: 4,
       globeGlowRadiusScale: 0.5,
     }}

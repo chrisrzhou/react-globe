@@ -18,15 +18,11 @@ Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 npm install react-globe
 ```
 
-Note that `react-globe` requires `react >= 16.8.0` and `three >= 0.102.0` as peer dependencies.
+Note that `react-globe` requires `react >= 16.13.1` and `three >= 0.118.3` as peer dependencies.
 
 ## Examples
 
-### Documented Examples
-
 View all documented examples and gallery of `react-globe` applications at https://react-globe.netlify.com/.
-
-### Local Examples
 
 You can also run the examples locally:
 
@@ -66,22 +62,3 @@ npm install && npm run docs
 The code is written in `typescript`, linted with `xo`, and built with `microbundle`. Examples and documentations are built with `docz`.
 
 Feel free to contribute by submitting a pull request.
-
-### Main Dependencies
-
-- `react`
-- `three`
-- `three-glow-mesh`
-- `three.interaction`
-- `es6-tween`
-- `tippy.js`
-
-### Codebase Overview
-
-- `ReactGlobe.tsx`: Core React component exposing relevant props controlling the `Globe` instance.
-- `Globe.ts`: Primary ThreeJS rendering logic written as a `Globe` class.
-- `Tooltip.ts`: Tooltip component powered by `tippy.js`.
-- `types.ts`: Typescript types.
-- `defaults.ts`: Default options and constants.
-- `utils.ts`: Various simple functions to compute derived data.
-- `/textures`: Default globe, clouds and background textures.

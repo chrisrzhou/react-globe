@@ -4,11 +4,11 @@ menu: Usage
 route: /usage/callbacks
 ---
 
-import { Playground } from "docz";
-import { useState } from "react";
+import { Playground } from 'docz';
+import { useState } from 'react';
 
-import markers from "./markers";
-import ReactGlobe from "./react-globe";
+import markers from './markers';
+import ReactGlobe from './react-globe';
 
 # Callbacks
 
@@ -29,11 +29,10 @@ import ReactGlobe from "./react-globe";
       setDetails(`City: ${marker.city} (Sales: ${marker.value}.0M)`);
     }
 
-    function onDefocus(previousCoordinates, event) {
+    function onDefocus(previousCoordinates) {
       setEvent({
         type: 'DEFOCUS',
         previousCoordinates,
-        pointerEventPosition: { x: event.clientX, y: event.clientY },
       });
       setDetails();
     }
@@ -90,7 +89,5 @@ import ReactGlobe from "./react-globe";
         )}
       </div>
     );
-
-}}
-
+  }}
 </Playground>

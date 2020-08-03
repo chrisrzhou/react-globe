@@ -83,6 +83,7 @@
     "rules": {
       "capitalized-comments": "off",
       "import/no-anonymous-default-export": "off",
+      "import/no-unassigned-import": "off",
       "no-new": "off",
       "no-unused-vars": [
         "error",
