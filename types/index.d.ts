@@ -90,8 +90,8 @@ export interface Marker {
 
 export type MarkerCallback = (
   marker: Marker,
-  markerObject?: Object3D,
-  event?: PointerEvent,
+  markerObject: Object3D,
+  event: PointerEvent,
 ) => void;
 
 export type MinMaxPair = [number, number];
@@ -152,7 +152,7 @@ export interface Options {
   /** Globe glow coefficient (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
   globeGlowCoefficient: number;
   /** Globe glow color. */
-  globeGlowColor: number;
+  globeGlowColor: string;
   /** Globe glow power (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
   globeGlowPower: number;
   /** Size of the globe glow radius (measured as a scale factor to the globe radius). */
@@ -178,7 +178,7 @@ export interface Options {
   /** [min, max] size of markers (measured as scale factors to the globe radius). */
   markerRadiusScaleRange: MinMaxPair;
   /** Provide a custom marker renderer that should return a THREE.Object3D object for the associated marker data object. */
-  markerRenderer: (marker: Marker) => Object3D | null;
+  markerRenderer: (marker: Marker) => Object3D;
   /** Callback to render the tooltip string content based on the marker data. */
   markerTooltipRenderer: (marker: Marker) => string;
   /** If a valid type is passed, ReactGlobe will render the supported marker type. */
@@ -214,9 +214,9 @@ export interface Props {
   /** Callback to handle click events of a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
   onClickMarker?: MarkerCallback;
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates. */
-  onDefocus?: (previousFocus: Coordinates | null) => void;
+  onDefocus?: (previousFocus: Coordinates) => void;
   /** Capture the initialized globe instance */
-  onGetGlobe?: (globe: typeof Globe) => void;
+  onGetGlobe?: (globe: Globe) => void;
   /** Callback when globe background texture is successfully loaded. */
   onGlobeBackgroundTextureLoaded?: () => void;
   /** Callback when globe clouds texture is successfully loaded. */
@@ -266,7 +266,7 @@ export class Globe {
 
   updateFocus(
     focus: Coordinates | null,
-    overrideOptions: Optional<Options>,
+    overrideOptions?: Optional<Options>,
     shouldUnlockAfterFocus?: boolean,
   ): void;
 
