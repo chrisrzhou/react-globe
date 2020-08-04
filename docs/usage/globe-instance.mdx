@@ -10,15 +10,19 @@ import { useState, useEffect } from 'react';
 import markers from './markers';
 import ReactGlobe, { Globe } from './react-globe';
 
-# Globe Instance
+# `Globe` Instance
 
-`ReactGlobe` provides ways to interact with the underlying `Globe` class instance through the `onGetGlobeInstance` prop or the `Globe` named export.
+`react-globe` provides ways to interact with the underlying `Globe` class instance through the `onGetGlobeInstance` prop or the `Globe` class.
 
-> Note that the `Globe` instance APIs are **less stable** than the `ReactGlobe` component APIs. Therefore, it is **strongly recommended** that you still use the component props to control globe behaviors.
+## `onGetGlobeInstance` Prop
+
+The following interactive example demonstrates capturing the `Globe` instance using the `onGetGlobeInstance` prop. Once the `Globe` instance is captured, you can hook it up to your application lifecycle. Useful methods include `freeze` and `unfreeze`, and you have access to many other class methods and variables.
+
+The example also demonstrates that configuring `Globe` instance works interchangeably well with component props. In most cases, the component props implicitly call the `Globe` instance methods, therefore updating props should behave the same as calling the instance methods explicitly
 
 <Playground>
   {() => {
-    const [globeInstance, setGlobeInstance] = useState();
+    const [globe, setGlobe] = useState();
     const [isFrozen, setIsFrozen] = useState(false);
     const [focus, setFocus] = useState();
     const [lightOptions, setLightOptions] = useState({});
@@ -30,7 +34,7 @@ import ReactGlobe, { Globe } from './react-globe';
           <button
             disabled={isFrozen}
             onClick={() => {
-              globeInstance.freeze();
+              globe.freeze();
               setIsFrozen(true);
             }}
           >
@@ -39,22 +43,22 @@ import ReactGlobe, { Globe } from './react-globe';
           <button
             disabled={!isFrozen}
             onClick={() => {
-              globeInstance.unfreeze();
+              globe.unfreeze();
               setIsFrozen(false);
             }}
           >
             Unfreeze
           </button>
           <br />
-          <button onClick={() => globeInstance.updateFocus([1.3521, 103.8198])}>
+          <button onClick={() => globe.updateFocus([1.3521, 103.8198])}>
             Change Focus
           </button>
-          <button onClick={() => globeInstance.updateFocus(undefined)}>
+          <button onClick={() => globe.updateFocus(undefined)}>
             Unfocus
           </button>
           <button
             onClick={() =>
-              globeInstance.updateLights({ ambientLightColor: 'red' })
+              globe.updateLights({ ambientLightColor: 'red' })
             }
           >
             Change lights
@@ -78,20 +82,14 @@ import ReactGlobe, { Globe } from './react-globe';
           focus={focus}
           lightOptions={lightOptions}
           markers={markers}
-          onGetGlobeInstance={setGlobeInstance}
+          onGetGlobeInstance={setGlobe}
         />
       </div>
     );
   }}
 </Playground>
 
-## `onGetGlobeInstance` Prop
-
-The following interactive example demonstrates capturing the `Globe` instance using the `onGetGlobeInstance` prop. Once the `Globe` instance is captured, you can hook it up to your application lifecycle. Useful methods include `freeze` and `unfreeze`, and you have access to many other class methods and variables. Please refer to the [Props](../props#globe-instance) section for more details on the fields and methods available on the `Globe` instance.
-
-The example also demonstrates that configuring `Globe` instance works interchangeably well with component props. In most cases, the component props implicitly call the `Globe` instance methods, therefore updating props should behave the same as calling the instance methods explicitly.
-
-## `Globe` Named Export
+## `Globe` Class
 
 You can also directly work with the `Globe` class by using the provided named export:
 
@@ -99,7 +97,7 @@ You can also directly work with the `Globe` class by using the provided named ex
 import { Globe } from 'react-globe';
 ```
 
-The `Globe` named export allows you to create globe visualizations with vanilla Javascript without the need for React. In the following example, we demonstrate how we can create the globe with basic Javascript when given a mounting ref.
+The `Globe` class allows you to create globe visualizations with vanilla Javascript without the need for React. In the following example, we demonstrate how we can create the globe with basic Javascript when given a mounting ref.
 
 > Note that while the `Globe` instance gives you full control on using the class in any code, we recommend that you still use the component to manage globe functionalities. There is a lot of work required to hook everything up together, and that's the whole point of what `react-globe` is trying to accomplish for you!
 
@@ -107,20 +105,25 @@ The `Globe` named export allows you to create globe visualizations with vanilla 
   {() => {
     useEffect(() => {
       // create initial DOM hierarchy
-      const mount = document.getElementById('react-globe-instance');
-      const canvas = document.createElement('canvas');
-      canvas.style.display = 'block';
-      const tooltipDiv = document.createElement('div');
-      mount.appendChild(canvas);
-      mount.appendChild(tooltipDiv);
+      const mountElement = document.getElementById('react-globe-instance');
+      const tooltipElement = document.createElement('div');
+      const canvasElement = document.createElement('canvas');
+      mountElement.appendChild(canvasElement);
+      mountElement.appendChild(tooltipElement);
       // create and initialize globe instance
-      const globeInstance = new Globe(canvas, tooltipDiv);
-      mount.appendChild(globeInstance.renderer.domElement);
+      const globe = new Globe({ canvasElement, tooltipElement });
       // call any update method
-      globeInstance.updateSize([800, 400]);
-      globeInstance.updateLights({ ambientLightColor: 'red' });
-      globeInstance.animate();
-    });
+      globe.resize({ height: 500, width: 800 });
+      globe.updateOptions({
+        ambientLightColor: 'red',
+        cameraAutoRotateSpeed: 3,
+        globeGlowColor: 'blue',
+        markerTooltipRenderer: marker => `${marker.city} (${marker.value})`,
+        pointLightColor: 'gold',
+      });
+      globe.updateMarkers(markers);
+      globe.animate();
+    }, []);
     return <div id='react-globe-instance' />;
   }}
 </Playground>

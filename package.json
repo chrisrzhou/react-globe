@@ -29,31 +29,31 @@
   "main": "dist/index.js",
   "module": "dist/index.module.js",
   "source": "index.js",
-  "typings": "src/index.d.ts",
+  "typings": "types/index.d.ts",
   "dependencies": {
     "d3-scale": "^3.0.0",
     "es6-tween": "^5.5.10",
     "resize-observer-polyfill": "^1.5.1",
-    "three-glow-mesh": "^0.1.1",
+    "three-glow-mesh": "^0.1.2",
     "three.interaction": "^0.2.3",
-    "tippy.js": "^6.2.5"
+    "tippy.js": "^6.2.6"
   },
   "devDependencies": {
     "@types/d3-scale": "^2.1.1",
-    "@types/react": "^16.9.43",
-    "css-loader": "^4.0.0",
+    "@types/react": "^16.9.44",
+    "css-loader": "^4.2.0",
     "docz": "^1.2.0",
     "docz-theme-default": "^1.2.0",
     "eslint-config-xo-react": "^0.23.0",
     "eslint-config-xo-typescript": "^0.31.0",
-    "eslint-plugin-react": "^7.20.4",
+    "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
     "husky": "^4.2.5",
     "microbundle": "^0.12.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "style-loader": "^1.2.1",
-    "three": "^0.118.3",
+    "three": "^0.119.1",
     "typescript": "^3.8.3",
     "xo": "^0.32.1"
   },
@@ -87,7 +87,9 @@
       "no-new": "off",
       "no-unused-vars": [
         "error",
-        { "argsIgnorePattern": "^_" }
+        {
+          "argsIgnorePattern": "^_"
+        }
       ],
       "no-warning-comments": "off",
       "padding-line-between-statements": "off",

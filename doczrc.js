@@ -43,6 +43,7 @@ export default {
   },
   public: 'public',
   themeConfig: {
+    linesToScrollEditor: 10000,
     showPlaygroundEditor: true,
   },
   title: `🌎 ${pkg.name} (v${pkg.version})`,

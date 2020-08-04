@@ -3,12 +3,10 @@ import React from 'react';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
 
-import ReactGlobeSrc, { Props } from '../../lib';
+import ReactGlobeSrc from '../..';
 
-export default function ReactGlobe(props: Props): JSX.Element {
-  return (
-    <div style={{ height: 400, width: '100%' }}>
-      <ReactGlobeSrc {...props} />
-    </div>
-  );
+export * from '../..';
+
+export default function ReactGlobe(props): JSX.Element {
+  return <ReactGlobeSrc height={400} width="100%" {...props} />;
 }
