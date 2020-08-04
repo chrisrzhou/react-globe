@@ -14,6 +14,16 @@ export interface Animation {
   focusEasingFunction: EasingFunction;
 }
 
+export interface Callbacks {
+  onClickMarker: MarkerCallback;
+  onDefocus: (previousFocus: Coordinates | null) => void;
+  onGlobeBackgroundTextureLoaded: () => void;
+  onGlobeCloudsTextureLoaded: () => void;
+  onGlobeTextureLoaded: () => void;
+  onMouseOutMarker: MarkerCallback;
+  onMouseOverMarker: MarkerCallback;
+}
+
 export type Coordinates = [number, number];
 
 export type EasingFunction =
@@ -204,7 +214,9 @@ export interface Props {
   /** Callback to handle click events of a marker.  Captures the clicked marker, ThreeJS object and pointer event. */
   onClickMarker?: MarkerCallback;
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates. */
-  onDefocus?: (previousFocus: Coordinates) => void;
+  onDefocus?: (previousFocus: Coordinates | null) => void;
+  /** Capture the initialized globe instance */
+  onGetGlobe?: (globe: typeof Globe) => void;
   /** Callback when globe background texture is successfully loaded. */
   onGlobeBackgroundTextureLoaded?: () => void;
   /** Callback when globe clouds texture is successfully loaded. */
@@ -219,7 +231,49 @@ export interface Props {
 
 export default function ReactGlobe(props: Props): JSX.Element;
 
-export function Globe(): void;
+export class Globe {
+  constructor({
+    canvasElement,
+    initialCoordinates,
+    tooltipElement,
+  }: {
+    canvasElement: HTMLCanvasElement;
+    initialCoordinates: Coordinates;
+    tooltipElement: HTMLDivElement;
+  });
+
+  animate(): void;
+
+  animateClouds(): void;
+
+  applyAnimations(animations: Animation[]): () => void;
+
+  defocus(): void;
+
+  destroy(): void;
+
+  lock(): void;
+
+  render(): void;
+
+  resize(size: { height: number; width: number }): void;
+
+  saveFocus(focusPosition: Coordinates | null): void;
+
+  unlock(): void;
+
+  updateCallbacks(callbacks?: Optional<Callbacks>): void;
+
+  updateFocus(
+    focus: Coordinates | null,
+    overrideOptions: Optional<Options>,
+    shouldUnlockAfterFocus?: boolean,
+  ): void;
+
+  updateOptions(options?: Optional<Options>): void;
+
+  updateMarkers(markers?: Marker[]): void;
+}
 
 /**
  * Utils

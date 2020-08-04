@@ -3,8 +3,6 @@ name: Props
 route: /props
 ---
 
-import { Props } from 'docz';
-
 <!-- Keep up to date with types/index.d.ts -->
 # Props
 
@@ -34,6 +32,8 @@ interface Props {
   onClickMarker?: MarkerCallback;
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates. */
   onDefocus?: (previousFocus: Coordinates) => void;
+  /** Capture the initialized globe instance */
+  onGetGlobe?: (globe: typeof Globe) => void;
   /** Callback when globe background texture is successfully loaded. */
   onGlobeBackgroundTextureLoaded?: () => void;
   /** Callback when globe clouds texture is successfully loaded. */
@@ -148,7 +148,49 @@ interface Options {
 `react-globe` exposes a `Globe` class that allows building globe visualizations without the React component.
 
 ```ts
-function Globe(): void;
+class Globe {
+  constructor({
+    canvasElement,
+    initialCoordinates,
+    tooltipElement,
+  }: {
+    canvasElement: HTMLCanvasElement;
+    initialCoordinates: Coordinates;
+    tooltipElement: HTMLDivElement;
+  });
+
+  animate(): void;
+
+  animateClouds(): void;
+
+  applyAnimations(animations: Animation[]): () => void;
+
+  defocus(): void;
+
+  destroy(): void;
+
+  lock(): void;
+
+  render(): void;
+
+  resize(size: { height: number; width: number }): void;
+
+  saveFocus(focusPosition: Coordinates | null): void;
+
+  unlock(): void;
+
+  updateCallbacks(callbacks?: Optional<Callbacks>): void;
+
+  updateFocus(
+    focus: Coordinates | null,
+    overrideOptions: Optional<Options>,
+    shouldUnlockAfterFocus?: boolean,
+  ): void;
+
+  updateOptions(options?: Optional<Options>): void;
+
+  updateMarkers(markers?: Marker[]): void;
+}
 ```
 
 ## Interfaces

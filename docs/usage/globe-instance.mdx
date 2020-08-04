@@ -10,57 +10,60 @@ import { useState, useEffect } from 'react';
 import markers from './markers';
 import ReactGlobe, { Globe } from './react-globe';
 
-# `Globe` Instance
+# Globe Instance
 
-`react-globe` provides ways to interact with the underlying `Globe` class instance through the `onGetGlobeInstance` prop or the `Globe` class.
+`react-globe` provides ways to interact with the underlying globe instance through the `onGetGlobe` prop or the `Globe` class.
 
-## `onGetGlobeInstance` Prop
+## `onGetGlobe` Prop
 
-The following interactive example demonstrates capturing the `Globe` instance using the `onGetGlobeInstance` prop. Once the `Globe` instance is captured, you can hook it up to your application lifecycle. Useful methods include `freeze` and `unfreeze`, and you have access to many other class methods and variables.
+The following interactive example demonstrates capturing the globe instance using the `onGetGlobe` prop. Once the globe instance is captured, you can hook it up to your application lifecycle. Useful methods include `lock` and `unlock`, and you have access to many other class methods.
 
-The example also demonstrates that configuring `Globe` instance works interchangeably well with component props. In most cases, the component props implicitly call the `Globe` instance methods, therefore updating props should behave the same as calling the instance methods explicitly
+The example also demonstrates that configuring the globe instance works interchangeably with component props. Use the Playground to observe how either instance methods or props updates can update the globe.
 
 <Playground>
   {() => {
     const [globe, setGlobe] = useState();
-    const [isFrozen, setIsFrozen] = useState(false);
+    const [isLocked, setIsLocked] = useState(false);
     const [focus, setFocus] = useState();
-    const [lightOptions, setLightOptions] = useState({});
+    const [options, setOptions] = useState({});
     return (
       <div>
         <p>
           <b>Edit Globe Instance</b>
           <br />
           <button
-            disabled={isFrozen}
+            disabled={isLocked}
             onClick={() => {
-              globe.freeze();
-              setIsFrozen(true);
-            }}
-          >
-            Freeze
+              globe.lock();
+              setIsLocked(true);
+            }}>
+            Lock
           </button>
           <button
-            disabled={!isFrozen}
+            disabled={!isLocked}
             onClick={() => {
-              globe.unfreeze();
-              setIsFrozen(false);
-            }}
-          >
-            Unfreeze
+              globe.unlock();
+              setIsLocked(false);
+            }}>
+            Unlock
           </button>
           <br />
-          <button onClick={() => globe.updateFocus([1.3521, 103.8198])}>
+          <button
+            onClick={() => {
+              globe.updateFocus([1.3521, 103.8198])
+            }}>
             Change Focus
           </button>
-          <button onClick={() => globe.updateFocus(undefined)}>
+          <button
+            onClick={() => {
+              globe.updateFocus(null);
+            }}>
             Unfocus
           </button>
           <button
-            onClick={() =>
-              globe.updateLights({ ambientLightColor: 'red' })
-            }
-          >
+            onClick={() => {
+              globe.updateOptions({ ambientLightColor: 'red' });
+            }}>
             Change lights
           </button>
           <br />
@@ -68,21 +71,30 @@ The example also demonstrates that configuring `Globe` instance works interchang
         <p>
           <b>Edit Globe Props</b>
           <br />
-          <button onClick={() => setFocus([37.773972, -122.431297])}>
+          <button
+            onClick={() => {
+              setFocus([37.773972, -122.431297]);
+            }}>
             Change Focus
           </button>
-          <button onClick={() => setFocus(undefined)}>Defocus</button>
           <button
-            onClick={() => setLightOptions({ ambientLightColor: 'blue' })}
-          >
+            onClick={() => {
+              setFocus(null);
+            }}>
+            Defocus
+          </button>
+          <button
+            onClick={() => {
+              setOptions({ ambientLightColor: 'blue' });
+            }}>
             Change lights
           </button>
         </p>
         <ReactGlobe
           focus={focus}
-          lightOptions={lightOptions}
           markers={markers}
-          onGetGlobeInstance={setGlobe}
+          options={options}
+          onGetGlobe={setGlobe}
         />
       </div>
     );

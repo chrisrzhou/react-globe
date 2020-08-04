@@ -36,13 +36,13 @@ Various props are replaced, updated (interface updates), removed, or unchanged. 
 | replaced | ~~`lightOptions`~~ | `options` |
 | replaced | ~~`markerOptions`~~ | `options` |
 | replaced | ~~`size`~~ | `height`, `width` |
-| removed | `onGetGlobeInstance` | |
 | unchanged | `focus` | `focus` |
 | unchanged | `initialCoordinates` | `initialCoordinates` |
 | unchanged | `markers` | `markers` |
 | unchanged | `onClickMarker` | `onClickMarker` |
 | unchanged | `onMouseOutMarker` | `onMouseOutMarker` |
 | unchanged | `onMouseOverMarker` | `onMouseOverMarker` |
+| renamed | `onGetGlobeInstance` | `onGetGlobe` |
 | renamed | `onTextureLoaded` | `onGlobeTextureLoaded` |
 | added | | `onGlobeBackgroundTextureLoaded` |
 | added | | `onGlobeCloudsTextureLoaded` |
