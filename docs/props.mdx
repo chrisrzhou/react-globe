@@ -20,6 +20,8 @@ interface Props {
   focus?: Coordinates | null;
   /** Height of globe (e.g. 30vh, 100%, 300px, 400).  Note that the globe aspect ratio is scaled to its height */
   height?: string | number;
+  /** Distance (measured as a scale factor to the globe radius) that the camera is initially placed.  This value should be greater than 1. */
+  initialCameraDistanceRadiusScale?: number;
   /** Initial [lat, lon] coordinates for the globe. */
   initialCoordinates?: Coordinates;
   /** An array of data that will render interactive markers on the globe. */

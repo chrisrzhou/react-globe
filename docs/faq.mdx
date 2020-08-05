@@ -1,0 +1,91 @@
+---
+name: FAQ
+route: /faq
+---
+
+# FAQ
+
+## How do I make the globe responsive?
+
+Simply set responsive-based values for `height` and `width` props e.g. `100vh`, `50vh`, `100vw`, `100%`, `80%` etc.
+
+## How do I make the globe smaller on initial render?
+
+Specify the `initialCameraDistanceRadiusScale` value to control how far the camera is placed from the globe as a scale factor of the globe's radius.
+
+## Why is my globe infinitely resizing vertically?
+
+This usually happens if you set `height` prop to a percentage-based value (e.g. `100%`) and the parent div does not enforce a fixed height.  There are a few ways of fixing this:
+- Ensure the parent div has a fixed `height` e.g. `400px`, `50vh`.
+- Ensure the parent div has a fixed `maxHeight` e.g. `400px`, `50vh`.
+- Use non-percentage based values for `height` e.g. `400px`, `50vh`.
+
+## Why is my globe infinitely rendering?
+
+Various props for `react-globe` such as `initialCoordinates`, `options`, `focus` are array/object-based.  A common mistake in React components is to declare these conveniently as literal prop values:
+
+```js
+function MyGlobe() {
+  return (
+    <ReactGlobe
+      focus={[0, 0]}
+      options={{
+        ambientLightColor: 'red',
+      }}
+    />
+  )
+}
+```
+
+When `MyGlobe` re-renders, the array/object literal props are always initialized as new instances, and this causes the underlying `ReactGlobe` component to re-render as props have changed.  To avoid this situation, either declare these prop values outside of your component, or memoize them:
+
+```js
+const focus = [0, 0];
+const options = {
+  ambientLightColor: 'red',
+};
+
+function MyStaticGlobe() {
+  return (
+    <ReactGlobe
+      focus={focus}
+      options={options}
+    />
+  )
+}
+
+import { useMemo } from 'react';
+
+function MyMemoizedGlobe() {
+  const focus = useMemo(() => {
+    return [0, 0];
+  }, []); // add dependencies to useMemo where appropriate
+
+  const options = useMemo(() => {
+    return {
+      ambientLightColor: 'red',
+    }
+  }, []); // add dependencies to useMemo where appropriate
+
+  return (
+    <ReactGlobe
+      focus={focus}
+      options={options}
+    />
+  )
+}
+```
+
+## How do I get positional information of rendered marker objects?
+`react-globe` is meant to be a simple and convenient library to bootstrap globe visualizations.  This request goes deeper into rendering internals and is not supported by the library.  We recommend that you continue to explore this approach in a separate library or implement your own custom globes!
+
+## Typescript errors
+Common typescript issues are frequently experienced when working with `EasingFunction`, `MinMaxPair`, `Coordinates`, `Position`, `Options.markerType` types where providing literal number arrays or strings will cause the TS compiler to complain.  Most of these are type aliases (e.g. `[number, number]` and `[number, number, number]`) and you can resolve these issues by type-asserting them e.g.
+
+```ts
+const position: Position = [1, 2, 3];
+const position = [1, 2, 3] as Position;
+
+const markerType = 'dot' as const;
+const fruit = <const> 'dot';
+```

@@ -2,6 +2,8 @@
 
 ## [5.0.0](https://github.com/chrisrzhou/react-globe/compare/v5.0.0...v4.0.0) (2020-08-02)
 
+Refactoring and simplification of codebase and exposed public APIs.
+
 ### Changes
 - New props (see section below).
 - Flattened `options` prop (improves and simplifies component rendering lifecycle with hooks).
@@ -10,7 +12,7 @@
   - Fixed various GH issues.
   - Memory leaks with marker callbacks.
 - Simplified and decoupled internal implementation.
-- Detypescripify source code to improve future OSS development.
+- Detypescriptify source code to improve future OSS development.
 - Updated dev tools and build pipeline (`microbundle`, `xo`).
 - Updated docs and examples.
 

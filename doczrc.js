@@ -29,6 +29,7 @@ export default {
       name: 'Gallery',
       menu: ['Submissions', 'Google Globe Trends'],
     },
+    'FAQ',
     'Changelog',
   ],
   modifyBundlerConfig: bundlerConfig => {
