@@ -5,6 +5,16 @@ route: /faq
 
 # FAQ
 
+## Globe Textures
+`react-globe` textures for globe, background and clouds are configured with defaults pointing to the image assets found in https://github.com/chrisrzhou/react-globe/tree/main/textures (accessed via the https://raw.githubusercontent.com domain).
+
+These textures provide a convenient way to bootstrap your globe visualizations but it is recommended that you provide your own image assets (data URLs or paths) to avoid the following potential problems:
+- Network requests, rate limits, access policies may change for the https://raw.githubusercontent.com domain.
+- The provided texture URLs may change and break existing globe visualizations.
+- Your globe visualizations have an external and uncontrollable dependency if you do not use your own assets.
+
+With all that said, `react-globe` provides these textures as a convenient way to easily bootstrap globe visualizations with as little as a single line of code!
+
 ## How do I make the globe responsive?
 
 Simply set responsive-based values for `height` and `width` props e.g. `100vh`, `50vh`, `100vw`, `100%`, `80%` etc.

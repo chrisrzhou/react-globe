@@ -30,6 +30,10 @@
   "module": "dist/index.module.js",
   "source": "index.js",
   "typings": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types/index.d.ts"
+  ],
   "dependencies": {
     "d3-scale": "^3.0.0",
     "es6-tween": "^5.5.10",
