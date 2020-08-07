@@ -22,6 +22,23 @@ Note that `react-globe` requires `react >= 16.13.1` and `three >= 0.118.3` as pe
 
 ## Use
 
+### Simple
+
+Render a simple interactive globe with a single line of code!
+
+```js
+import React from 'react';
+import ReactGlobe from 'react-globe';
+
+function SimpleGlobe() {
+  return <ReactGlobe />
+}
+```
+
+### Kitchen Sink
+
+An example showing various features (markers, tooltips, options, callbacks, textures).
+
 ```js
 import React, { useState } from 'react';
 import ReactGlobe from 'react-globe';
@@ -81,11 +98,8 @@ function MyGlobe() {
   const options = {
     ambientLightColor: 'red',
     cameraRotateSpeed: 0.5,
-    enableGlobeBackground: true,
-    enableGlobeClouds: true,
     focusAnimationDuration: 2000,
     focusEasingFunction: ['Linear', 'None'],
-    globeTexture: 'https://your/own/globe.jpg',
     pointLightColor: 'gold',
     pointLightIntensity: 1.5,
     globeGlowColor: 'blue',
@@ -99,6 +113,9 @@ function MyGlobe() {
   return (
     <ReactGlobe
       height="100vh"
+      globeBackgroundTexture="https://your/own/background.jpg"
+      globeCloudsTexture={null}
+      globeTexture="https://your/own/globe.jpg"
       initialCoordinates={[1.3521, 103.8198]}
       markers={markers}
       options={options}

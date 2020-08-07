@@ -20,6 +20,12 @@ interface Props {
   focus?: Coordinates | null;
   /** Height of globe (e.g. 30vh, 100%, 300px, 400).  Note that the globe aspect ratio is scaled to its height */
   height?: string | number;
+  /** Globe background texture.  Accepts a URL or image data. If null, disables the background */
+  globeBackgroundTexture: string | null;
+  /** Globe cloud texture.  Accepts a URL or image data. If null, disables the clouds */
+  globeCloudsTexture: string | null;
+  /** Globe texture.  Accepts a URL or image data. If null, disables the globe texture (there's no reason to do this!) */
+  globeTexture?: string | null;
   /** Distance (measured as a scale factor to the globe radius) that the camera is initially placed.  This value should be greater than 1. */
   initialCameraDistanceRadiusScale?: number;
   /** Initial [lat, lon] coordinates for the globe. */
@@ -35,7 +41,7 @@ interface Props {
   /** Callback to handle defocus events (i.e. clicking the globe after a focus has been applied).  Captures the previously focused coordinates. */
   onDefocus?: (previousFocus: Coordinates) => void;
   /** Capture the initialized globe instance */
-  onGetGlobe?: (globe: typeof Globe) => void;
+  onGetGlobe?: (globe: Globe) => void;
   /** Callback when globe background texture is successfully loaded. */
   onGlobeBackgroundTextureLoaded?: () => void;
   /** Callback when globe clouds texture is successfully loaded. */
@@ -80,10 +86,6 @@ interface Options {
   enableCameraZoom: boolean;
   /** Enable the defocus feature (i.e. clicking the globe after a focus has been applied). */
   enableDefocus: boolean;
-  /** Enable the globe background.  If disabled, the canvas will be transparent, allowing use of custom styled backgrounds. */
-  enableGlobeBackground: boolean;
-  /** Enable globe clouds. */
-  enableGlobeClouds: boolean;
   /** Enable glow effect of the globe. */
   enableGlobeGlow: boolean;
   /** Enable glow effect of the marker. */
@@ -96,22 +98,16 @@ interface Options {
   focusDistanceRadiusScale: number;
   /** Easing function applied for the animation. */
   focusEasingFunction: EasingFunction;
-  /** Globe background texture.  Accepts a URL or image data. */
-  globeBackgroundTexture: string;
   /** Opacity of clouds with values from 0 to 1. */
   globeCloudsOpacity: number;
-  /** Globe cloud texture.  Accepts a URL or image data. */
-  globeCloudsTexture: string;
   /** Globe glow coefficient (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
   globeGlowCoefficient: number;
   /** Globe glow color. */
-  globeGlowColor: number;
+  globeGlowColor: string;
   /** Globe glow power (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
   globeGlowPower: number;
   /** Size of the globe glow radius (measured as a scale factor to the globe radius). */
   globeGlowRadiusScale: number;
-  /** Globe texture.  Accepts a URL or image data. */
-  globeTexture: string;
   /** Duration of marker enter animation (in milliseconds). */
   markerEnterAnimationDuration: number;
   /** Easing function of marker enter animation. */
@@ -131,7 +127,7 @@ interface Options {
   /** [min, max] size of markers (measured as scale factors to the globe radius). */
   markerRadiusScaleRange: MinMaxPair;
   /** Provide a custom marker renderer that should return a THREE.Object3D object for the associated marker data object. */
-  markerRenderer: (marker: Marker) => Object3D | null;
+  markerRenderer: (marker: Marker) => Object3D;
   /** Callback to render the tooltip string content based on the marker data. */
   markerTooltipRenderer: (marker: Marker) => string;
   /** If a valid type is passed, ReactGlobe will render the supported marker type. */
@@ -150,14 +146,22 @@ interface Options {
 `react-globe` exposes a `Globe` class that allows building globe visualizations without the React component.
 
 ```ts
-class Globe {
+export class Globe {
   constructor({
     canvasElement,
+    initialCameraDistanceRadiusScale,
     initialCoordinates,
+    textures,
     tooltipElement,
   }: {
     canvasElement: HTMLCanvasElement;
-    initialCoordinates: Coordinates;
+    initialCameraDistanceRadiusScale?: number;
+    initialCoordinates?: Coordinates;
+    textures?: {
+      globeBackgroundTexture?: string | null;
+      globeCloudsTexture?: string | null;
+      globeTexture?: string | null;
+    };
     tooltipElement: HTMLDivElement;
   });
 
@@ -185,13 +189,13 @@ class Globe {
 
   updateFocus(
     focus: Coordinates | null,
-    overrideOptions: Optional<Options>,
+    overrideOptions?: Optional<Options>,
     shouldUnlockAfterFocus?: boolean,
   ): void;
 
-  updateOptions(options?: Optional<Options>): void;
-
   updateMarkers(markers?: Marker[]): void;
+
+  updateOptions(options?: Optional<Options>): void;
 }
 ```
 

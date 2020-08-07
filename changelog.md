@@ -46,6 +46,9 @@ Various props are replaced, updated (interface updates), removed, or unchanged. 
 | unchanged | `onMouseOverMarker` | `onMouseOverMarker` |
 | renamed | `onGetGlobeInstance` | `onGetGlobe` |
 | renamed | `onTextureLoaded` | `onGlobeTextureLoaded` |
+| added | | `globeBackgroundTexture` |
+| added | | `globeCloudsTexture` |
+| added | | `globeTexture` |
 | added | | `onGlobeBackgroundTextureLoaded` |
 | added | | `onGlobeCloudsTextureLoaded` |
 
@@ -57,6 +60,9 @@ Most options are renamed in an organized way that allows easy refactoring.
 
 | Status | Old | New |
 | --- | --- | --- |
+| removed | ~~`globeOptions.enableBackground`~~ | |
+| removed | ~~`globeOptions.enableClouds`~~ | |
+| removed | `markerOptions.activeScale` |  |
 | renamed | `cameraOptions.autoRotateSpeed` | `options.cameraAutoRotateSpeed` |
 | renamed | `cameraOptions.distanceRadiusScale` | `options.cameraDistanceRadiusScale` |
 | renamed | `cameraOptions.enableAutoRotate` | `options.enableCameraAutoRotate` |
@@ -74,8 +80,6 @@ Most options are renamed in an organized way that allows easy refactoring.
 | renamed | `globeOptions.backgroundTexture` | `options.globeBackgroundTexture` |
 | renamed | `globeOptions.cloudsOpacity` | `options.globeCloudsOpacity` |
 | renamed | `globeOptions.cloudsTexture` | `options.globeCloudsTexture` |
-| renamed | `globeOptions.enableBackground` | `options.enableGlobeBackground` |
-| renamed | `globeOptions.enableClouds` | `options.enableGlobeClouds` |
 | renamed | `globeOptions.enableGlow` | `options.enableGlobeGlow` |
 | renamed | `globeOptions.glowCoefficient` | `options.globeGlowCoefficient` |
 | renamed | `globeOptions.glowColor` | `options.globeGlowColor` |
@@ -87,7 +91,6 @@ Most options are renamed in an organized way that allows easy refactoring.
 | renamed | `lightOptions.pointLightColor` | `options.pointLightColor` |
 | renamed | `lightOptions.pointLightIntensity` | `options.pointLightIntensity` |
 | renamed | `lightOptions.pointLightPositionRadiusScales` | `options.pointLightPositionRadiusScales` |
-| removed | `markerOptions.activeScale` |  |
 | renamed | `markerOptions.enableGlow` | `options.enableMarkerGlow` |
 | renamed | `markerOptions.enableTooltip` | `options.enableMarkerTooltip` |
 | renamed | `markerOptions.enterAnimationDuration` | `options.markerEnterAnimationDuration` |

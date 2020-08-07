@@ -127,10 +127,6 @@ export interface Options {
   enableCameraZoom: boolean;
   /** Enable the defocus feature (i.e. clicking the globe after a focus has been applied). */
   enableDefocus: boolean;
-  /** Enable the globe background.  If disabled, the canvas will be transparent, allowing use of custom styled backgrounds. */
-  enableGlobeBackground: boolean;
-  /** Enable globe clouds. */
-  enableGlobeClouds: boolean;
   /** Enable glow effect of the globe. */
   enableGlobeGlow: boolean;
   /** Enable glow effect of the marker. */
@@ -143,12 +139,8 @@ export interface Options {
   focusDistanceRadiusScale: number;
   /** Easing function applied for the animation. */
   focusEasingFunction: EasingFunction;
-  /** Globe background texture.  Accepts a URL or image data. */
-  globeBackgroundTexture: string;
   /** Opacity of clouds with values from 0 to 1. */
   globeCloudsOpacity: number;
-  /** Globe cloud texture.  Accepts a URL or image data. */
-  globeCloudsTexture: string;
   /** Globe glow coefficient (see http://stemkoski.github.io/Three.js/Shader-Glow.html). */
   globeGlowCoefficient: number;
   /** Globe glow color. */
@@ -157,8 +149,6 @@ export interface Options {
   globeGlowPower: number;
   /** Size of the globe glow radius (measured as a scale factor to the globe radius). */
   globeGlowRadiusScale: number;
-  /** Globe texture.  Accepts a URL or image data. */
-  globeTexture: string;
   /** Duration of marker enter animation (in milliseconds). */
   markerEnterAnimationDuration: number;
   /** Easing function of marker enter animation. */
@@ -203,6 +193,12 @@ export interface Props {
   focus?: Coordinates | null;
   /** Height of globe (e.g. 30vh, 100%, 300px, 400).  Note that the globe aspect ratio is scaled to its height */
   height?: string | number;
+  /** Globe background texture.  Accepts a URL or image data. If null, disables the background */
+  globeBackgroundTexture: string | null;
+  /** Globe cloud texture.  Accepts a URL or image data. If null, disables the clouds */
+  globeCloudsTexture: string | null;
+  /** Globe texture.  Accepts a URL or image data. If null, disables the globe texture (there's no reason to do this!) */
+  globeTexture?: string | null;
   /** Distance (measured as a scale factor to the globe radius) that the camera is initially placed.  This value should be greater than 1. */
   initialCameraDistanceRadiusScale?: number;
   /** Initial [lat, lon] coordinates for the globe. */
@@ -236,11 +232,19 @@ export default function ReactGlobe(props: Props): JSX.Element;
 export class Globe {
   constructor({
     canvasElement,
+    initialCameraDistanceRadiusScale,
     initialCoordinates,
+    textures,
     tooltipElement,
   }: {
     canvasElement: HTMLCanvasElement;
-    initialCoordinates: Coordinates;
+    initialCameraDistanceRadiusScale?: number;
+    initialCoordinates?: Coordinates;
+    textures?: {
+      globeBackgroundTexture?: string | null;
+      globeCloudsTexture?: string | null;
+      globeTexture?: string | null;
+    };
     tooltipElement: HTMLDivElement;
   });
 
@@ -272,9 +276,9 @@ export class Globe {
     shouldUnlockAfterFocus?: boolean,
   ): void;
 
-  updateOptions(options?: Optional<Options>): void;
-
   updateMarkers(markers?: Marker[]): void;
+
+  updateOptions(options?: Optional<Options>): void;
 }
 
 /**
@@ -299,6 +303,13 @@ export function tween({
 /**
  * Defaults
  */
+
+export const defaultGlobeBackgroundTexture: string;
+
+export const defaultGlobeCloudsTexture: string;
+
+export const defaultGlobeTexture: string;
+
 export const defaultInitialCoordinates: Coordinates;
 
 export const defaultOptions: Options;

@@ -28,7 +28,7 @@ By default, `react-globe` is responsively sized to the parent container. You can
 
 ## Background
 
-By default, `react-globe` uses the provided background texture specified in `options.globeBackgroundTexture`.  You can disable texture backgrounds by setting `options.enableGlobeBackground` to `false`.  This will allow you to use the parent container's background instead:
+By default, `react-globe` renders with a default background.  You can disable texture backgrounds by setting the `globeBackgroundTexture` prop to `null`.  This will allow you to use the parent container's background instead:
 
 <Playground>
   <div
@@ -36,22 +36,18 @@ By default, `react-globe` uses the provided background texture specified in `opt
       backgroundImage: 'linear-gradient(to right, red , yellow)',
     }}
   >
-    <ReactGlobe
-      options={{
-        enableGlobeBackground: false,
-      }}
-    />
+    <ReactGlobe globeBackgroundTexture={null} />
   </div>
 </Playground>
 
 ## Clouds
 
-You can disable and control various cloud properties in the `globeOptions` prop. Use the Playground to play around with the respective cloud options.
+You can disable clouds by setting the `globeCloudsTexture` to `null`, and control various cloud properties in the `options` prop. Use the Playground to play around with the respective cloud options.
 
 <Playground>
   <ReactGlobe
+    globeCloudsTexture={null}
     options={{
-      enableGlobeClouds: true,
       globeCloudsOpacity: 0.8,
     }}
   />
@@ -59,7 +55,7 @@ You can disable and control various cloud properties in the `globeOptions` prop.
 
 ## Glow
 
-You can disable and control various glow properties in the `globeOptions` prop.  Use the Playground to play around with the respective glow options.
+You can disable and control various glow properties in the `options` prop.  Use the Playground to play around with the respective glow options.
 
 <Playground>
   <ReactGlobe
