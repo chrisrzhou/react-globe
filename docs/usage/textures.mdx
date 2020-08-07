@@ -13,11 +13,11 @@ import ReactGlobe from './react-globe';
 
 Provide valid image URLs for the `globeTexture`, `globeBackgroundTexture` and `globeCloudsTexture` options to configure custom textures for the globe, background, and clouds respectively.  If these props are set to `null`, the various textures will be disabled.
 
-You can use the `onGlobeTextureLoaded`, `onGlobeBackgroundTextureLoaded` and `onGlobeCloudsTextureLoaded` callback to capture the event after the texture has successfully been applied.
+You can use the `onGlobeTextureLoaded`, `onGlobeBackgroundTextureLoaded` and `onGlobeCloudsTextureLoaded` callback to capture the event after the texture has been applied.  This callback is also run when a texture fails to load.
 
 <Playground>
   {() => {
-    const globeBackgroundTexture = 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/background.jpg';
+    const globeBackgroundTexture = 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/invalid_background_file.png';
     const globeCloudsTexture = 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/clouds2.png';
     const globeTexture = 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg';
     const [isLoadingGlobeBackgroundTexture, setIsLoadingGlobeBackgroundTexture] = useState(true);

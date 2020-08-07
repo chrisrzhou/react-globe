@@ -194,9 +194,9 @@ export interface Props {
   /** Height of globe (e.g. 30vh, 100%, 300px, 400).  Note that the globe aspect ratio is scaled to its height */
   height?: string | number;
   /** Globe background texture.  Accepts a URL or image data. If null, disables the background */
-  globeBackgroundTexture: string | null;
+  globeBackgroundTexture?: string | null;
   /** Globe cloud texture.  Accepts a URL or image data. If null, disables the clouds */
-  globeCloudsTexture: string | null;
+  globeCloudsTexture?: string | null;
   /** Globe texture.  Accepts a URL or image data. If null, disables the globe texture (there's no reason to do this!) */
   globeTexture?: string | null;
   /** Distance (measured as a scale factor to the globe radius) that the camera is initially placed.  This value should be greater than 1. */
