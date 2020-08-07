@@ -98,7 +98,7 @@ If the `markerRenderer` option is provided, `react-globe` will use this callback
         const { color, id, value } = marker;
         const scaledSize = value / 3;
         const geometry =
-          id > 3
+          Math.random() > 0.5
             ? new BoxGeometry(10, 10, scaledSize)
             : new SphereGeometry(scaledSize, 10, 10);
         const material = new MeshLambertMaterial({ color: new Color(color) });

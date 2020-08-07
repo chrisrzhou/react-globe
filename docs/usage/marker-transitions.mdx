@@ -12,13 +12,13 @@ import ReactGlobe from './react-globe';
 
 # Marker Transitions
 
-`react-globe` provides an intuitive way to transition markers when the underlying data changes. The transition pattern is inspired by [Mike Bostock's general update pattern](https://observablehq.com/@d3/selection-join) and uses the underlying string representation of the marker's coordinates as a data key to detect if markers should be added, updated, or removed.
+`react-globe` provides an intuitive way to transition markers when the underlying data changes. The transition pattern is based on [Mike Bostock's general update pattern](https://observablehq.com/@d3/selection-join) and uses the uniqueness of a marker's `id` field to decide if it should be added, updated, or removed.
 
 The example below demonstrates creating randomized markers:
 
 - Click on the `Randomize markers` button to render an initial set of markers to the globe.
 - Hover over the markers and keep a mental note of the random numbers assigned.
-- Click the `Randomize markers` again. You will notice that there are no visual changes. This is because the markers, identified uniquely by their coordinates, already exist on the globe.
+- Click the `Randomize markers` again. You will notice that there are no visual changes. This is because the markers, identified by `id`, still exist on the globe.
 - Hover over the markers and note that the random numbers have changed. This confirms that the markers are capturing the updated data changes.
 - Click on the `Remove marker` or `Clear markers` button to observe how exit transitions are managed.
 - And finally, you can observe how individual markers are animated one by one using the `Add marker` button.

@@ -26,6 +26,10 @@ Note that `react-globe` requires `react >= 16.13.1` and `three >= 0.118.3` as pe
 import React, { useState } from 'react';
 import ReactGlobe from 'react-globe';
 
+// import optional tippy styles for tooltip support
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/animations/scale.css';
+
 function MyGlobe() {
   // support rendering markers with simple data
   const markers = [
@@ -73,7 +77,7 @@ function MyGlobe() {
     },
   ];
 
-  // rich options to configure globe
+  // simple and extensive options to configure globe
   const options = {
     ambientLightColor: 'red',
     cameraRotateSpeed: 0.5,
