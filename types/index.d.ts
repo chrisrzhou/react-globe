@@ -291,6 +291,7 @@ export function tween({
   easingFunction,
   onUpdate,
   onEnd,
+  delay,
 }: {
   from: any;
   to: any;
@@ -298,6 +299,7 @@ export function tween({
   easingFunction: EasingFunction;
   onUpdate: () => void;
   onEnd?: () => void;
+  delay?: number;
 }): void;
 
 /**

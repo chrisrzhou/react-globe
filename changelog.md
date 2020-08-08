@@ -1,6 +1,10 @@
 # Change Log
 
-## [5.0.0](https://github.com/chrisrzhou/react-globe/compare/v5.0.0...v4.0.0) (2020-08-02)
+## [5.0.1](https://github.com/chrisrzhou/react-globe/compare/v5.0.1...v5.0.1) (2020-08-08)
+
+Add `delay` support to exported `tween` utility.
+
+## [5.0.0](https://github.com/chrisrzhou/react-globe/compare/v5.0.0...v4.0.0) (2020-08-07)
 
 Refactoring and simplification of codebase and exposed public APIs.
 

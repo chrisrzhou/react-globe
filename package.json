@@ -1,6 +1,6 @@
 {
   "name": "react-globe",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Create beautiful and interactive React + ThreeJS globe visualizations with ease.",
   "license": "MIT",
   "homepage": "https://react-globe.netlify.com/",
