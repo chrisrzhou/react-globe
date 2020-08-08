@@ -1,0 +1,64 @@
+---
+name: Focus
+menu: Usage
+route: /usage/focus
+---
+
+import { Playground } from 'docz';
+import { useState } from 'react';
+
+import ReactGlobe from './react-globe';
+
+# Focus
+
+## Behavior
+
+To focus on a specific latitude/longitude  coordinate (e.g. Singapore `[1.3521, 103.8198]`), pass an array of coordinates to the component. Clicking on the globe or resetting the `focus` prop to `null` defocuses the globe.
+
+<Playground>
+  {() => {
+    const [focus, setFocus] = useState(null);
+    return (
+      <div>
+        <button onClick={() => setFocus([1.3521, 103.8198])}>Singapore</button>
+        <button onClick={() => setFocus([40.73061, -73.935242])}>
+          New York
+        </button>
+        <button onClick={() => setFocus([37.773972, -122.431297])}>
+          San Fransisco
+        </button>
+        <button onClick={() => setFocus(null)}>None</button>
+        <ReactGlobe focus={focus} />
+      </div>
+    );
+  }}
+</Playground>
+
+Use the focus options to control how focused coordinates behave.  Use the playground code editor to explore customizing the focus animations or disabling the defocus feature.
+
+<Playground>
+  {() => {
+    const [focus, setFocus] = useState(null);
+    return (
+      <div>
+        <button onClick={() => setFocus([1.3521, 103.8198])}>Singapore</button>
+        <button onClick={() => setFocus([40.73061, -73.935242])}>
+          New York
+        </button>
+        <button onClick={() => setFocus([37.773972, -122.431297])}>
+          San Fransisco
+        </button>
+        <button onClick={() => setFocus(null)}>None</button>
+        <ReactGlobe
+          focus={focus}
+          options={{
+            focusAnimationDuration: 3000,
+            focusDistanceRadiusScale: 2,
+            focusEasingFunction: ['Elastic', 'In'],
+            enableDefocus: false
+          }}
+        />
+      </div>
+    );
+  }}
+</Playground>

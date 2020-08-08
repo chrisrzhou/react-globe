@@ -2,7 +2,7 @@
 node_modules
 
 # logs
-*.log*
+*.log
 
 # files and IDE
 .DS_STORE
@@ -11,5 +11,6 @@ node_modules
 *.swo
 
 # project
-dist
 .docz
+dist
+package-lock.json

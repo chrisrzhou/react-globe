@@ -1,0 +1,45 @@
+---
+name: Camera
+menu: Usage
+route: /usage/camera
+---
+
+import { Playground } from 'docz';
+
+import ReactGlobe from './react-globe';
+
+# Camera
+
+The camera controls how we observe and interact with the globe. You can control these behaviors using various camera options as detailed in the examples below:
+
+## Zoom
+
+Use the playground code editor to play around with the respective camera options that control zoom features.
+
+<Playground>
+  <ReactGlobe
+    options={{
+      cameraDistanceRadiusScale: 5,
+      cameraMaxDistanceRadiusScale: 15,
+      cameraZoomSpeed: 2,
+      enableCameraZoom: true,
+    }}
+  />
+</Playground>
+
+## Auto-rotate and rotate
+
+Use the playground code editor to play around with the respective camera options that control auto-rotate and rotate features.
+
+<Playground>
+  <ReactGlobe
+    options={{
+      cameraAutoRotateSpeed: 1,
+      cameraMaxPolarAngle: (Math.PI * 9) / 16,
+      cameraMinPolarAngle: (Math.PI * 7) / 16,
+      cameraRotateSpeed: 0.5,
+      enableCameraAutoRotate: true,
+      enableCameraRotate: true,
+    }}
+  />
+</Playground>

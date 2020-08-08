@@ -1,0 +1,141 @@
+---
+name: Globe Instance
+menu: Usage
+route: /usage/globe-instance
+---
+
+import { Playground } from 'docz';
+import { useState, useEffect } from 'react';
+
+import markers from './markers';
+import ReactGlobe, { Globe } from './react-globe';
+
+# Globe Instance
+
+`react-globe` provides ways to interact with the underlying globe instance through the `onGetGlobe` prop or the `Globe` class.
+
+## `onGetGlobe` Prop
+
+The following interactive example demonstrates capturing the globe instance using the `onGetGlobe` prop. Once the globe instance is captured, you can hook it up to your application lifecycle. Useful methods include `lock` and `unlock`, and you have access to many other class methods.
+
+The example also demonstrates that configuring the globe instance works interchangeably with component props. Use the Playground to observe how either instance methods or props updates can update the globe.
+
+<Playground>
+  {() => {
+    const [globe, setGlobe] = useState();
+    const [isLocked, setIsLocked] = useState(false);
+    const [focus, setFocus] = useState();
+    const [options, setOptions] = useState({});
+    return (
+      <div>
+        <p>
+          <b>Edit Globe Instance</b>
+          <br />
+          <button
+            disabled={isLocked}
+            onClick={() => {
+              globe.lock();
+              setIsLocked(true);
+            }}>
+            Lock
+          </button>
+          <button
+            disabled={!isLocked}
+            onClick={() => {
+              globe.unlock();
+              setIsLocked(false);
+            }}>
+            Unlock
+          </button>
+          <br />
+          <button
+            onClick={() => {
+              globe.updateFocus([1.3521, 103.8198])
+            }}>
+            Change Focus
+          </button>
+          <button
+            onClick={() => {
+              globe.updateFocus(null);
+            }}>
+            Defocus
+          </button>
+          <button
+            onClick={() => {
+              globe.updateOptions({ ambientLightColor: 'red' });
+            }}>
+            Change lights
+          </button>
+          <br />
+        </p>
+        <p>
+          <b>Edit Globe Props</b>
+          <br />
+          <button
+            onClick={() => {
+              setFocus([37.773972, -122.431297]);
+            }}>
+            Change Focus
+          </button>
+          <button
+            onClick={() => {
+              setFocus(null);
+            }}>
+            Defocus
+          </button>
+          <button
+            onClick={() => {
+              setOptions({ ambientLightColor: 'blue' });
+            }}>
+            Change lights
+          </button>
+        </p>
+        <ReactGlobe
+          focus={focus}
+          markers={markers}
+          options={options}
+          onGetGlobe={setGlobe}
+        />
+      </div>
+    );
+  }}
+</Playground>
+
+## `Globe` Class
+
+You can also directly work with the `Globe` class by using the provided named export:
+
+```js
+import { Globe } from 'react-globe';
+```
+
+The `Globe` class allows you to create globe visualizations with vanilla Javascript without the need for React. In the following example, we demonstrate how we can create the globe with basic Javascript when given a mounting ref.
+
+> Note that while the `Globe` instance gives you full control on using the class in any code, we recommend that you still use the component to manage globe functionalities. There is a lot of work required to hook everything up together, and that's the whole point of what `react-globe` is trying to accomplish for you!
+
+<Playground>
+  {() => {
+    useEffect(() => {
+      // create initial DOM hierarchy
+      const mountElement = document.getElementById('react-globe-instance');
+      const tooltipElement = document.createElement('div');
+      const canvasElement = document.createElement('canvas');
+      mountElement.appendChild(canvasElement);
+      mountElement.appendChild(tooltipElement);
+      // create and initialize globe instance
+      const globe = new Globe({ canvasElement, tooltipElement });
+      // call any update method
+      globe.resize({ height: 500, width: 800 });
+      globe.updateOptions({
+        ambientLightColor: 'red',
+        cameraAutoRotateSpeed: 3,
+        globeGlowColor: 'blue',
+        markerTooltipRenderer: marker => `${marker.city} (${marker.value})`,
+        pointLightColor: 'gold',
+      });
+      globe.updateMarkers(markers);
+      globe.animate();
+    }, []);
+    return <div id='react-globe-instance' />;
+  }}
+</Playground>

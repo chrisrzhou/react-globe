@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
     "jsx": "react",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "sourceMap": true,
-    "target": "es5"
+    "noEmit": true,
+    "resolveJsonModule": true
   },
-  "include": ["src"]
+  "exclude": ["**/dist", "**/node_modules"]
 }

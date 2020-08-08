@@ -3,14 +3,15 @@ import pkg from './package.json';
 export default {
   description: pkg.description,
   dest: 'dist/docs',
+  editBranch: 'main',
   htmlContext: {
     favicon: null,
   },
   menu: [
-    'README',
+    'Readme',
     'Props',
     {
-      name: 'Examples',
+      name: 'Usage',
       menu: [
         'Globe',
         'Textures',
@@ -28,13 +29,24 @@ export default {
       name: 'Gallery',
       menu: ['Submissions', 'Google Globe Trends'],
     },
-    'CHANGELOG',
-    { name: 'Github', href: 'https://github.com/chrisrzhou/react-globe' },
+    'FAQ',
+    'Changelog',
   ],
-  public: '/public',
-  title: `🌎 ${pkg.name} (v${pkg.version})`,
+  modifyBundlerConfig: bundlerConfig => {
+    const rules = [
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+    ];
+    bundlerConfig.module.rules.push(...rules);
+    return bundlerConfig;
+  },
+  public: 'public',
   themeConfig: {
+    linesToScrollEditor: 10000,
     showPlaygroundEditor: true,
   },
+  title: `🌎 ${pkg.name} (v${pkg.version})`,
   typescript: true,
 };

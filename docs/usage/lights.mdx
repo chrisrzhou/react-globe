@@ -1,0 +1,40 @@
+---
+name: Lights
+menu: Usage
+route: /usage/lights
+---
+
+import { Playground } from 'docz';
+
+import ReactGlobe from './react-globe';
+
+# Lights
+
+`react-globe` uses two light sources to illuminate the globe. The colors and intensity of the light sources can be configured using various light options.
+
+## Ambient Light
+
+The [ambient light](https://threejs.org/docs/#api/en/lights/AmbientLight) illuminates all objects in the scene equally. Use the playground code editor to play around with the respective ambient light options.
+
+<Playground>
+  <ReactGlobe
+    options={{
+      ambientLightColor: 'red',
+      ambientLightIntensity: 1,
+    }}
+  />
+</Playground>
+
+## Point Light
+
+The [point light](https://threejs.org/docs/#api/en/lights/PointLight) provides a source of light emitting from a single point. Use the playground code editor to play around with the respective ambient light options
+
+<Playground>
+  <ReactGlobe
+    options={{
+      pointLightColor: 'orange',
+      pointLightIntensity: 4,
+      pointLightPositionRadiusScales: [2, 1, -1],
+    }}
+  />
+</Playground>

@@ -1,0 +1,66 @@
+---
+name: Textures
+menu: Usage
+route: /usage/textures
+---
+
+import { Playground } from 'docz';
+import { useState } from 'react';
+
+import ReactGlobe from './react-globe';
+
+# Textures
+
+Provide valid image URLs for the `globeTexture`, `globeBackgroundTexture` and `globeCloudsTexture` options to configure custom textures for the globe, background, and clouds respectively.  If these props are set to `null`, the various textures will be disabled.
+
+You can use the `onGlobeTextureLoaded`, `onGlobeBackgroundTextureLoaded` and `onGlobeCloudsTextureLoaded` callback to capture the event after the texture has been applied.  This callback is also run when a texture fails to load.
+
+<Playground>
+  {() => {
+    const globeBackgroundTexture = 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/invalid_background_file.png';
+    const globeCloudsTexture = 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/clouds2.png';
+    const globeTexture = 'https://raw.githubusercontent.com/chrisrzhou/react-globe/main/textures/globe_dark.jpg';
+    const [isLoadingGlobeBackgroundTexture, setIsLoadingGlobeBackgroundTexture] = useState(true);
+    const [isLoadingGlobeCloudsTexture, setIsLoadingGlobeCloudsTexture] = useState(true);
+    const [isLoadingGlobeTexture, setIsLoadingGlobeTexture] = useState(true);
+    let loader = (isLoadingGlobeBackgroundTexture || isLoadingGlobeCloudsTexture || isLoadingGlobeTexture) && (
+      <div
+        style={{
+          alignItems: 'center',
+          background: 'black',
+          bottom: 0,
+          color: 'white',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          left: 0,
+          position: 'absolute',
+          right: 0,
+          top: 0,
+        }}>
+        <p>
+          {isLoadingGlobeBackgroundTexture && `Loading '${globeBackgroundTexture}'...`}
+        </p>
+        <p>
+          {isLoadingGlobeCloudsTexture && `Loading '${globeCloudsTexture}'...`}
+        </p>
+        <p>
+          {isLoadingGlobeTexture && `Loading '${globeTexture}'...`}
+        </p>
+      </div>
+    );
+    return (
+      <>
+        {loader}
+        <ReactGlobe
+          globeBackgroundTexture={globeBackgroundTexture}
+          globeCloudsTexture={globeCloudsTexture}
+          globeTexture={globeTexture}
+          onGlobeBackgroundTextureLoaded={() => setIsLoadingGlobeBackgroundTexture(false)}
+          onGlobeCloudsTextureLoaded={() => setIsLoadingGlobeCloudsTexture(false)}
+          onGlobeTextureLoaded={() => setIsLoadingGlobeTexture(false)}
+        />
+      </>
+    );
+  }}
+</Playground>

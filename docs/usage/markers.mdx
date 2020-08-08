@@ -1,0 +1,109 @@
+---
+name: Markers
+menu: Usage
+route: /usage/markers
+---
+
+import { Playground } from 'docz';
+import { useState } from 'react';
+import {
+  BoxGeometry,
+  Color,
+  Mesh,
+  MeshLambertMaterial,
+  SphereGeometry,
+} from 'three';
+
+import markers from './markers';
+import ReactGlobe from './react-globe';
+
+# Markers
+
+In the [Focus](./focus) section, we explored ways to focus on a coordinate specified explicitly via the `focus` props. In most scenarios, we would like to render various markers on the globe that support focusing events.
+
+`react-globe` provides an extremely simple way to do this by passing an array of marker data using the `markers` props. Based on the `id`, `coordinates`, `color` and `value` fields of the marker data, `react-globe` will render these values accordingly on the globe. Markers support focusing/defocusing behaviors, and provide a rich ways to interact with the globe.
+
+We will be using the following `markers` dataset for the examples:
+
+<pre style={{ fontSize: 10 }}>{JSON.stringify(markers, null, 2)}</pre>
+
+## Point/Bar Markers
+
+`react-globe` supports rendering point and bar markers natively. This can be controlled by setting the `markerType` option. You can import some useful defaults for point and bar markers with:
+
+```js
+import { defaultBarMarkerOptions, defaultDotMarkerOptions } from 'react-globe';
+```
+
+### Dot Markers
+
+<Playground>
+  <ReactGlobe
+    markers={markers}
+    options={{
+      enableMarkerGlow: true,
+      markerRadiusScaleRange: [0.005, 0.02],
+      markerType: 'dot'
+    }}
+  />
+</Playground>
+
+### Bar Markers
+
+<Playground>
+  <ReactGlobe
+    markers={markers}
+    options={{
+      enableMarkerGlow: false,
+      markerRadiusScaleRange: [0.2, 0.5],
+      markerType: 'bar',
+    }}
+  />
+</Playground>
+
+## Marker Options and Tooltips
+
+You can configure various marker features using the `options` prop (e.g.  setting the size range of the marker using the `markerRadiusScaleRange` option).
+
+By default, tooltips are enabled for markers and the default value of the tooltip is the marker's coordinates. The `markerTooltipRenderer` option allows you to return custom tooltip strings based on the marker data. Use the Playground to play around with some of these options.
+
+<Playground>
+  <ReactGlobe
+    markers={markers}
+    options={{
+      enableMarkerTooltip: true,
+      markerEnterAnimationDuration: 3000,
+      markerEnterEasingFunction: ['Bounce', 'InOut'],
+      markerExitAnimationDuration: 3000,
+      markerExitEasingFunction: ['Cubic', 'Out'],
+      markerTooltipRenderer: marker => `${marker.city} (Sales: ${marker.value}.0M)`,
+      markerRadiusScaleRange: [0.01, 0.05],
+    }}
+  />
+</Playground>
+
+## Custom Renderer
+
+If the `markerRenderer` option is provided, `react-globe` will use this callback to render the markers. The return type of `markerRenderer` has to be an instance of `THREE.Object3D`. `react-globe` will still handle placing the markers and supporting focus/defocus and pointer events. This is an extremely powerful data-driven way to render custom objects on the globe. Go crazy!
+
+![image](../../public/react-globe-custom-marker-renderer.gif)
+
+[![Edit react-globe-interactive](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/knhlr)
+
+<Playground>
+  <ReactGlobe
+    markers={markers}
+    options={{
+      markerRenderer: marker => {
+        const { color, id, value } = marker;
+        const scaledSize = value / 3;
+        const geometry =
+          Math.random() > 0.5
+            ? new BoxGeometry(10, 10, scaledSize)
+            : new SphereGeometry(scaledSize, 10, 10);
+        const material = new MeshLambertMaterial({ color: new Color(color) });
+        return new Mesh(geometry, material);
+      }
+    }}
+  />
+</Playground>

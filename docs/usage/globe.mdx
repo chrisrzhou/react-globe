@@ -1,0 +1,81 @@
+---
+name: Globe
+menu: Usage
+route: /usage/globe
+---
+
+import { Playground } from 'docz';
+
+import ReactGlobe from './react-globe';
+
+# Globe
+
+## Simple
+
+Render a simple interactive globe with a single line of code!
+
+<Playground>
+  <ReactGlobe />
+</Playground>
+
+## Size
+
+By default, `react-globe` is responsively sized to the parent container. You can provide explicit `height` and `width` prop to control the globe size.  Note that the globe's aspect ratio is always computed with respect to its height.  Try resizing the window's height or play with other values in the Playground.
+
+<Playground>
+  <ReactGlobe height='30vh' width={400} />
+</Playground>
+
+## Background
+
+By default, `react-globe` renders with a default background.  You can disable texture backgrounds by setting the `globeBackgroundTexture` prop to `null`.  This will allow you to use the parent container's background instead:
+
+<Playground>
+  <div
+    style={{
+      backgroundImage: 'linear-gradient(to right, red , yellow)',
+    }}
+  >
+    <ReactGlobe globeBackgroundTexture={null} />
+  </div>
+</Playground>
+
+## Clouds
+
+You can disable clouds by setting the `globeCloudsTexture` to `null`, and control various cloud properties in the `options` prop. Use the Playground to play around with the respective cloud options.
+
+<Playground>
+  <ReactGlobe
+    globeCloudsTexture={null}
+    options={{
+      globeCloudsOpacity: 0.8,
+    }}
+  />
+</Playground>
+
+## Glow
+
+You can disable and control various glow properties in the `options` prop.  Use the Playground to play around with the respective glow options.
+
+<Playground>
+  <ReactGlobe
+    options={{
+      enableGlobeGlow: true,
+      globeGlowCoefficient: 0.1,
+      globeGlowColor: 'gold',
+      globeGlowPower: 4,
+      globeGlowRadiusScale: 0.5,
+    }}
+  />
+</Playground>
+
+## Initial Settings
+
+You can set the `initialCameraDistanceRadiusScale` prop to control how far the camera is placed from the globe, and the `initialCoordinates` prop as initial settings for the globe.
+
+<Playground>
+  <ReactGlobe
+    initialCameraDistanceRadiusScale={12}
+    initialCoordinates={[29.7604, -95.3698]}
+  />
+</Playground>
