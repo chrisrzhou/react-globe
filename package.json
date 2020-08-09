@@ -1,6 +1,6 @@
 {
   "name": "react-globe",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Create beautiful and interactive React + ThreeJS globe visualizations with ease.",
   "license": "MIT",
   "homepage": "https://react-globe.netlify.com/",
@@ -22,7 +22,7 @@
     "build:docs": "docz build",
     "clean": "rm -rf dist",
     "clean:docs": "rm -rf .docz",
-    "docs": "docz dev",
+    "docs": "npm run clean; docz dev",
     "lint": "xo --fix; tsc",
     "prepare": "npm run clean; npm run build"
   },
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@types/d3-scale": "^2.1.1",
-    "@types/react": "^16.9.44",
+    "@types/react": "^16.9.45",
     "css-loader": "^4.2.1",
     "docz": "^1.2.0",
     "docz-theme-default": "^1.2.0",

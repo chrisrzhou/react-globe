@@ -1,5 +1,15 @@
 # Change Log
 
+## [5.0.2](https://github.com/chrisrzhou/react-globe/compare/v5.0.2...v5.0.1) (2020-08-08)
+
+Various bugfixes.
+
+- Fixed bug to allow `cameraDistanceRadiusScale` to affect the initial globe camera distance.  This prop has the same exact behavior as `initialCameraDistanceRadiusScale`, which is now reserved as a useful semantic prop alias.
+- Fixed bug where the globe's glow was not removed when `options` is updated.  This led to creation and attachment of increasing amounts of glow meshes, and also not honoring the `enableGlobeGlow` prop.
+- Remove `console.log`
+- Increase `cameraMaxDistanceRadiusScale` default value to better support the `initialCameraDistanceRadiusScale` prop.
+- Add names to three objects for easier development/debugging.
+
 ## [5.0.1](https://github.com/chrisrzhou/react-globe/compare/v5.0.1...v5.0.1) (2020-08-08)
 
 Add `delay` support to exported `tween` utility.
