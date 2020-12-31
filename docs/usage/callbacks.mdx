@@ -31,7 +31,7 @@ import ReactGlobe from './react-globe';
 
     function onTouchMarker(marker, markerObject, event) {
       setEvent({
-        type: 'TOUCH',
+        type: 'TOUCHSTART',
         marker,
         markerObjectID: markerObject.uuid,
         pointerEventPosition: { x: event.clientX, y: event.clientY },
