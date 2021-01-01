@@ -1,5 +1,13 @@
 # Change Log
 
+## [5.0.3](https://github.com/chrisrzhou/react-globe/compare/v5.0.3...v5.0.2) (2020-12-31)
+
+Small enhancement.
+Add onTouch event for mobile use.
+| Status | Old | New |
+| --- | --- | --- |
+| added | | `onTouchMarker` |
+
 ## [5.0.2](https://github.com/chrisrzhou/react-globe/compare/v5.0.2...v5.0.1) (2020-08-08)
 
 Various bugfixes.

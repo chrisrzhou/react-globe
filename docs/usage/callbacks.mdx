@@ -29,6 +29,16 @@ import ReactGlobe from './react-globe';
       setDetails(`City: ${marker.city} (Sales: ${marker.value}.0M)`);
     }
 
+    function onTouchMarker(marker, markerObject, event) {
+      setEvent({
+        type: 'TOUCHSTART',
+        marker,
+        markerObjectID: markerObject.uuid,
+        pointerEventPosition: { x: event.clientX, y: event.clientY },
+      });
+      setDetails(`City: ${marker.city} (Sales: ${marker.value}.0M)`);
+    }
+
     function onDefocus(previousCoordinates) {
       setEvent({
         type: 'DEFOCUS',
@@ -59,6 +69,7 @@ import ReactGlobe from './react-globe';
       <div style={{ position: 'relative' }}>
         <ReactGlobe
           onClickMarker={onClickMarker}
+          onTouchMarker={onTouchMarker}
           onDefocus={onDefocus}
           onMouseOutMarker={onMouseOutMarker}
           onMouseOverMarker={onMouseOverMarker}
