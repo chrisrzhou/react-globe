@@ -18,7 +18,7 @@ Create beautiful and interactive React + ThreeJS globe visualizations with ease.
 npm install react-globe
 ```
 
-Note that `react-globe` requires `react >= 16.13.1` and `three >= 0.118.3` as peer dependencies.
+Note that `react-globe` requires `react >= 16.13.1` and `0.109.0 <= three >= 0.118.3` as peer dependencies.
 
 ## Use
 
